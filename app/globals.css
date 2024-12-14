@@ -1,9 +1,45 @@
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "MadimiOne";
+  src: url("./fonts/MadimiOne-Regular.ttf") format("woff2");
+}
+@font-face {
+  font-family: "Anta";
+  src: url("./fonts/Anta-Regular.ttf") format("woff2");
+}
+
+
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'MadimiOne', Arial, Helvetica, sans-serif;
+
+}
+
+.headerButton {
+  @apply text-xl transition-colors text-white hover:text-muthootRed
+}
+@keyframes text-grow {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+
+.headerButton:active {
+  animation: text-grow 0.1s ease-in-out;
+}
+
+.muthootIcon:active {
+  animation: text-grow 0.1s ease-in-out;
 }
 
 @layer utilities {
@@ -12,9 +48,10 @@ body {
   }
 }
 
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 31 12% 12%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -67,6 +104,7 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
+
 
 @layer base {
   * {
