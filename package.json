@@ -9,15 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@nextui-org/react": "^2.6.8",
     "admission-mgmt": "file:",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^11.15.0",
     "lucide-react": "^0.462.0",
-    "next": "14.2.16",
+    "motion": "^11.15.0",
+    "next": "^14.2.16",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^20",

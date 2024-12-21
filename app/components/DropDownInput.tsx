@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { Select ,SelectItem } from "@nextui-org/react";
 
 interface DropDownInputProps {
   options: string[];
@@ -10,33 +11,27 @@ interface DropDownInputProps {
 
 const DropDownInput: React.FC<DropDownInputProps> = ({ options, id, label, required = false }) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("");
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = (e: React.FocusEvent<HTMLSelectElement>) => setIsFocused(e.target.value !== "");
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
+  const handleChange = (value: string) => {
     setSelectedOption(value);
   };
 
   return (
     <div className="relative w-full">
-      <select value={selectedOption} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={`peer text-white bg-textBoxBackground w-full border-2 border-white rounded-md px-3 pt-5 pb-2 text-sm `}>
-        <option value="" disabled hidden></option>
-        {options.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-      <label
-        htmlFor={id}
-        className={`absolute left-3 text-sm text-white transition-all duration-200 
-          ${isFocused || value ? "text-xs -top-2 bg-textBoxBackground px-1" : "top-4 text-red-500"}`}
+      <Select
+        
+        label={label}
+        className="w-full"
+        variant="bordered"
+        isRequired={required}
       >
-        {label} {required && <span className="text-red-500"> * </span>}
-      </label>
+        {options.map((option, index) => (
+          <SelectItem  key={index}>
+            {option}
+          </SelectItem >
+        ))}
+      </Select>
+
     </div>
   );
 };

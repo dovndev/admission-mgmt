@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, FocusEvent, ChangeEvent } from "react";
+import {Input} from "@nextui-org/input";
+import { z } from "zod";
 
 interface FloatingLabelInputProps {
   id: string;
@@ -8,24 +10,40 @@ interface FloatingLabelInputProps {
   required?: boolean;
   autoComplete?: string;
 }
-const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ id, label, type = "text", required = false,autoComplete = "off" }) => {
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("");
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = (e: FocusEvent<HTMLInputElement>) => setIsFocused(e.target.value !== "");
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value);
+const validateInput = (inputType: string, value: string): boolean => {
+  let schema;
+  let inputStringObject = z.string();
+  switch (inputType) {
+    case "email":
+      schema = inputStringObject.email();
+      break;
+    default:
+      schema = inputStringObject;
+  }
+  return schema.safeParse(value).success;
+};
+
+const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ id,label, type = "text", required = false, autoComplete = "off" }) => {
+  const [isValid, setIsValid] = useState(true);
+
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setIsValid(validateInput(id, value));
+  };
 
   return (
     <div className="relative w-full">
-      <input id={id} type={type} value={value} autoComplete={autoComplete} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={`peer text-white bg-textBoxBackground w-full border-2 border-white rounded-md px-3 pt-5 pb-2 text-sm `} />
-      <label
-        htmlFor={id}
-        className={`absolute left-3 text-sm text-white transition-all duration-200 
-          ${isFocused || value ? "text-xs -top-2 bg-textBoxBackground px-1" : "top-4 text-red-500"}`}>
-        
-        {label} {required && <span className="text-red-500"> * </span>}
-      </label>
+      <Input
+      label={label}
+      isRequired={required}
+      id={id}
+      type={type}
+      autoComplete={autoComplete}
+      required={required}
+      variant="bordered"
+      onBlur={handleBlur}
+      />
     </div>
   );
 };
