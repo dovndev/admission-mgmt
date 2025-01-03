@@ -42,7 +42,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ id,label, type 
       autoComplete={autoComplete}
       required={required}
       variant="bordered"
-      onBlur={handleBlur}
+      onBlur={handleBlur}      
       />
     </div>
   );

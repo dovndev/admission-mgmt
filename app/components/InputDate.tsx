@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import {DateInput} from "@nextui-org/react";
-import {CalendarDate, parseDate} from "@internationalized/date";
 
 interface DateInputProps {
   id: string;
