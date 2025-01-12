@@ -1,43 +1,33 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
+import { Select, SelectItem } from "@nextui-org/react";
 
 interface DropDownInputProps {
   options: string[];
   id: string;
   label: string;
   required?: boolean;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const DropDownInput: React.FC<DropDownInputProps> = ({ options, id, label, required = false }) => {
-  const [selectedOption, setSelectedOption] = useState<string>("");
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("");
+const DropDownInput: React.FC<DropDownInputProps> = ({ options, id, label, required = false,onChange }) => {
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = (e: React.FocusEvent<HTMLSelectElement>) => setIsFocused(e.target.value !== "");
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-    setSelectedOption(value);
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (onChange) {
+      const event = {
+        target: { id, value: options[Number(e.target.value)] },
+      } as unknown as React.ChangeEvent<HTMLSelectElement>;
+      onChange(event);
+    }
   };
 
   return (
-    <div className="relative w-full">
-      <select value={selectedOption} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className={`peer text-white bg-textBoxBackground w-full border-2 border-white rounded-md px-3 pt-5 pb-2 text-sm `}>
-        <option value="" disabled hidden></option>
-        {options.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-      <label
-        htmlFor={id}
-        className={`absolute left-3 text-sm text-white transition-all duration-200 
-          ${isFocused || value ? "text-xs -top-2 bg-textBoxBackground px-1" : "top-4 text-red-500"}`}
-      >
-        {label} {required && <span className="text-red-500"> * </span>}
-      </label>
-    </div>
+    <Select label={label} id={id} className="w-full" variant="bordered" isRequired={required} onChange={handleSelect}>
+      {options.map((option, index) => (
+        <SelectItem key={index}>{option}</SelectItem>
+      ))}
+    </Select>
   );
 };
 

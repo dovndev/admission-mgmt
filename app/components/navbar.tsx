@@ -29,9 +29,6 @@ const Navbar = () => {
           <Link href="/login" className="headerButton">
             Login
           </Link>
-          <Link href="/contact" className="headerButton hidden sm:block">
-            Contact
-          </Link>
           <Link href="/about" className="headerButton hidden sm:block">
             About
           </Link>
