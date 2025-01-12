@@ -4,10 +4,17 @@ import Link from "next/link";
 
 export default function Login() {
   return (
+<<<<<<< HEAD
     <div className="flex flex-col items-center justify-center min-h-screen bg-background">
       <Navbar />
       <div className="flex flex-auto justify-center items-center w-full">
         <div className="bg-textBoxBackground relative shadow rounded-3xl p-8 max-w-2xl w-full">
+=======
+    <div className="flex flex-col items-center min-h-screen bg-background">
+      <Navbar />
+      <div className="flex flex-col items-center w-full p-3">
+        <div className="bg-textBoxBackground relative shadow rounded-3xl p-8 max-w-2xl w-full mt-10 ">
+>>>>>>> 1996f48ee4a1881d9dcb01963d81f91cee3945ac
           <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
             Login
           </h2>
