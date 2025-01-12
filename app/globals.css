@@ -1,6 +1,3 @@
-
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,24 +11,22 @@
   src: url("./fonts/Anta-Regular.ttf") format("woff2");
 }
 
-
-
 body {
-  font-family: 'MadimiOne', Arial, Helvetica, sans-serif;
+  font-family: "MadimiOne", Arial, Helvetica, sans-serif;
 }
 
 .headerButton {
-  @apply text-xl transition-colors text-white hover:text-muthootRed
+  @apply text-xl transition-colors text-white hover:text-muthootRed;
 }
 @keyframes text-grow {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
     transform: scale(1.2);
   }
 }
-
 
 .headerButton:active {
   animation: text-grow 0.1s ease-in-out;
@@ -45,8 +40,18 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-}
 
+  /* To remove arrows in number input fields*/
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
 
 @layer base {
   :root {
@@ -102,7 +107,6 @@ body {
   }
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -113,10 +117,9 @@ body {
 
   /* Autofill Styles to Prevent White Background */
   input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
-  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
-
     -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
     box-shadow: 0 0 0 1000px transparent inset !important;
 
@@ -124,7 +127,6 @@ body {
     caret-color: #ef4444 !important;
     transition: background-color 5000s ease-in-out 0s;
   }
-
 
   label:-webkit-autofill {
     color: white !important;
