@@ -1,38 +1,65 @@
+"use client";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/navbar";
 import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
 import { Button } from "@nextui-org/react";
+import { useState } from "react";
 
 export default function Register() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    email: "",
+    mobileNumber: "",
+    gender: "",
+    dob: "",
+    applyingYear: "",
+    quota: "",
+    program: "",
+    aadharNo: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(formData);
+  };
   return (
     <div className="flex flex-col items-center min-h-screen bg-background">
       <Navbar />
-      
+
       <div className="flex flex-auto items-center justify-center w-full p-3">
         <div className="bg-textBoxBackground  relative shadow rounded-3xl p-8 max-w-2xl w-full">
           <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">Registration</h2>
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <FloatingLabelInput id={"firstName"} label={"First Name"} autoComplete="given-name" required={true} />
-              <FloatingLabelInput id={"middleName"} label={"Middle Name"} autoComplete="additional-name" />
-              <FloatingLabelInput id={"lastName"} label={"Last Name"} required={true} autoComplete="family-name" />
+              <FloatingLabelInput id={"firstName"} label={"First Name"} autoComplete="given-name" required={true} onChange={handleChange}/>
+              <FloatingLabelInput id={"middleName"} label={"Middle Name"} autoComplete="additional-name"onChange={handleChange}/>
+              <FloatingLabelInput id={"lastName"} label={"Last Name"} required={true} autoComplete="family-name" onChange={handleChange}/>
             </div>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <FloatingLabelInput id={"email"} label={"Email"} required={true} autoComplete="email" type={"email"}/>
-              <FloatingLabelInput id={"mobileNumber"} label={"Mobile Number"} required={true} type={"number"} />
+              <FloatingLabelInput id={"email"} label={"Email"} required={true} autoComplete="email" type={"email"} onChange={handleChange}/>
+              <FloatingLabelInput id={"mobileNumber"} label={"Mobile Number"} required={true} type={"number"} onChange={handleChange}/>
             </div>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <DropDownInput id={"gender"} label={"Gender"} required={true} options={["Male", "Female", "Other"]} />
-              <InputDate id={"dob"} label={"Date of Birth"} required={true} />
-              <DropDownInput id={"applyingYear"} label={"Applying Year"} required={true} options={["2025", "2026"]} />
+              <DropDownInput id={"gender"} label={"Gender"} required={true} options={["Male", "Female", "Other"]} onChange={handleChange} />
+              <InputDate id={"dob"} label={"Date of Birth"} required={true} value={formData.dob} onChange={handleChange}/>
+              <DropDownInput id={"applyingYear"} label={"Applying Year"} required={true} options={["2025", "2026"]} onChange={handleChange}/>
             </div>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <DropDownInput id={"quota"} label={"Quota"} required={true} options={["NRI", "OCI/PIO/CIWG"]} />
-              <DropDownInput id={"program"} label={"Program"} required={true} options={["BTech", "Mtech", "MCA"]} />
+              <DropDownInput id={"quota"} label={"Quota"} required={true} options={["NRI", "OCI/PIO/CIWG"]} onChange={handleChange}/>
+              <DropDownInput id={"program"} label={"Program"} required={true} options={["BTech", "Mtech", "MCA"]} onChange={handleChange}/>
             </div>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <FloatingLabelInput id={"aadharNo"} label={"Aadhar No."} autoComplete="off" type={"number"}  />
+              <FloatingLabelInput id={"aadharNo"} label={"Aadhar No."} autoComplete="off" type={"number"} onChange={handleChange}/>
             </div>
             <Button type="submit" className="w-full bg-muthootRed text-white py-2 rounded-lg hover:bg-red-600 transition-colors">
               Submit
