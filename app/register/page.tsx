@@ -61,6 +61,7 @@ export default function Register() {
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <FloatingLabelInput id={"aadharNo"} label={"Aadhar No."} autoComplete="off" type={"number"} onChange={handleChange}/>
             </div>
+            <h1 className="text-center"><span className="text-muthootRed">* </span>Please be advised that the fields mentioned above are not editable in any subsequent stages</h1>
             <Button type="submit" className="w-full bg-muthootRed text-white py-2 rounded-lg hover:bg-red-600 transition-colors">
               Submit
             </Button>
