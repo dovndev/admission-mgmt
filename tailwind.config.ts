@@ -7,12 +7,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#13100e",
-        foreground: "#ffffff",
-        muthootRed: "#d81c24",
-        danger: "#d81c24",
-        
-        textBoxBackground: "#1a1715",
+       background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        muthootRed: "hsl(var(--muthootRed))",
+        danger: "hsl(var(--danger))",
+        textBoxBackground: "hsl(var(--textBoxBackground))",
+
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",

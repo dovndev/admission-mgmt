@@ -1,22 +1,21 @@
-
-
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
+import ThemeToggle from "./ThemeToggle";
 
-const Navbar = () => {
+
+interface NavbarProps {
+  mode?: "dark";
+}
+
+const Navbar: React.FC<NavbarProps> = ({mode=""}) => {
   return (
     <div className="relative z-10 bg-white bg-opacity-[7%] shadow max-w-[90%] w-full h-[60px] mt-10 mx-4 rounded-3xl flex items-center justify-between px-6">
-        <div className="flex items-center">
+      <div className="flex items-center">
         <Link href="/" passHref>
-          <Image
-            src="/muthoot_logo.png"
-            alt="Muthoot Logo"
-            width={40}
-            height={40}
-            className="mr-4 rounded-xl cursor-pointer"
-          />
+          <Image src="/muthoot_logo.png" alt="Muthoot Logo" width={40} height={40} className="mr-4 rounded-xl cursor-pointer" />
         </Link>
       </div>
 
@@ -26,13 +25,17 @@ const Navbar = () => {
           <Link href="/register" className="headerButton !text-muthootRed">
             Register
           </Link>
-          <Link href="/login" className="headerButton">
+          <Link href="/login" className={`headerButton ${mode === "dark" ? "text-white" : ""}`}>
             Login
           </Link>
-          <Link href="/about" className="headerButton hidden sm:block">
+          <Link href="/about" className={`headerButton ${mode == "dark" ? "text-white" : ""} hidden sm:block`}>
             About
           </Link>
         </div>
+      </div>
+
+      <div className={`flex items-center ${mode == "dark" ? "hidden" : ""}`}>
+        <ThemeToggle />
       </div>
     </div>
   );
