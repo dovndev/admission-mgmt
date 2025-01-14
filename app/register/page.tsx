@@ -5,6 +5,7 @@ import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
+import { APPLYING_YEAR_OPTIONS, GENDER_OPTIONS, PROGRAM_OPTIONS, QUOTA_OPTIONS } from "../constants/dropdownOptions";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -50,13 +51,13 @@ export default function Register() {
               <FloatingLabelInput id={"mobileNumber"} label={"Mobile Number"} required={true} type={"number"} onChange={handleChange}/>
             </div>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <DropDownInput id={"gender"} label={"Gender"} required={true} options={["Male", "Female", "Other"]} onChange={handleChange} />
+              <DropDownInput id={"gender"} label={"Gender"} required={true} options={GENDER_OPTIONS} onChange={handleChange} />
               <InputDate id={"dob"} label={"Date of Birth"} required={true} value={formData.dob} onChange={handleChange}/>
-              <DropDownInput id={"applyingYear"} label={"Applying Year"} required={true} options={["2025", "2026"]} onChange={handleChange}/>
+              <DropDownInput id={"applyingYear"} label={"Applying Year"} required={true} options={APPLYING_YEAR_OPTIONS} onChange={handleChange}/>
             </div>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <DropDownInput id={"quota"} label={"Quota"} required={true} options={["NRI", "OCI/PIO/CIWG"]} onChange={handleChange}/>
-              <DropDownInput id={"program"} label={"Program"} required={true} options={["BTech", "Mtech", "MCA"]} onChange={handleChange}/>
+              <DropDownInput id={"quota"} label={"Quota"} required={true} options={QUOTA_OPTIONS} onChange={handleChange}/>
+              <DropDownInput id={"program"} label={"Program"} required={true} options={PROGRAM_OPTIONS} onChange={handleChange}/>
             </div>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <FloatingLabelInput id={"aadharNo"} label={"Aadhar No."} autoComplete="off" type={"number"} onChange={handleChange}/>
