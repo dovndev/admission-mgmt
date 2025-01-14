@@ -1,10 +1,9 @@
-
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
+/* fonts */
 @font-face {
   font-family: "MadimiOne";
   src: url("./fonts/MadimiOne-Regular.ttf") format("woff2");
@@ -14,24 +13,28 @@
   src: url("./fonts/Anta-Regular.ttf") format("woff2");
 }
 
-
-
 body {
-  font-family: 'MadimiOne', Arial, Helvetica, sans-serif;
+  font-family: "MadimiOne", Arial, Helvetica, sans-serif;
 }
+
+
+/* class definitions */
 
 .headerButton {
-  @apply text-xl transition-colors text-white hover:text-muthootRed
+  @apply text-xl transition-colors hover:text-muthootRed;
 }
+
+  /* Animations */
 @keyframes text-grow {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
     transform: scale(1.2);
   }
 }
-
+  /* To make the button grow when clicked */
 
 .headerButton:active {
   animation: text-grow 0.1s ease-in-out;
@@ -45,11 +48,28 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-}
 
+  /* To remove arrows in number input fields*/
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
 
 @layer base {
   :root {
+    --background: 24, 16%, 94%; 
+    --foreground: 0, 0%, 0%;
+    --muthootRed: 0, 70%, 50%;    
+    --danger: 0, 70%, 50%;        
+    --textBoxBackground: 24, 10%, 95%;
+    
+
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
@@ -75,8 +95,14 @@ body {
     --radius: 0.5rem;
   }
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+
+    --background: 24, 15%, 6%;
+    --foreground: 0, 0%, 100%;
+    --muthootRed: 357, 77%, 48%;
+    --danger: 357, 77%, 48%;
+    --textBoxBackground: 24, 11%, 9%;
+
+
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
@@ -102,10 +128,9 @@ body {
   }
 }
 
-
 @layer base {
   * {
-    @apply border-border;
+    /*@apply border-border;*/
   }
   body {
     @apply bg-background text-foreground;
@@ -113,10 +138,9 @@ body {
 
   /* Autofill Styles to Prevent White Background */
   input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
-  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
-
     -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
     box-shadow: 0 0 0 1000px transparent inset !important;
 
@@ -124,7 +148,6 @@ body {
     caret-color: #ef4444 !important;
     transition: background-color 5000s ease-in-out 0s;
   }
-
 
   label:-webkit-autofill {
     color: white !important;
