@@ -6,13 +6,14 @@ import React from "react";
 import ThemeToggle from "./ThemeToggle";
 
 
+//this prop is used for forcing the navbar to use white text for the main page and remove the toggle
 interface NavbarProps {
   mode?: "dark";
 }
 
-const Navbar: React.FC<NavbarProps> = ({mode=""}) => {
+const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
   return (
-    <div className="relative z-10 bg-white bg-opacity-[7%] shadow max-w-[90%] w-full h-[60px] mt-10 mx-4 rounded-3xl flex items-center justify-between px-6">
+    <div className="relative z-10 bg-white bg-opacity-[7%] shadow max-w-[90%] w-full h-[60px] mt-5 mx-4 rounded-3xl flex items-center justify-between px-6">
       <div className="flex items-center">
         <Link href="/" passHref>
           <Image src="/muthoot_logo.png" alt="Muthoot Logo" width={40} height={40} className="mr-4 rounded-xl cursor-pointer" />
