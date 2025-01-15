@@ -5,6 +5,8 @@ import Link from "next/link";
 import React from "react";
 import ThemeToggle from "./ThemeToggle";
 
+
+//this prop is used for forcing the navbar to use white text for the main page and remove the toggle
 interface NavbarProps {
   mode?: "dark";
 }
