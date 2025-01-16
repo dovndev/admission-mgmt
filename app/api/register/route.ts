@@ -9,6 +9,10 @@ export async function POST(
     try {
         dbConnect()
         const data = await req.json()
+        const user = await userModel.findOne({ email: data.email })
+        if (user) {
+            return NextResponse.json({ error: 'User with this email already exists' }, { status: 400 })
+        }
         const password = generatePassword({
             firstName: data.firstName,
             lastName: data.lastName,
@@ -18,6 +22,8 @@ export async function POST(
         const newUser = new userModel(data)
         newUser.password = await newUser.generateHashPassword(password)
         const savedUser = await newUser.save()
+        // send email with emai and password
+
         console.log("user saved", savedUser)
         return NextResponse.json({ data: data })
     } catch (err) {

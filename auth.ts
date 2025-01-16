@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         Credentials({
@@ -11,11 +12,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 password: {},
             },
             authorize: async (credentials) => {
-                console.log("recived data", credentials)
+                console.log("recived credentials", credentials)
                 let user = null
 
                 // // logic to salt and hash password
                 // const pwHash = saltAndHashPassword(credentials.password)
+
 
                 // // logic to verify if the user exists
                 // user = await getUserFromDb(credentials.email, pwHash)
