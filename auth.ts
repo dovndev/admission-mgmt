@@ -11,6 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 password: {},
             },
             authorize: async (credentials) => {
+                console.log("recived data", credentials)
                 let user = null
 
                 // // logic to salt and hash password
