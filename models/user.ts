@@ -91,6 +91,48 @@ const PaymentSchema = new mongoose.Schema({
     },
 });
 
+const UserAddressSchema = new mongoose.Schema({
+    houseName: {
+        type: String,
+        required: [true, "Please provide a house name"],
+    },
+    state: {
+        type: String,
+        required: [true, "Please provide a state"],
+    },
+    district: {
+        type: String,
+        required: [true, "Please provide a district"],
+    },
+    pincode: {
+        type: Number,
+        required: [true, "Please provide a pincode"],
+    },
+    city: {
+        type: String,
+        required: [true, "Please provide a city"],
+    },
+});
+
+const parentDetailsSchema = new mongoose.Schema({
+    guardian: {
+        type: String,
+        required: [true, "Please provide a guardian"],
+    },
+    occupation: {
+        type: String,
+        required: [true, "Please provide an occupation"],
+    },
+    sponsor: {
+        type: String,
+        required: [true, "Please provide a sponsor"],
+    },
+    relation: {
+        type: String,
+        required: [true, "Please provide a relation"],
+    },
+});
+
 const UserSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -165,6 +207,18 @@ const UserSchema = new mongoose.Schema({
     cast: {
         type: String,
         required: [true, "Please provide a cast"],
+    },
+    contactAddress: {
+        type: UserAddressSchema,
+        required: false,
+    },
+    permanentAddress: {
+        type: UserAddressSchema,
+        required: false,
+    },
+    parentDetails: {
+        type: parentDetailsSchema,
+        required: false,
     },
     education: {
         type: EducationSchema,

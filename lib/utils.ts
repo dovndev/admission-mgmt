@@ -50,8 +50,15 @@ export function generatePassword(userData: {
   return shuffled;
 }
 
-export async function isUserValid(email: string, password: string) {
+export async function getValidUser(email: string, password: string) {
   dbConnect()
-  const user = userModel.findOne({ email: email });
-  console.log("user valid", user)
+  const user = await userModel.findOne({ email: email });
+  if (!user) {
+    throw Error("User not found");
+  }
+  const isValid = await user.validatePassword(password);
+  if (isValid) {
+    console.log("user valid", user)
+    return user;
+  }
 }
