@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt, { compare, genSalt, hash } from "bcrypt";
+import { compare, genSalt, hash } from "bcrypt";
 
 const EducationSchema = new mongoose.Schema({
     tenth: {

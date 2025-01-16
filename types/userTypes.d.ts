@@ -1,5 +1,9 @@
 import { Document } from 'mongoose';
 
+export type Branch = "CSE" | "ECE" | "EEE" | "ME" | "CE" | "IT";
+export type Quota = "NRI" | "CWIG";
+export type Program = "BTech" | "MCA" | "MTech";
+
 export interface IEducation {
     tenth: {
         schoolName: string;
@@ -23,7 +27,7 @@ export interface IEducation {
 }
 
 export interface IDeclaration {
-    branch: "CSE" | "ECE" | "EEE" | "ME" | "CE" | "IT";
+    branch: Branch;
     signature: string;
     signatureGuardian: string;
 }
@@ -33,7 +37,22 @@ export interface IPayment {
     transactionSlip: string;
 }
 
-export interface IPersonalDetails {
+export interface IUserAddress {
+    houseName: string;
+    state: string;
+    district: string;
+    pincode: number;
+    city: string;
+}
+
+export interface IParentDetails {
+    guardian: string;
+    occupation: string;
+    sponsor: string;
+    relation: string;
+}
+
+export interface IpersonalDetails {
     firstName: string;
     middleName: string;
     lastName?: string;
@@ -42,17 +61,20 @@ export interface IPersonalDetails {
     mobileNumber: number;
     keralaMobileNumber?: number;
     gender: string;
-    quota: "NRI" | "CWIG";
-    program: "BTech" | "MCA" | "MTech";
+    quota: Quota;
+    program: Program;
     applyingYear: number;
     aadharNo: number;
     dob: Date;
     religion: string;
     cast: string;
+    contactAddress?: IUserAddress;
+    permanentAddress?: IUserAddress;
+    parentDetails?: IParentDetails;
 }
 
 export interface IUser extends Document {
-    personalDetails: IPersonalDetails;
+    personalDetails: IpersonalDetails;
     education?: IEducation;
     declaration?: IDeclaration;
     payment?: IPayment;
