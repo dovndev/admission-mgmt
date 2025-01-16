@@ -43,7 +43,7 @@ export default function OnBoarding() {
   return (
     <div className="flex flex-col items-center min-h-screen bg-background">
       <ProgressBar currentStep={currentStep} />
-      <div className="w-full max-w-2xl p-4">{renderStepContent()}</div>
+      <div className="w-full max-w-6xl p-4">{renderStepContent()}</div>
 
       <div className="flex space-x-4 mt-4">
         <Button id="previousPage" onPress={handlePrevious} disabled={currentStep === 0}>
