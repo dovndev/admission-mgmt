@@ -1,7 +1,8 @@
 "use client";
 import { Button, Checkbox, Image } from "@nextui-org/react";
 import TableDisplayContent from "../TableDisplayContent";
-import { STUDENTDATA as studentData } from "@/app/types/studentData";
+import { STUDENTDATA as studentData } from "@/app/mock/mockData";
+
 
 export default function Register() {
 

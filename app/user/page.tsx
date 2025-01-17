@@ -1,7 +1,7 @@
 "use client";
 import Navbar from "../components/navbar";
-import { Button, Image } from "@nextui-org/react";
-import { APPLICATION_DATA as applicantData } from "@/app/constants/dropdownOptions";
+import {  Image } from "@nextui-org/react";
+import { STUDENTDATA as studentData } from "../mock/mockData";
 
 
 export default function Register() {
@@ -13,7 +13,7 @@ export default function Register() {
         <div className="bg-textBoxBackground  relative shadow-xl rounded-3xl p-8 max-w-2xl w-full flex flex-col items-center justify-center">
           
           <Image isBlurred alt="HeroUI Album Cover" className=" object-contain" src="no_img.png" width={240} />
-          <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">{applicationData[]}</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">{studentData["Student Details"]["Name"]}</h2>
         </div>
       </div>
     </div>
