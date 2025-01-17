@@ -8,10 +8,15 @@ export const STUDENTDATA: StudentSection = {
      "Aadhar": "848736823687" ,
     "Phone 1": "54535568345" ,
     "Phone 2": "9898475598" ,
+    "Email": "abddef@abcd.com",
     "Parent Name": "Santhosh" ,
     "Parent Occupation": "Manager" ,
-    "Nri Sponsor": "Santhosh" ,
-    "Relationship with applicant": "Father" ,
+    "Quota": "NRI" ,
+    "Course": "BTech",
+    "Academic Year": "2025-2029" ,
+    "NRI Sponsor": "Santhosh" ,
+    "Relationship with Applicant": "Father" ,
+
   },
   "Contact Address": {
     "House Name": "jillathodical",

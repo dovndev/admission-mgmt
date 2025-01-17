@@ -1,11 +1,6 @@
 "use client";
 import React from "react";
 
-interface StudentSection {
-  label: string;
-  value: string;
-}
-
 interface TableDisplayContentProps {
   id: string;
   className?: string;
