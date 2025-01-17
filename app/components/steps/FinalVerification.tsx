@@ -1,50 +1,10 @@
 "use client";
 import { Button, Checkbox, Image } from "@nextui-org/react";
 import TableDisplayContent from "../TableDisplayContent";
+import { STUDENTDATA as studentData } from "@/app/types/studentData";
+
 export default function Register() {
-  const applicantData = {
-    "Student Details": {
-      Name: "Alan Francis Santhosh",
-      "Date of Birth": "2025-01-21",
-      Gender: "Male",
-      Aadhar: "848736823687",
-      "Phone 1": "54535568345",
-      "Phone 2": "9898475598",
-      "Parent Name": "Santhosh",
-      "Parent Occupation": "Manager",
-      "Nri Sponsor": "Santhosh",
-      "Relationship with applicant": "Father",
-    },
-    "Contact Address": {
-      "House Name": "jillathodical",
-      State: "kerala",
-      "District, City": "ernakulam, kochi",
-      Pin: "682507",
-    },
-    "Permanent Address": {
-      "House Name": "jillathodical",
-      State: "kerala",
-      "District, City": "ernakulam, kochi",
-      Pin: "682507",
-    },
-    "10th Mark Details": {
-      "Name of Institution": "St. Joseph's School",
-    },
-    "12th Mark Details": {
-      "Name of Institution": "St. Joseph's School",
-    },
-    "Keam Details": {
-      Year: "2025",
-      "Roll No": "123456",
-      Rank: "1234",
-      "Paper 1 score(Physics and Chemistry)": "120",
-      "Paper 2 score(Mathematics)": "120",
-      "Total Keam Score": "240",
-    },
-    "Branch Details": {
-      "Branch Preference": "Computer Science",
-    },
-  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +41,7 @@ export default function Register() {
             <h1 className="text-center font-extrabold">
               Student Details<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Student Data" rows={Object.entries(applicantData["Student Details"])} />
+            <TableDisplayContent id="Student Data" rows={studentData["Student Details"]} />
           </div>
 
           {/* Contact and Permanent Address */}
@@ -89,11 +49,11 @@ export default function Register() {
             <h1 className="text-center font-extrabold">
               Contact Address<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Student Data" rows={Object.entries(applicantData["Contact Address"])} />
+            <TableDisplayContent id="Student Data" rows={studentData["Contact Address"]} />
             <h1 className="text-center font-extrabold pt-1">
               Permanent Address<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Address" rows={Object.entries(applicantData["Permanent Address"])} />
+            <TableDisplayContent id="Address" rows={studentData["Permanent Address"]} />
           </div>
         </div>
 
@@ -105,7 +65,7 @@ export default function Register() {
             <h1 className="text-center font-extrabold">
               10th Mark Details<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="10th Mark Details" rows={Object.entries(applicantData["10th Mark Details"])} />
+            <TableDisplayContent id="10th Mark Details" rows={studentData["10th Mark Details"]} />
             <Image
               src="/no_img.png"
               alt="Student Photo"
@@ -115,7 +75,7 @@ export default function Register() {
 
           <div className="flex flex-col w-full items-center justify-start">
             <h1 className="text-center font-extrabold pt-1">12th Mark Details</h1>
-            <TableDisplayContent id="12th Mark Details" rows={Object.entries(applicantData["12th Mark Details"])} />
+            <TableDisplayContent id="12th Mark Details" rows={studentData["12th Mark Details"]} />
             <Image
               src="/no_img.png"
               alt="Student Photo"
@@ -130,7 +90,7 @@ export default function Register() {
             <h1 className="text-center font-extrabold">
               KEAM Details<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Keam Details" rows={Object.entries(applicantData["Keam Details"])} />
+            <TableDisplayContent id="Keam Details" rows={studentData["Keam Details"]} />
           </div>
           <Image
             src="/no_img.png"
@@ -141,7 +101,7 @@ export default function Register() {
 
         {/* Branch Details */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-5 pb-2  ">
-          <TableDisplayContent id="Branch Details" rows={Object.entries(applicantData["Branch Details"])} />
+          <TableDisplayContent id="Branch Details" rows={studentData["Branch Details"]} />
         </div>
 
         {/* Final submit*/}
