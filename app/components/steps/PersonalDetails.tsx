@@ -112,6 +112,7 @@ export default function PersonalDetails() {
                 UPLOAD
               </Button>
             </div>
+            
             <span className="text-red-500 font-thin text-small">
               Upload an image file of size less than 2mb
             </span>

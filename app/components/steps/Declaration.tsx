@@ -79,6 +79,7 @@ export default function Declaration() {
             </p>
           </div>
           <Checkbox isRequired>I have clearly read the instructions mentioned above and would like to proceed further</Checkbox>
+          
           <FileUploadInput id={"signature"} label={"Signature of Applicant"} required={true} />
           <FileUploadInput id={"parentSignature"} label={"Signature of Parent"} required={true} />
           <h1 className="text-muthootRed">the image should be of filetype (jpeg/png) of size less than 2MB*</h1>
