@@ -16,3 +16,4 @@ export const REGISTER_STEPS: string[] = [
   "Payment",
 ];
 
+export const NRI_RELATION_OPTIONS: string[] = [""]
