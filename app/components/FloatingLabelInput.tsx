@@ -35,10 +35,12 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
       variant="bordered"
       onChange={onChange}
       validate={
-        id == "mobileNumber"
+        id == "mobileNumber" || id == "contactNumber" || id == "contactNumberKerala"
           ? (value) => value.length === 10 || "Phone number must be 10 digits"
           : id == "aadharNo"
           ? (value) => value.length === 12 || "Aadhar number must be 12 digits"
+          : id == "pinCode" || id== "pinCodePermanent"
+          ? (value) => value.length === 6 || " Pin Code must be 6 digits"
           : undefined
       }
     />

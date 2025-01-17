@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
 import DropDownInput from "../DropDownInput";
 import InputDate from "../InputDate";
@@ -12,17 +12,45 @@ export default function PersonalDetails() {
     firstName: "",
     middleName: "",
     lastName: "",
-    email: "",
-    mobileNumber: "",
-    gender: "",
+    contactNumber: "",
+    contactNumberKerala: "",
     dob: "",
-    applyingYear: "",
-    quota: "",
-    program: "",
-    aadharNo: "",
-    religion: "",
-    cast: "",
+    photo: "",
+    houseName: "",
+    state: "",
+    district: "",
+    city: "",
+    pinCode: "",
+    houseNamePermanent: "",
+    statePermanent: "",
+    districtPermanent: "",
+    cityPermanent: "",
+    pinCodePermanent: "",
+    guardian: "",
+    occupation: "",
+    sponsor: "",
+    sponsorRelation: "",
   });
+
+  useEffect(() => {
+    if (isSelected) {
+      setFormData((prev) => ({
+        ...prev,
+        houseNamePermanent: prev.houseName,
+        statePermanent: prev.state,
+        districtPermanent: prev.district,
+        cityPermanent: prev.city,
+        pinCodePermanent: prev.pinCode,
+      }));
+    }
+  }, [
+    isSelected,
+    formData.houseName,
+    formData.state,
+    formData.district,
+    formData.city,
+    formData.pinCode,
+  ]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -36,7 +64,7 @@ export default function PersonalDetails() {
     console.log(formData);
   };
   const handleUpload = () => {
-
+    //upload photo to db and get the url
   };
 
   return (
@@ -52,12 +80,14 @@ export default function PersonalDetails() {
                 autoComplete="given-name"
                 required={true}
                 onChange={handleChange}
+                value={formData.firstName}
               />
               <FloatingLabelInput
                 id={"middleName"}
                 label={"Middle Name"}
                 autoComplete="additional-name"
                 onChange={handleChange}
+                value={formData.middleName}
               />
               <FloatingLabelInput
                 id={"lastName"}
@@ -65,6 +95,7 @@ export default function PersonalDetails() {
                 required={true}
                 autoComplete="family-name"
                 onChange={handleChange}
+                value={formData.lastName}
               />
             </div>
             <div className="flex flex-col gap-4 md:flex-row ">
@@ -74,6 +105,7 @@ export default function PersonalDetails() {
                 required={true}
                 type={"number"}
                 onChange={handleChange}
+                value={formData.contactNumber}
               />
               <FloatingLabelInput
                 id={"contactNumberKerala"}
@@ -81,6 +113,7 @@ export default function PersonalDetails() {
                 required={true}
                 type={"number"}
                 onChange={handleChange}
+                value={formData.contactNumberKerala}
               />
               <InputDate
                 id={"dob"}
@@ -99,7 +132,7 @@ export default function PersonalDetails() {
                 type="file"
               />
               <Button
-              color="warning"
+                color="warning"
                 variant="ghost"
                 id={"photosubmit"}
                 className="m-6"
@@ -126,6 +159,7 @@ export default function PersonalDetails() {
                 required={true}
                 autoComplete="family-name"
                 onChange={handleChange}
+                value={formData.houseName}
               />
             </div>
             <div className="flex flex-col gap-4 md:flex-row ">
@@ -135,6 +169,7 @@ export default function PersonalDetails() {
                 required={true}
                 autoComplete="state"
                 onChange={handleChange}
+                value={formData.state}
               />
               <FloatingLabelInput
                 id={"district"}
@@ -142,6 +177,7 @@ export default function PersonalDetails() {
                 required={true}
                 autoComplete="district"
                 onChange={handleChange}
+                value={formData.district}
               />
             </div>
             <div className="flex flex-col gap-4 md:flex-row ">
@@ -151,6 +187,7 @@ export default function PersonalDetails() {
                 required={true}
                 autoComplete="city"
                 onChange={handleChange}
+                value={formData.city}
               />
               <FloatingLabelInput
                 id={"pinCode"}
@@ -158,11 +195,15 @@ export default function PersonalDetails() {
                 required={true}
                 autoComplete="pincode"
                 onChange={handleChange}
+                value={formData.pinCode}
+                type="number"
               />
             </div>
             <div className="flex flex-col gap-4 md:flex-row ">
               <Checkbox
-                onValueChange={() => setIsSelected(!isSelected)}
+                onValueChange={() => {
+                  setIsSelected(!isSelected);
+                }}
                 isSelected={isSelected}
               ></Checkbox>{" "}
               <span>Use Contact address as Permanent address</span>
@@ -174,43 +215,49 @@ export default function PersonalDetails() {
             <h1>Permanent Address</h1>
             <div className="flex flex-col gap-4 md:flex-row ">
               <FloatingLabelInput
-                id={"houseName"}
+                id={"houseNamePermanent"}
                 label={"House Name"}
                 required={true}
                 autoComplete="family-name"
                 onChange={handleChange}
+                value={formData.houseNamePermanent}
               />
             </div>
             <div className="flex flex-col gap-4 md:flex-row ">
               <FloatingLabelInput
-                id={"state"}
+                id={"statePermanent"}
                 label={"State"}
                 required={true}
                 autoComplete="state"
                 onChange={handleChange}
+                value={formData.statePermanent}
               />
               <FloatingLabelInput
-                id={"district"}
+                id={"districtPermanent"}
                 label={"District"}
                 required={true}
                 autoComplete="district"
                 onChange={handleChange}
+                value={formData.districtPermanent}
               />
             </div>
             <div className="flex flex-col gap-4 md:flex-row ">
               <FloatingLabelInput
-                id={"city"}
+                id={"cityPermanent"}
                 label={"City"}
                 required={true}
                 autoComplete="city"
                 onChange={handleChange}
+                value={formData.cityPermanent}
               />
               <FloatingLabelInput
-                id={"pinCode"}
+                id={"pinCodePermanent"}
                 label={"Pin Code"}
                 required={true}
                 autoComplete="pincode"
                 onChange={handleChange}
+                value={formData.pinCodePermanent}
+                type="number"
               />
             </div>
           </div>
@@ -223,6 +270,7 @@ export default function PersonalDetails() {
                 required={true}
                 autoComplete="parent"
                 onChange={handleChange}
+                value={formData.guardian}
               />
               <FloatingLabelInput
                 id={"occupation"}
@@ -230,6 +278,7 @@ export default function PersonalDetails() {
                 required={true}
                 autoComplete="occupation"
                 onChange={handleChange}
+                value={formData.occupation}
               />
             </div>
             <div className="flex flex-col gap-4 md:flex-row ">
@@ -239,6 +288,7 @@ export default function PersonalDetails() {
                 required={true}
                 autoComplete="family-name"
                 onChange={handleChange}
+                value={formData.sponsor}
               />
             </div>
             <div className="flex flex-col gap-4 md:flex-row ">
@@ -248,6 +298,7 @@ export default function PersonalDetails() {
                 required={true}
                 options={NRI_RELATION_OPTIONS}
                 onChange={handleChange}
+                value={formData.sponsorRelation}
               />
             </div>
           </div>
@@ -255,7 +306,8 @@ export default function PersonalDetails() {
             <span className="text-red-400">
               Note: make sure you click upload button before proceeding
             </span>{" "}
-            <Button color="danger" onSubmit={handleSubmit}>Save</Button>
+            <Button onSubmit={handleSubmit}>Save
+            </Button>
           </div>
         </div>
       </div>
