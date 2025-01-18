@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
-import DropDownInput from "../DropDownInput";
 import InputDate from "../InputDate";
 import { Button } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
-import { NRI_RELATION_OPTIONS } from "@/app/constants/dropdownOptions";
 
 export default function PersonalDetails() {
   const [isSelected, setIsSelected] = useState(false);
@@ -292,11 +290,11 @@ export default function PersonalDetails() {
               />
             </div>
             <div className="flex flex-col gap-4 md:flex-row ">
-              <DropDownInput
+              <FloatingLabelInput
                 id={"sponsorRelation"}
                 label={"Relationship with NRI Sponsor"}
                 required={true}
-                options={NRI_RELATION_OPTIONS}
+                autoComplete="off"
                 onChange={handleChange}
                 value={formData.sponsorRelation}
               />
@@ -306,7 +304,7 @@ export default function PersonalDetails() {
             <span className="text-red-400">
               Note: make sure you click upload button before proceeding
             </span>{" "}
-            <Button onSubmit={handleSubmit}>Save
+            <Button color="danger" onSubmit={handleSubmit}>Save
             </Button>
           </div>
         </div>
