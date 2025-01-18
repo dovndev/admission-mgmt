@@ -10,6 +10,6 @@ export const _12TH_BOARD: string[] = ["CBSE", "ICSE", "STATE"];
 
 export const _10TH_BOARD: string[] = ["CBSE", "ICSE", "STATE"];
 
-export const registerSteps: string[] = ["Personal Details", "Educational Details", "Declaration", "Final Verification", "Payment"];
+export const REGISTER_STEPS: string[] = ["Personal Details", "Educational Details", "Declaration", "Final Verification", "Payment"];
 
 export const BRANCH_OPTIONS: string[] = ["CSE", "ECE", "EEE", "MECH", "CIVIL"];

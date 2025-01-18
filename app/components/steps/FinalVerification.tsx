@@ -86,7 +86,7 @@ export default function Register() {
         </div>
 
         {/* Keam Details */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-5 pt-10 pb-2  ">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-5 pt-2 pb-2  ">
           <div className="w-full ">
             <h1 className="text-center font-extrabold">
               KEAM Details<span className="text-muthootRed">*</span>

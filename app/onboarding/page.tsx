@@ -12,7 +12,7 @@ import FinalVerification from "../components/steps/FinalVerification";
 import Payment from "../components/steps/Payment";
 
 export default function OnBoarding() {
-  const [currentStep, setCurrentStep] = useState<number>(3);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const handleNext = () => {
     setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
   };
