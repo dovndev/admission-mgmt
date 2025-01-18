@@ -9,6 +9,7 @@ interface FloatingLabelInputProps {
   required?: boolean;
   autoComplete?: string;
   value?: string;
+  labelPlacement?:"inside" | "outside" | "outside-left";
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -20,6 +21,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   value,
   required = false,
   autoComplete = "off",
+  labelPlacement = "inside",
 }) => {
   return (
     // onWheel is used to stop incrimenting values while scrolling
@@ -34,6 +36,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
       required={required}
       variant="bordered"
       onChange={onChange}
+      labelPlacement={labelPlacement}
       validate={
         id == "mobileNumber" || id == "contactNumber" || id == "contactNumberKerala"
           ? (value) => value.length === 10 || "Phone number must be 10 digits"
@@ -43,6 +46,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
           ? (value) => value.length === 6 || " Pin Code must be 6 digits"
           : undefined
       }
+      placeholder={labelPlacement === 'outside' ? " ":""}
     />
   );
 };
