@@ -4,15 +4,15 @@ import Image from "next/image";
 import React from "react";
 import ThemeToggle from "./ThemeToggle";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
-import { REGISTER_STEPS } from "../constants/dropdownOptions";
- 
+import { registerSteps } from "../constants/dropdownOptions";
+
 interface ProgressBarProps {
   currentStep: number;
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep }) => {
   return (
-    <div className="fixed z-50 bg-textBoxBackground shadow max-w-[90%] w-full h-[60px] mt-5 mx-4 rounded-3xl flex items-center justify-between px-6">
+    <div className="relative z-10 bg-white bg-opacity-[7%] shadow max-w-[90%] w-full h-[60px] mt-5 mx-4 rounded-3xl flex items-center justify-between px-6">
       <div className="flex items-center">
         <Image src="/muthoot_logo.png" alt="Muthoot Logo" width={40} height={40} className="mr-4 rounded-xl cursor-pointer" />
       </div>
@@ -31,7 +31,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep }) => {
               ],
             }}
           >
-            {REGISTER_STEPS.map((step, index) => (
+            {registerSteps.map((step, index) => (
               <BreadcrumbItem key={index} isCurrent={index === currentStep} className={`${index !== currentStep ? "hidden sm:flex" : ""}`}
               >
                 {step}
