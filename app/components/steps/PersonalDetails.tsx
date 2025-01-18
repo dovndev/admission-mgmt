@@ -257,6 +257,7 @@ export default function PersonalDetails() {
                 value={formData.pinCodePermanent}
                 type="number"
               />
+              
             </div>
           </div>
           <div className="flex flex-col gap-4">
