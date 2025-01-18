@@ -6,14 +6,10 @@ export const QUOTA_OPTIONS: string[] = ["NRI", "OCI", "CIWG"];
 
 export const PROGRAM_OPTIONS: string[] = ["BTech", "MTech", "MCA"];
 
+export const _12TH_BOARD: string[] = ["CBSE", "ICSE", "STATE"];
+
+export const _10TH_BOARD: string[] = ["CBSE", "ICSE", "STATE"];
+
+export const registerSteps: string[] = ["Personal Details", "Educational Details", "Declaration", "Final Verification", "Payment"];
+
 export const BRANCH_OPTIONS: string[] = ["CSE", "ECE", "EEE", "MECH", "CIVIL"];
-
-export const REGISTER_STEPS: string[] = [
-  "Personal Details",
-  "Educational Details",
-  "Declaration",
-  "Final Verification",
-  "Payment",
-];
-
-export const NRI_RELATION_OPTIONS: string[] = [""]
