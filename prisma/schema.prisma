@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Branch {
+  CSE
+  ECE
+  EEE
+  ME
+  CE
+  IT
+}
+
+enum Quota {
+  NRI
+  CWIG
+}
+
+enum Program {
+  BTech
+  MCA
+  MTech
+}
+
+type Tenth {
+  schoolName String
+  board      String
+  markList   String
+}
+
+type Twelfth {
+  schoolName String
+  board      String
+  markList   String
+}
+
+type Keam {
+  year       Int
+  rollNumber Int
+  rank       Int
+  paper1Mark Int
+  paper2Mark Int
+  totalScore Int
+  markList   String
+}
+
+type Education {
+  tenth   Tenth
+  twelfth Twelfth
+  keam    Keam
+}
+
+type Declaration {
+  branch            Branch
+  signature         String
+  signatureGuardian String
+}
+
+type Payment {
+  transactionNumber Int
+  transactionSlip   String
+}
+
+type UserAddress {
+  houseName String
+  state     String
+  district  String
+  pincode   Int
+  city      String
+}
+
+type ParentDetails {
+  guardian   String
+  occupation String
+  sponsor    String
+  relation   String
+}
+
+model User {
+  id                 String         @id @default(auto()) @map("_id") @db.ObjectId
+  firstName          String
+  middleName         String
+  lastName           String?
+  email              String         @unique
+  password           String?        @unique
+  mobileNumber       String         @unique
+  keralaMobileNumber String?        @unique
+  gender             String
+  quota              Quota
+  program            Program
+  applyingYear       String
+  aadharNo           Int            @unique
+  dob                DateTime
+  religion           String
+  cast               String
+  contactAddress     UserAddress?
+  permanentAddress   UserAddress?
+  parentDetails      ParentDetails?
+  education          Education?
+  declaration        Declaration?
+  payment            Payment?
+  createdAt          DateTime       @default(now())
+}

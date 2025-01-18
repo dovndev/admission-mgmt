@@ -1,7 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import dbConnect from "./db";
-import userModel from "@/models/user";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -48,17 +46,4 @@ export function generatePassword(userData: {
     .join('');
 
   return shuffled;
-}
-
-export async function getValidUser(email: string, password: string) {
-  dbConnect()
-  const user = await userModel.findOne({ email: email });
-  if (!user) {
-    throw Error("User not found");
-  }
-  const isValid = await user.validatePassword(password);
-  if (isValid) {
-    console.log("user valid", user)
-    return user;
-  }
 }

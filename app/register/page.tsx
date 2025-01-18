@@ -11,7 +11,8 @@ import {
   PROGRAM_OPTIONS,
   QUOTA_OPTIONS,
 } from "../constants/dropdownOptions";
-import axios from "axios";
+import { registerAction } from "../actions/auth-actions";
+import userRegisterSchema from "@/schemas";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -39,12 +40,16 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
-    const response = await axios.post(
-      "/api/register",
-      JSON.stringify(formData)
-    );
-    console.log(await response.data);
+    try {
+      const validatedData = userRegisterSchema.parse(formData);
+      if (!validatedData) {
+        return { error: "Invalid data" };
+      }
+      const response = await registerAction(validatedData);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div className="flex flex-col items-center min-h-screen bg-background">
