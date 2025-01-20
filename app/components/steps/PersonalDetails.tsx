@@ -197,12 +197,13 @@ export default function PersonalDetails() {
                 type="number"
               />
             </div>
-            <div className="flex flex-col gap-4 md:flex-row ">
+            <div className="flex flex-row ">
               <Checkbox
                 onValueChange={() => {
                   setIsSelected(!isSelected);
                 }}
                 isSelected={isSelected}
+                color="warning"
               ></Checkbox>{" "}
               <span>Use Contact address as Permanent address</span>
             </div>
