@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
 import { Button } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
