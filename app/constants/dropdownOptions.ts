@@ -13,3 +13,5 @@ export const _10TH_BOARD: string[] = ["CBSE", "ICSE", "STATE"];
 export const REGISTER_STEPS: string[] = ["Personal Details", "Educational Details", "Declaration", "Final Verification", "Payment"];
 
 export const BRANCH_OPTIONS: string[] = ["CSE", "ECE", "EEE", "MECH", "CIVIL"];
+
+export const BANK_ACCOUNT = {name:"Muthoot M George Institute of Technology" ,address:"Varikoli, Puthencruz - 682308" ,phone:"0484-2732100",bank:"FEDERAL BANK", "bank address":"PUTHENCRUZ", branch:"Puthencruz", "branch phone":"0484-2731259",IFSC:"FDRL0001223" , MICR:"682049055","account number":"12230200217387"}
