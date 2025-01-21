@@ -37,7 +37,8 @@ export default function EducationalDetails() {
   };
 
   return (
-    <div className="">
+    <div className="flex flex-col items-center justify-center w-full p-3">
+      <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-7xl ">
       <h1 className="p-4 text-2xl">Educatinal Details</h1>
       <div className="flex flex-col grid-rows-4 gap-10 md:flex-row space-y-4 md:space-y-0 md:space-x-4">
         <div className="flex flex-1 flex-col gap-10 ">
@@ -262,7 +263,7 @@ export default function EducationalDetails() {
             Upload an image file of size less than 2mb
           </span>
           <div className="flex flex-col text-center gap-4 w-full justify-around">
-            <span className="text-red-500 bg-red-100 bg-opacity-40 p-2 rounded-lg">
+            <span className="text-red-500  bg-opacity-40 p-2 rounded-lg">
               After selecting the mark list make sure you click UPLOAD button.
               Your ast change will be saved, you can also use the upload button
               to change the file later.
@@ -273,6 +274,7 @@ export default function EducationalDetails() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
 import { Button } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
@@ -32,7 +32,8 @@ export default function Payment() {
   };
 
   return (
-    <div className="">
+    <div className="flex flex-col items-center justify-center w-full p-3">
+      <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-7xl ">
       <h1 className="p-4 text-2xl">Payment</h1>
       <div className="flex flex-col grid-rows-4 gap-10 md:flex-col space-y-4 md:space-y-0 md:space-x-4">
         <div className="flex flex-1 flex-col gap-10 ">
@@ -222,6 +223,7 @@ export default function Payment() {
           Submit
         </Button>
       </div>
+    </div>
     </div>
   );
 }
