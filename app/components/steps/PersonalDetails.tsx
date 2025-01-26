@@ -41,9 +41,18 @@ export default function PersonalDetails() {
         pinCodePermanent: prev.pinCode,
       }));
     }
-  }, [isSelected, formData.houseName, formData.state, formData.district, formData.city, formData.pinCode]);
+  }, [
+    isSelected,
+    formData.houseName,
+    formData.state,
+    formData.district,
+    formData.city,
+    formData.pinCode,
+  ]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
@@ -114,7 +123,13 @@ export default function PersonalDetails() {
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
-                <FloatingLabelInput id={"photo"} label={"Photo"} required={true} onChange={handleChange} type="file" />
+                <FloatingLabelInput
+                  id={"photo"}
+                  label={"Photo"}
+                  required={true}
+                  onChange={handleChange}
+                  type="file"
+                />
                 <Button
                   color="warning"
                   variant="ghost"
@@ -129,7 +144,9 @@ export default function PersonalDetails() {
                   UPLOAD
                 </Button>
               </div>
-              <span className="text-red-500 font-thin text-small">Upload an image file of size less than 2mb</span>
+              <span className="text-red-500 font-thin text-small">
+                Upload an image file of size less than 2mb
+              </span>
             </div>
             <div className="flex flex-col gap-4">
               <h1>Contact Address</h1>
@@ -181,8 +198,9 @@ export default function PersonalDetails() {
                   type="number"
                 />
               </div>
-              <div className="flex flex-col gap-4 md:flex-row ">
+              <div className="flex flex-row gap-4 md:flex-row ">
                 <Checkbox
+                  color="warning"
                   onValueChange={() => {
                     setIsSelected(!isSelected);
                   }}
@@ -285,7 +303,9 @@ export default function PersonalDetails() {
               </div>
             </div>
             <div className="flex w-full items-center justify-around">
-              <span className="text-red-400">Note: make sure you click upload button before proceeding</span>{" "}
+              <span className="text-red-400">
+                Note: make sure you click upload button before proceeding
+              </span>{" "}
               <Button color="danger" onSubmit={handleSubmit}>
                 Save
               </Button>
