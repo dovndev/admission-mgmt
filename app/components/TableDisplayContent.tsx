@@ -11,7 +11,7 @@ const TableDisplayContent: React.FC<TableDisplayContentProps> = ({ id, rows, cla
   return (
     <div className={`flex flex-col w-full p-2 rounded-lg shadow-md border border-background ${className}`} id={id}>
       {Object.entries(rows).map(([key,value]) => (
-        <div key={key} className="flex flex-row justify-between">
+        <div key={key} className="flex flex-row justify-between p-1">
           <div className="font-light">{key}:</div>
           <div className="font-bold">{value}</div>
         </div>
