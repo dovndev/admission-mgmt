@@ -13,8 +13,10 @@ import {
 } from "../constants/dropdownOptions";
 import { registerAction } from "../actions/auth-actions";
 import userRegisterSchema from "@/schemas";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     firstName: "",
     middleName: "",
@@ -45,8 +47,15 @@ export default function Register() {
       if (!validatedData) {
         return { error: "Invalid data" };
       }
-      const response = await registerAction(validatedData);
-      console.log(response);
+      const response: RegisterActionResult = await registerAction(
+        validatedData
+      );
+      if (response?.success) {
+        console.log("redirecting to login");
+        router.push("/login");
+      } else {
+        console.log(response.error);
+      }
     } catch (error) {
       console.error(error);
     }

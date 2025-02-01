@@ -30,7 +30,11 @@ export default function LoginPage() {
       } else {
         // User login logic
         // console.log("User Login:", formData);
-        loginAction(formData.emailOrReg, formData.password);
+        const response = await loginAction({
+          email: formData.emailOrReg,
+          password: formData.password,
+        });
+        console.log(response);
         // Implement your user authentication logic here
       }
     };

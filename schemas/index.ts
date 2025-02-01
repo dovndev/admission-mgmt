@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const userRegisterSchema = z.object({
+export const userRegisterSchema = z.object({
     firstName: z.string().min(1, "Please provide a name").max(60, "Name cannot be more than 60 characters"),
     middleName: z.string().min(1, "Please provide a name").max(60, "Name cannot be more than 60 characters"),
     lastName: z.string().max(60, "Name cannot be more than 60 characters").optional(),
@@ -16,4 +16,9 @@ const userRegisterSchema = z.object({
     cast: z.string().min(1, "Please provide a cast"),
 });
 
-export default userRegisterSchema;
+export const userLoginSchema = z.object({
+    email: z.string().email("Please provide a valid email"),
+    password: z.string().min(8, "Password must be atleast 8 characters"),
+});
+
+

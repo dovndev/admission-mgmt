@@ -1,11 +1,12 @@
 "use server"
 import { auth } from "@/auth/auth"
 import { signIn } from "@/auth/auth"
-import userRegisterSchema from "@/schemas"
+import { userRegisterSchema, userLoginSchema } from "@/schemas"
 import { z } from 'zod'
 import { prisma } from "@/prisma/prisma"
 import { generatePassword } from "@/lib/utils"
 import { hash, genSalt } from "bcryptjs"
+import { AuthError } from "next-auth"
 export async function isSessonActive() {
     const session = await auth()
     const user = session?.user?.id
@@ -15,22 +16,70 @@ export async function isSessonActive() {
     return false
 }
 
-export async function loginAction(email: string, password: string) {
+export async function loginAction(data: z.infer<typeof userLoginSchema>): Promise<LoginActionResult> {
 
-    console.log("loginAction", email, password)
-    const response = await signIn("credentials", {
-        email: email,
-        password: password,
+    const validatedData = userLoginSchema.parse(data)
+    if (!validatedData) {
+        return {
+            error: "Invalid data",
+            success: false
+        }
+    }
+
+    const { email, password } = validatedData;
+
+    const userExists = await prisma.user.findUnique({
+        where: {
+            email: email
+        }
     })
-    console.log("response", response)
+    console.log("userExists", userExists)
+
+    if (!userExists || !userExists.password || !userExists.email) {
+        return {
+            error: "User not found",
+            success: false
+        }
+    }
+
+    try {
+        await signIn("credentials", {
+            email: userExists.email,
+            password: password,
+            redirectTo: "/onboarding",
+        })
+    }
+    catch (e) {
+        if (e instanceof AuthError) {
+            switch (e.type) {
+                case "CredentialsSignin":
+                    return {
+                        error: "Invalid credentials",
+                        success: false
+                    };
+                default:
+                    return {
+                        error: "Email or password is incorrect",
+                        success: false
+                    };
+            }
+        }
+
+        throw e;
+    }
+
+    return {
+        message: "login success",
+        success: true
+    }
 }
 
-export async function registerAction(data: z.infer<typeof userRegisterSchema>) {
+export async function registerAction(data: z.infer<typeof userRegisterSchema>): Promise<RegisterActionResult> {
     console.log("registerAction triggered", data)
     try {
         const validatedData = userRegisterSchema.parse(data)
         if (!validatedData) {
-            return { error: "Invalid data" }
+            return { error: "Invalid data", success: false }
         }
         const user = await prisma.user.findUnique({
             where: {
@@ -38,13 +87,14 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>) {
             }
         })
         if (user) {
-            return { error: "User already exists" }
+            return { error: "User already exists", success: false }
         }
         const password = generatePassword({
             firstName: validatedData.firstName,
             lastName: validatedData.middleName,
             mobileNumber: validatedData.mobileNumber
         })
+        // console.log("password", password)
         //need to add code to send email
         // {}
         const salt = await genSalt(10)
@@ -69,13 +119,12 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>) {
             },
         })
         if (!createdUser) {
-            return { error: "User not created" }
+            return { error: "User not created", success: false }
         }
-        return { message: "User created successfully" }
+        return { message: "User created successfully", success: true }
 
     } catch (e) {
         console.log(e)
+        return { error: "user creation failed", success: false }
     }
-    console.log("registerAction", data)
-    return data
 }
