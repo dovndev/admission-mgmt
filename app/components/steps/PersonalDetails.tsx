@@ -3,6 +3,7 @@ import FloatingLabelInput from "../FloatingLabelInput";
 import InputDate from "../InputDate";
 import { Button } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
+import { personalDetailsAction } from "../../actions/onboarding-actions";
 
 export default function PersonalDetails() {
   const [isSelected, setIsSelected] = useState(false);
@@ -60,6 +61,13 @@ export default function PersonalDetails() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(formData);
+
+    try {
+      const response = await personalDetailsAction(formData);
+      console.log(response.message);
+    } catch (error) {
+      console.error("Error submitting personal details", error);
+    }
   };
   const handleUpload = () => {
     //upload photo to db and get the url

@@ -3,6 +3,7 @@ import authConfig from "./auth.config";
 
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/prisma/prisma";
+import { getUserByID } from "@/lib/dbutils";
 
 export const runtime = "nodejs";
 
@@ -16,11 +17,35 @@ export const {
 } = NextAuth({
     adapter: PrismaAdapter(prisma),
     session: { strategy: "jwt" },
+    //callback for jwt
+    callbacks: {
+        async jwt({ token, session }) {
+            console.log("jwt", token)
+            if (!token.sub) {
+                return token
+            }
+            const user = await getUserByID(token.sub)
+            if (!user) {
+                console.log("user not found in db")
+                return token
+            }
+            token.user = user;
+            return token;
+        },
+        async session({ session, token }) {
+            console.log("session object", session)
+            console.log("session token ", token)
+            session.user = token.user as any;
+            return session;
+        },
+
+    },
     // callbacks: {
     //     async signIn({ account, user, credentials, email, profile }) {
     //         try {
     //             if (account?.provider === "google") {
     //                 return "/auth/error?error=accessDenied";
+
     //                 return true;
     //             }
     //             return true;
