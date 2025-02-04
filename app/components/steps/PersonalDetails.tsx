@@ -4,73 +4,142 @@ import InputDate from "../InputDate";
 import { Button } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
 import { personalDetailsAction } from "../../actions/onboarding-actions";
+import { type PersonalDetailsFormData } from "@/schemas";
 
 export default function PersonalDetails() {
   const [isSelected, setIsSelected] = useState(false);
-  const [formData, setFormData] = useState({
+
+  // Initialize form state with proper types
+  const [formData, setFormData] = useState<PersonalDetailsFormData>({
     firstName: "",
     middleName: "",
     lastName: "",
-    contactNumber: "",
-    contactNumberKerala: "",
+    mobileNumber: "",
+    keralaMobileNumber: "",
     dob: "",
     photo: "",
-    houseName: "",
-    state: "",
-    district: "",
-    city: "",
-    pinCode: "",
-    houseNamePermanent: "",
-    statePermanent: "",
-    districtPermanent: "",
-    cityPermanent: "",
-    pinCodePermanent: "",
-    guardian: "",
-    occupation: "",
-    sponsor: "",
-    sponsorRelation: "",
+    contactAddress: {
+      houseName: "",
+      state: "",
+      district: "",
+      city: "",
+      pincode: "",
+    },
+    permanentAddress: {
+      houseName: "",
+      state: "",
+      district: "",
+      city: "",
+      pincode: "",
+    },
+    parentDetails: {
+      guardian: "",
+      occupation: "",
+      sponsor: "",
+      relation: "",
+    },
   });
 
   useEffect(() => {
     if (isSelected) {
       setFormData((prev) => ({
         ...prev,
-        houseNamePermanent: prev.houseName,
-        statePermanent: prev.state,
-        districtPermanent: prev.district,
-        cityPermanent: prev.city,
-        pinCodePermanent: prev.pinCode,
+        permanentAddress: {
+          ...prev.permanentAddress,
+          houseName: prev.contactAddress.houseName,
+          state: prev.contactAddress.state,
+          district: prev.contactAddress.district,
+          city: prev.contactAddress.city,
+          pincode: prev.contactAddress.pincode,
+        },
       }));
     }
-  }, [
-    isSelected,
-    formData.houseName,
-    formData.state,
-    formData.district,
-    formData.city,
-    formData.pinCode,
-  ]);
+  }, [isSelected, formData.contactAddress]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+
+    // Map form field IDs to schema fields
+    const fieldMappings: Record<
+      string,
+      { section: keyof PersonalDetailsFormData; field: string }
+    > = {
+      // Personal details
+      firstName: { section: "firstName", field: "firstName" },
+      middleName: { section: "middleName", field: "middleName" },
+      lastName: { section: "lastName", field: "lastName" },
+      contactNumber: { section: "mobileNumber", field: "mobileNumber" },
+      contactNumberKerala: {
+        section: "keralaMobileNumber",
+        field: "keralaMobileNumber",
+      },
+      dob: { section: "dob", field: "dob" },
+      photo: { section: "photo", field: "photo" },
+
+      // Contact address
+      houseName: { section: "contactAddress", field: "houseName" },
+      state: { section: "contactAddress", field: "state" },
+      district: { section: "contactAddress", field: "district" },
+      city: { section: "contactAddress", field: "city" },
+      pinCode: { section: "contactAddress", field: "pincode" },
+
+      // Permanent address
+      houseNamePermanent: { section: "permanentAddress", field: "houseName" },
+      statePermanent: { section: "permanentAddress", field: "state" },
+      districtPermanent: { section: "permanentAddress", field: "district" },
+      cityPermanent: { section: "permanentAddress", field: "city" },
+      pinCodePermanent: { section: "permanentAddress", field: "pincode" },
+
+      // Parent details
+      guardian: { section: "parentDetails", field: "guardian" },
+      occupation: { section: "parentDetails", field: "occupation" },
+      sponsor: { section: "parentDetails", field: "sponsor" },
+      sponsorRelation: { section: "parentDetails", field: "relation" },
+    };
+
+    const mapping = fieldMappings[id];
+    if (!mapping) return;
+
+    setFormData((prev) => {
+      if (
+        mapping.section === "contactAddress" ||
+        mapping.section === "permanentAddress" ||
+        mapping.section === "parentDetails"
+      ) {
+        return {
+          ...prev,
+          [mapping.section]: {
+            ...prev[mapping.section],
+            [mapping.field]: value,
+          },
+        };
+      }
+      return {
+        ...prev,
+        [mapping.section]: value,
+      };
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
-
     try {
       const response = await personalDetailsAction(formData);
-      console.log(response.message);
+      if (response.success) {
+        console.log(response.message);
+      } else {
+        throw new Error(response.message);
+      }
     } catch (error) {
       console.error("Error submitting personal details", error);
     }
   };
+
   const handleUpload = () => {
     //upload photo to db and get the url
+    return;
   };
 
   return (
@@ -112,7 +181,7 @@ export default function PersonalDetails() {
                   required={true}
                   type={"number"}
                   onChange={handleChange}
-                  value={formData.contactNumber}
+                  value={formData.mobileNumber}
                 />
                 <FloatingLabelInput
                   id={"contactNumberKerala"}
@@ -120,7 +189,7 @@ export default function PersonalDetails() {
                   required={true}
                   type={"number"}
                   onChange={handleChange}
-                  value={formData.contactNumberKerala}
+                  value={formData.keralaMobileNumber}
                 />
                 <InputDate
                   id={"dob"}
@@ -166,7 +235,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="family-name"
                   onChange={handleChange}
-                  value={formData.houseName}
+                  value={formData.contactAddress.houseName}
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
@@ -176,7 +245,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="state"
                   onChange={handleChange}
-                  value={formData.state}
+                  value={formData.contactAddress.state}
                 />
                 <FloatingLabelInput
                   id={"district"}
@@ -184,7 +253,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="district"
                   onChange={handleChange}
-                  value={formData.district}
+                  value={formData.contactAddress.district}
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
@@ -194,7 +263,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="city"
                   onChange={handleChange}
-                  value={formData.city}
+                  value={formData.contactAddress.city}
                 />
                 <FloatingLabelInput
                   id={"pinCode"}
@@ -202,7 +271,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="pincode"
                   onChange={handleChange}
-                  value={formData.pinCode}
+                  value={formData.contactAddress.pincode}
                   type="number"
                 />
               </div>
@@ -228,7 +297,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="family-name"
                   onChange={handleChange}
-                  value={formData.houseNamePermanent}
+                  value={formData.permanentAddress.houseName}
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
@@ -238,7 +307,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="state"
                   onChange={handleChange}
-                  value={formData.statePermanent}
+                  value={formData.permanentAddress.state}
                 />
                 <FloatingLabelInput
                   id={"districtPermanent"}
@@ -246,7 +315,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="district"
                   onChange={handleChange}
-                  value={formData.districtPermanent}
+                  value={formData.permanentAddress.district}
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
@@ -256,7 +325,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="city"
                   onChange={handleChange}
-                  value={formData.cityPermanent}
+                  value={formData.permanentAddress.city}
                 />
                 <FloatingLabelInput
                   id={"pinCodePermanent"}
@@ -264,7 +333,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="pincode"
                   onChange={handleChange}
-                  value={formData.pinCodePermanent}
+                  value={formData.permanentAddress.pincode}
                   type="number"
                 />
               </div>
@@ -278,7 +347,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="parent"
                   onChange={handleChange}
-                  value={formData.guardian}
+                  value={formData.parentDetails.guardian}
                 />
                 <FloatingLabelInput
                   id={"occupation"}
@@ -286,7 +355,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="occupation"
                   onChange={handleChange}
-                  value={formData.occupation}
+                  value={formData.parentDetails.occupation}
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
@@ -296,7 +365,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="family-name"
                   onChange={handleChange}
-                  value={formData.sponsor}
+                  value={formData.parentDetails.sponsor}
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
@@ -306,7 +375,7 @@ export default function PersonalDetails() {
                   required={true}
                   autoComplete="off"
                   onChange={handleChange}
-                  value={formData.sponsorRelation}
+                  value={formData.parentDetails.relation}
                 />
               </div>
             </div>
@@ -314,7 +383,7 @@ export default function PersonalDetails() {
               <span className="text-red-400">
                 Note: make sure you click upload button before proceeding
               </span>{" "}
-              <Button color="danger" onSubmit={handleSubmit}>
+              <Button color="danger" onClick={handleSubmit}>
                 Save
               </Button>
             </div>

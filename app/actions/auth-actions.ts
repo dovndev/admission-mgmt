@@ -33,7 +33,6 @@ export async function loginAction(data: z.infer<typeof userLoginSchema>): Promis
             email: email
         }
     })
-    console.log("userExists", userExists)
 
     if (!userExists || !userExists.password || !userExists.email) {
         return {

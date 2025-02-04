@@ -17,7 +17,7 @@ export default auth(async (req) => {
         return
     }
     if (isLoggedIn && isAuthRoute) {
-        return Response.redirect(new URL("/dashboard", req.url))
+        return Response.redirect(new URL("/onboarding", req.url))
     }
     if (!isLoggedIn && !isAuthRoute) {
         return

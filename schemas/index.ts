@@ -21,4 +21,53 @@ export const userLoginSchema = z.object({
     password: z.string().min(8, "Password must be atleast 8 characters"),
 });
 
+const addressSchema = z.object({
+    houseName: z.string().min(1, "House name is required"),
+    state: z.string().min(1, "State is required"),
+    district: z.string().min(1, "District is required"),
+    city: z.string().min(1, "City is required"),
+    pincode: z.string().min(6, "Enter valid pincode").max(6, "Enter valid pincode"),
+});
 
+const parentDetailsSchema = z.object({
+    guardian: z.string().min(1, "Guardian name is required"),
+    occupation: z.string().min(1, "Occupation is required"),
+    sponsor: z.string().min(1, "NRI Sponsor name is required"),
+    relation: z.string().min(1, "Sponsor relation is required"),
+});
+
+export const personalDetailsSchema = z.object({
+    // Personal Information
+    firstName: z.string().min(1, "First name is required"),
+    middleName: z.string().optional(),
+    lastName: z.string().min(1, "Last name is required"),
+    mobileNumber: z
+        .string()
+        .min(10, "Mobile number must be 10 digits")
+        .max(10, "Mobile number must be 10 digits"),
+    keralaMobileNumber: z
+        .string()
+        .min(10, "Kerala mobile number must be 10 digits")
+        .max(10, "Kerala mobile number must be 10 digits"),
+    dob: z.string().min(1, "Date of birth is required"),
+
+    // Photo will need separate handling for file upload
+    photo: z.string().optional(),
+
+    // Contact Address
+    contactAddress: addressSchema,
+
+    // Permanent Address
+    permanentAddress: addressSchema,
+
+    // Parent Details
+    parentDetails: parentDetailsSchema,
+});
+
+// Type for the form data
+export type PersonalDetailsFormData = z.infer<typeof personalDetailsSchema>;
+
+// Validation function for use in the server action
+export const validatePersonalDetails = (data: unknown) => {
+    return personalDetailsSchema.parse(data);
+};
