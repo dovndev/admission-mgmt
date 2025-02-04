@@ -4,9 +4,11 @@ import DropDownInput from "../DropDownInput";
 import { Button } from "@nextui-org/react";
 import { _10TH_BOARD, _12TH_BOARD } from "@/app/constants/dropdownOptions";
 import FileUploadInput from "../FileUploadInput";
+import { updateEducationDetails } from "../../actions/onboarding-actions";
+import { EducationalDetailsFormData } from "@/schemas";
 
 export default function EducationalDetails() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<EducationalDetailsFormData>({
     _10thSchool: "",
     _10thBoard: "",
     _10thMarklist: "",
@@ -31,14 +33,23 @@ export default function EducationalDetails() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    try {
+      const response = await updateEducationDetails(formData);
+      if (response.success) {
+        console.log(response.message);
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      console.error("Error submitting educational details", error);
+      throw error;
+    }
   };
-
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-3">
       <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-7xl ">
-        <h1 className="p-4 text-2xl">Educatinal Details</h1>
+        <h1 className="p-4 text-2xl">Educational Details</h1>
         <div className="flex flex-col grid-rows-4 gap-10 md:flex-row space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex flex-1 flex-col gap-10 ">
             <div className="flex flex-col gap-4">
@@ -68,7 +79,7 @@ export default function EducationalDetails() {
                   labelPlacement="outside"
                 />
               </div>
-              <div className="flex flex-col gap-4 flex-row ">
+              <div className="flex flex-col gap-4 md:flex-row ">
                 <FileUploadInput
                   id={"_10thMarklist"}
                   label="Mark list upload [10th]"
@@ -109,11 +120,11 @@ export default function EducationalDetails() {
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
                 <FileUploadInput
-                id={"_12thMarklist"}
-                label="Mark list upload [12th]"
-                required={true}
-                onChange={handleChange}
-              ></FileUploadInput>
+                  id={"_12thMarklist"}
+                  label="Mark list upload [12th]"
+                  required={true}
+                  onChange={handleChange}
+                ></FileUploadInput>
               </div>
               <span className="text-red-500 font-thin text-small">
                 Upload an image file of size less than 2mb
@@ -210,11 +221,11 @@ export default function EducationalDetails() {
             </div>
             <div className="flex flex-col gap-4 md:flex-row">
               <FileUploadInput
-                  id={"KeamMarklist"}
-                  label="Mark list upload [KEAM]"
-                  required={true}
-                  onChange={handleChange}
-                ></FileUploadInput>
+                id={"KeamMarklist"}
+                label="Mark list upload [KEAM]"
+                required={true}
+                onChange={handleChange}
+              ></FileUploadInput>
             </div>
             <span className="text-red-500 font-thin text-small">
               Upload an image file of size less than 2mb
@@ -222,7 +233,7 @@ export default function EducationalDetails() {
             <div className="flex flex-col text-center gap-4 w-full justify-around">
               <span className="text-red-500  bg-opacity-40 p-2 rounded-lg">
                 After selecting the mark list make sure you click UPLOAD button.
-                Your ast change will be saved, you can also use the upload
+                Your last change will be saved, you can also use the upload
                 button to change the file later.
               </span>{" "}
               <Button

@@ -71,3 +71,21 @@ export type PersonalDetailsFormData = z.infer<typeof personalDetailsSchema>;
 export const validatePersonalDetails = (data: unknown) => {
     return personalDetailsSchema.parse(data);
 };
+
+export const EducationalDetailsSchema = z.object({
+    _10thSchool: z.string().min(1, "10th School is required"),
+    _10thBoard: z.string().min(1, "10th Board is required"),
+    _10thMarklist: z.string().min(1, "10th Marklist is required"),
+    _12thSchool: z.string().optional().default(""),
+    _12thBoard: z.string().optional().default(""),
+    _12thMarklist: z.string().optional().default(""),
+    KeamYear: z.string().optional(),
+    KeamRollNo: z.string().optional(),
+    KeamRank: z.string().optional(),
+    PaperOneScore: z.string().optional(),
+    PaperTwoScore: z.string().optional(),
+    KeamScore: z.string().optional(),
+    KeamMarklist: z.string().optional().default(""),
+});
+
+export type EducationalDetailsFormData = z.infer<typeof EducationalDetailsSchema>;
