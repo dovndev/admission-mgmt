@@ -8,13 +8,22 @@ interface DropDownInputProps {
   label: string;
   required?: boolean;
   value?: string;
-  labelPlacement?:"inside" | "outside" | "outside-left";
+  color?: "primary" | "secondary" | "success" | "warning" | "default" | undefined;
+  variant?: "bordered" | "flat" | "faded" | "underlined";
+  labelPlacement?: "inside" | "outside" | "outside-left";
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const DropDownInput: React.FC<DropDownInputProps> = ({ options, id, label, required = false,onChange ,  labelPlacement = "inside",
+const DropDownInput: React.FC<DropDownInputProps> = ({
+  options,
+  id,
+  label,
+  required = false,
+  variant = "bordered",
+  onChange,
+  color = undefined,
+  labelPlacement = "inside",
 }) => {
-
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (onChange) {
       const event = {
@@ -25,8 +34,17 @@ const DropDownInput: React.FC<DropDownInputProps> = ({ options, id, label, requi
   };
 
   return (
-    <Select label={label} id={id} className="w-full" variant="bordered" isRequired={required} onChange={handleSelect} labelPlacement={labelPlacement}       placeholder={labelPlacement === 'outside' ? " ":""}
->
+    <Select
+      label={label}
+      id={id}
+      className="w-full"
+      variant={variant}
+      isRequired={required}
+      color={color}
+      onChange={handleSelect}
+      labelPlacement={labelPlacement}
+      placeholder={labelPlacement === "outside" ? " " : ""}
+    >
       {options.map((option, index) => (
         <SelectItem key={index}>{option}</SelectItem>
       ))}

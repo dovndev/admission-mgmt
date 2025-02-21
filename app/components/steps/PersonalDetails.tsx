@@ -3,6 +3,7 @@ import FloatingLabelInput from "../FloatingLabelInput";
 import InputDate from "../InputDate";
 import { Button } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
+import FileUploadInput from "../FileUploadInput";
 
 export default function PersonalDetails() {
   const [isSelected, setIsSelected] = useState(false);
@@ -28,6 +29,7 @@ export default function PersonalDetails() {
     occupation: "",
     sponsor: "",
     sponsorRelation: "",
+    studentPhoto: "",
   });
 
   useEffect(() => {
@@ -41,18 +43,9 @@ export default function PersonalDetails() {
         pinCodePermanent: prev.pinCode,
       }));
     }
-  }, [
-    isSelected,
-    formData.houseName,
-    formData.state,
-    formData.district,
-    formData.city,
-    formData.pinCode,
-  ]);
+  }, [isSelected, formData.houseName, formData.state, formData.district, formData.city, formData.pinCode]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
@@ -61,12 +54,9 @@ export default function PersonalDetails() {
     e.preventDefault();
     console.log(formData);
   };
-  const handleUpload = () => {
-    //upload photo to db and get the url
-  };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full p-3">
+    <form className="flex flex-col items-center justify-center w-full p-3" onSubmit={handleSubmit}>
       <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-7xl ">
         <h1 className="p-4 text-2xl">Personal Details</h1>
         <div className="flex flex-col grid-rows-4 gap-10 md:flex-row space-y-4 md:space-y-0 md:space-x-4">
@@ -123,30 +113,9 @@ export default function PersonalDetails() {
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
-                <FloatingLabelInput
-                  id={"photo"}
-                  label={"Photo"}
-                  required={true}
-                  onChange={handleChange}
-                  type="file"
-                />
-                <Button
-                  color="warning"
-                  variant="ghost"
-                  id={"photosubmit"}
-                  className="m-6"
-                  onSubmit={(e: React.FormEvent) => {
-                    e.preventDefault();
-                    handleUpload();
-                  }}
-                  disabled={true}
-                >
-                  UPLOAD
-                </Button>
+                <FileUploadInput id="studentPhoto" label="Photo" required={true} onChange={handleChange} />
               </div>
-              <span className="text-red-500 font-thin text-small">
-                Upload an image file of size less than 2mb
-              </span>
+              <span className="text-red-500 font-thin text-small">Upload an image file of size less than 2mb</span>
             </div>
             <div className="flex flex-col gap-4">
               <h1>Contact Address</h1>
@@ -303,16 +272,14 @@ export default function PersonalDetails() {
               </div>
             </div>
             <div className="flex w-full items-center justify-around">
-              <span className="text-red-400">
-                Note: make sure you click upload button before proceeding
-              </span>{" "}
-              <Button color="danger" onSubmit={handleSubmit}>
+              <span className="text-red-400">Note: make sure you click upload button before proceeding</span>{" "}
+              <Button color="danger" type="submit">
                 Save
               </Button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

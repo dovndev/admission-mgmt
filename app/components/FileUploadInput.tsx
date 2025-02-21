@@ -43,17 +43,17 @@ const FileUploadInput: React.FC<FileUploadInputProps> = ({ id, label, required =
   return (
     <div id={id} className="flex flex-row items-center gap-4">
       <Input
-        type="file"
-        accept=".jpeg, .png"
-        isInvalid={isInvalid}
-        errorMessage={error}
-        variant="bordered"
-        isRequired={required}
-        onChange={handleFileChange}
-        label={label}
+      type="file"
+      accept=".jpeg, .png"
+      isInvalid={isInvalid}
+      errorMessage={error}
+      variant="bordered"
+      isRequired={required}
+      onChange={handleFileChange}
+      label={label}
       />
-      <Button type="button" color="warning" variant="ghost">
-        UPLOAD
+      <Button type="button" color="warning" variant="ghost" className="mt-5">
+      UPLOAD
       </Button>
     </div>
   );
