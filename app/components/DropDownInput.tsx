@@ -8,6 +8,7 @@ interface DropDownInputProps {
   label: string;
   required?: boolean;
   value?: string;
+  size? : "sm" | "md" | "lg";
   color?: "primary" | "secondary" | "success" | "warning" | "default" | undefined;
   variant?: "bordered" | "flat" | "faded" | "underlined";
   labelPlacement?: "inside" | "outside" | "outside-left";
@@ -23,6 +24,7 @@ const DropDownInput: React.FC<DropDownInputProps> = ({
   onChange,
   color = undefined,
   labelPlacement = "inside",
+  size = "md",
 }) => {
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (onChange) {
@@ -35,6 +37,7 @@ const DropDownInput: React.FC<DropDownInputProps> = ({
 
   return (
     <Select
+      size={size}
       label={label}
       id={id}
       className="w-full"
@@ -46,7 +49,7 @@ const DropDownInput: React.FC<DropDownInputProps> = ({
       placeholder={labelPlacement === "outside" ? " " : ""}
     >
       {options.map((option, index) => (
-        <SelectItem key={index}>{option}</SelectItem>
+      <SelectItem key={index}>{option}</SelectItem>
       ))}
     </Select>
   );
