@@ -1,25 +1,39 @@
+"use client";
 
+import { useState } from "react";
 import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import { Card, CardHeader, CardBody } from "@nextui-org/card";
 import NavbarAdmin from "../components/NavbarAdmin";
 import { BRANCHES as branches } from "../constants/dropdownOptions";
+import { SEAT_ALLOCATION as initialAllocations } from "../constants/dropdownOptions";
+
+type Branch = keyof typeof initialAllocations;
+
 interface BranchAllocationProps {
-  title: string;
+  title: Branch;
+  allocations: typeof initialAllocations;
+  handleChange: (branch: Branch, type: string, value: number) => void;
+  handleSave: (branch: Branch) => void;
 }
 
-
-function BranchAllocation({ title }: BranchAllocationProps) {
+function BranchAllocation({
+  title,
+  allocations,
+  handleChange,
+  handleSave,
+}: BranchAllocationProps) {
   return (
     <Card className="shadow-sm">
       <CardHeader className="p-4">
         <h1 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
           {title}
-        </h1>{" "}
+        </h1>
         <Button
           size="sm"
           variant="solid"
-          className=" ml-auto bg-[#be185d] text-white hover:bg-[#9d174d]"
+          className="ml-auto bg-[#be185d] text-white hover:bg-[#9d174d]"
+          onClick={() => handleSave(title)}
         >
           Save
         </Button>
@@ -32,7 +46,10 @@ function BranchAllocation({ title }: BranchAllocationProps) {
               labelPlacement="outside"
               type="number"
               className="h-8"
-              defaultValue="9"
+              value={allocations[title].NRI.toString()}
+              onChange={(e) =>
+                handleChange(title, "NRI", Number(e.target.value))
+              }
             />
           </div>
           <div className="space-y-2">
@@ -41,7 +58,10 @@ function BranchAllocation({ title }: BranchAllocationProps) {
               labelPlacement="outside"
               type="number"
               className="h-8"
-              defaultValue="9"
+              value={allocations[title].Supernumerary.toString()}
+              onChange={(e) =>
+                handleChange(title, "Supernumerary", Number(e.target.value))
+              }
             />
           </div>
           <div className="space-y-2">
@@ -50,6 +70,10 @@ function BranchAllocation({ title }: BranchAllocationProps) {
               labelPlacement="outside"
               type="number"
               className="h-8"
+              value={allocations[title].MGMT.toString()}
+              onChange={(e) =>
+                handleChange(title, "MGMT", Number(e.target.value))
+              }
             />
           </div>
         </div>
@@ -59,20 +83,44 @@ function BranchAllocation({ title }: BranchAllocationProps) {
 }
 
 export default function SeatAllocation() {
+  const [allocations, setAllocations] = useState(initialAllocations);
 
+  const handleChange = (branch: Branch, type: string, value: number) => {
+    setAllocations((prevAllocations) => ({
+      ...prevAllocations,
+      [branch]: {
+        ...prevAllocations[branch],
+        [type]: value,
+      },
+    }));
+  };
+
+  const handleSave = (branch: Branch) => {
+    console.log(`Saving allocations for ${branch}:`, allocations[branch]);
+    const newAllocations = allocations;
+    newAllocations[branch] = allocations[branch];
+    console.log(newAllocations);
+    setAllocations(newAllocations);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center flex-col">
-        <NavbarAdmin></NavbarAdmin>
+      <NavbarAdmin />
       <div className="mx-auto max-w-7xl my-4">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold ">Seat Allocation</h1>
+            <h1 className="text-2xl font-bold">Seat Allocation</h1>
           </div>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {branches.map((branch) => (
-            <BranchAllocation key={branch} title={branch} />
+          {Object.values(branches).map((branch) => (
+            <BranchAllocation
+              key={branch}
+              title={branch as Branch}
+              allocations={allocations}
+              handleChange={handleChange}
+              handleSave={handleSave}
+            />
           ))}
         </div>
         <div className="mt-8 w-[25%]">
