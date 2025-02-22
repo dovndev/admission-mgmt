@@ -50,8 +50,8 @@ export default function AdminHome() {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="h-20">
-        <NavbarAdmin />
+      <div className="h-20 flex items-center justify-center">
+      <NavbarAdmin />
       </div>
 
 
