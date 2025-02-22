@@ -24,15 +24,15 @@ function BranchAllocation({
   handleSave,
 }: BranchAllocationProps) {
   return (
-    <Card className="shadow-sm">
+    <Card className="shadow-md hover:shadow-sm hover:shadow-muthootRed bg-textBoxBackground">
       <CardHeader className="p-4">
         <h1 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          {title}
+          {branches[title]}
         </h1>
         <Button
           size="sm"
           variant="solid"
-          className="ml-auto bg-[#be185d] text-white hover:bg-[#9d174d]"
+          className="ml-auto bg-[#be185d] text-white hover:bg-[#9d174d] bg-muthootRed"
           onClick={() => handleSave(title)}
         >
           Save
@@ -113,13 +113,14 @@ export default function SeatAllocation() {
           </div>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {Object.values(branches).map((branch) => (
+          {Object.keys(branches).map((branch) => (
             <BranchAllocation
               key={branch}
               title={branch as Branch}
               allocations={allocations}
               handleChange={handleChange}
               handleSave={handleSave}
+              
             />
           ))}
         </div>
