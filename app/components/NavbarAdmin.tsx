@@ -52,8 +52,8 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
   };
 
   return (
-      <div className="relative z-10 bg-white bg-opacity-[7%] shadow max-w-[90%] w-full h-[60px] mt-5 mx-4 rounded-3xl flex items-center justify-between gap-1 md:gap-10 px-6">
-        <div className="flex items-center gap-4">
+      <div className="relative z-10 bg-white bg-opacity-[7%] shadow md:max-w-[90%] w-full h-[60px] mt-5 mx-1 md:mx-4 rounded-3xl flex items-center justify-between gap-1 md:gap-10 px-6">
+        <div className="flex items-center md:gap-2">
           
   
           {/* Navigation Dropdown */}
@@ -91,7 +91,7 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
 
       {/* Navigation Links */}
       <div className="flex-1 flex justify-end ">
-        <div className="flex gap-2 items-center w-full md:w-[50%] lg:w-[30%] xl:w-[30%] ">
+        <div className="flex gap-1 md:gap-2 items-center w-full md:w-[50%] lg:w-[30%] xl:w-[30%] ">
           <DropDownInput
             options={PROGRAM_OPTIONS}
             id="program"
