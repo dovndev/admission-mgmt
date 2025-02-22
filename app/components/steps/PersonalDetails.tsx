@@ -3,6 +3,7 @@ import FloatingLabelInput from "../FloatingLabelInput";
 import InputDate from "../InputDate";
 import { Button } from "@nextui-org/react";
 import { Checkbox } from "@nextui-org/checkbox";
+import FileUploadInput from "../FileUploadInput";
 import { personalDetailsAction } from "../../actions/onboarding-actions";
 import { type PersonalDetailsFormData } from "@/schemas";
 
@@ -54,7 +55,14 @@ export default function PersonalDetails() {
         },
       }));
     }
-  }, [isSelected, formData.contactAddress]);
+  }, [
+    isSelected,
+    formData.houseName,
+    formData.state,
+    formData.district,
+    formData.city,
+    formData.pinCode,
+  ]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -143,7 +151,10 @@ export default function PersonalDetails() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full p-3">
+    <form
+      className="flex flex-col items-center justify-center w-full p-3"
+      onSubmit={handleSubmit}
+    >
       <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-7xl ">
         <h1 className="p-4 text-2xl">Personal Details</h1>
         <div className="flex flex-col grid-rows-4 gap-10 md:flex-row space-y-4 md:space-y-0 md:space-x-4">
@@ -200,26 +211,12 @@ export default function PersonalDetails() {
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
-                <FloatingLabelInput
-                  id={"photo"}
-                  label={"Photo"}
+                <FileUploadInput
+                  id="studentPhoto"
+                  label="Photo"
                   required={true}
                   onChange={handleChange}
-                  type="file"
                 />
-                <Button
-                  color="warning"
-                  variant="ghost"
-                  id={"photosubmit"}
-                  className="m-6"
-                  onSubmit={(e: React.FormEvent) => {
-                    e.preventDefault();
-                    handleUpload();
-                  }}
-                  disabled={true}
-                >
-                  UPLOAD
-                </Button>
               </div>
               <span className="text-red-500 font-thin text-small">
                 Upload an image file of size less than 2mb
@@ -390,6 +387,6 @@ export default function PersonalDetails() {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

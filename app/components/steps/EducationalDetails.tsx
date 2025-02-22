@@ -47,7 +47,7 @@ export default function EducationalDetails() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full p-3">
+    <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center w-full p-3">
       <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-7xl ">
         <h1 className="p-4 text-2xl">Educational Details</h1>
         <div className="flex flex-col grid-rows-4 gap-10 md:flex-row space-y-4 md:space-y-0 md:space-x-4">
@@ -240,7 +240,6 @@ export default function EducationalDetails() {
                 color="danger"
                 className="ml-auto"
                 type="submit"
-                onClick={handleSubmit}
               >
                 Save
               </Button>
@@ -248,6 +247,6 @@ export default function EducationalDetails() {
           </div>
         </div>
       </div>
-    </div>
+      </form>
   );
 }
