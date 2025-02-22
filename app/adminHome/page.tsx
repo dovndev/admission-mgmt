@@ -49,21 +49,28 @@ export default function AdminHome() {
   }, [loadData]);
 
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-center h-20 w-full">
+    <div className="flex flex-col h-screen">
+      <div className="h-20">
         <NavbarAdmin />
       </div>
 
-      <div className="flex flex-col xl:flex-row items-center min-h-screen bg-background pb-4 pt-4 p-1">
-        {/* Graph Card */}
-        <div className="w-full max-w-6xl bg-textBoxBackground rounded-3xl shadow-xl p-4 md:p-6 m-4">
+
+      <div className="flex-1 flex flex-col lg:flex-row gap-4 p-4 overflow-hidden lg:items-center justify-center">
+
+        <div className="flex-1 bg-textBoxBackground rounded-3xl shadow-xl p-4 h-[400px] lg:h-full lg:p-6 lg:max-w-[50%]">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Registration Statistics</h2>
-            <Button isIconOnly color="warning" variant="ghost" onPress={loadData} isLoading={isLoading}>
+            <Button
+              isIconOnly
+              color="warning"
+              variant="ghost"
+              onPress={loadData}
+              isLoading={isLoading}
+            >
               <FiRefreshCw className={`h-5 w-5 ${isLoading ? "animate-spin" : ""}`} />
             </Button>
           </div>
-          <div className="h-[400px] w-full">
+          <div className="h-[calc(100%-3rem)]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={data}
@@ -85,24 +92,34 @@ export default function AdminHome() {
             </ResponsiveContainer>
           </div>
         </div>
-        <div>
-          <div className="flex gap-4">
+
+        {/* Right side - Stats */}
+        <div className="lg:w-80 flex flex-col gap-4 ">
+          <div className="grid grid-cols-2 gap-4">
             <div className="bg-textBoxBackground p-4 text-center shadow-xl rounded-3xl">
-              <div className="text-xl">Total Applications</div>
-              <div className="text-4xl font-bold">{data.reduce((sum, item) => sum + item.applications, 0)}</div>
+              <div className="text-xl">Applications</div>
+              <div className="text-4xl font-bold">
+                {data.reduce((sum, item) => sum + item.applications, 0)}
+              </div>
             </div>
             <div className="bg-textBoxBackground p-4 text-center shadow-xl rounded-3xl">
-              <div className="text-xl">Total Aproved</div>
-              <div className="text-4xl font-bold">{data.reduce((sum, item) => sum + item.aproved, 0)}</div>
+              <div className="text-xl">Aproved</div>
+              <div className="text-4xl font-bold">
+                {data.reduce((sum, item) => sum + item.aproved, 0)}
+              </div>
             </div>
           </div>
-          <div className="flex flex-wrap gap-4 my-4 bg-textBoxBackground shadow-xl rounded-3xl items-center justify-center">
-            {quotaData.map((option) => (
-              <div key={option.quota} className=" p-4 text-center ">
-                <div className="text-xl">{option.quota}</div>
-                <div className="text-4xl font-bold">{option.applications}</div>
-              </div>
-            ))}
+
+
+          <div className="flex-1 bg-textBoxBackground p-4 shadow-xl rounded-3xl">
+            <div className="flex gap-4 items-center justify-center">
+              {quotaData.map((option) => (
+                <div key={option.quota} className="text-center">
+                  <div className="text-xl">{option.quota}</div>
+                  <div className="text-4xl font-bold">{option.applications}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
