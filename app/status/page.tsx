@@ -7,7 +7,6 @@ import { Card, CardHeader, CardBody } from "@nextui-org/card";
 import NavbarAdmin from "../components/NavbarAdmin";
 import { BRANCHES as branches } from "../constants/dropdownOptions";
 import { SEAT_ALLOCATION as initialAllocations } from "../constants/dropdownOptions";
-import YearPopup from "../components/YearPopup";
 import {
   ModalHeader,
   ModalBody,
@@ -16,6 +15,7 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
+import { addYear } from "../actions/branch-Actions";
 
 type Branch = keyof typeof initialAllocations;
 
@@ -114,10 +114,16 @@ export default function SeatAllocation() {
     setAllocations(newAllocations);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (year) {
       console.log(`Year added: ${year}`);
       setYear(undefined);
+      const result = await addYear(year);
+      if (result.success) {
+        console.log(result.message);
+      } else {
+        console.error({ error: result.message });
+      }
       onClose();
     } else {
       console.error("Year is required");
