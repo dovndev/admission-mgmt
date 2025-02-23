@@ -7,6 +7,15 @@ import { Card, CardHeader, CardBody } from "@nextui-org/card";
 import NavbarAdmin from "../components/NavbarAdmin";
 import { BRANCHES as branches } from "../constants/dropdownOptions";
 import { SEAT_ALLOCATION as initialAllocations } from "../constants/dropdownOptions";
+import YearPopup from "../components/YearPopup";
+import {
+  ModalHeader,
+  ModalBody,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/react";
 
 type Branch = keyof typeof initialAllocations;
 
@@ -84,6 +93,8 @@ function BranchAllocation({
 
 export default function SeatAllocation() {
   const [allocations, setAllocations] = useState(initialAllocations);
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [year, setYear] = useState<number | undefined>(undefined);
 
   const handleChange = (branch: Branch, type: string, value: number) => {
     setAllocations((prevAllocations) => ({
@@ -103,6 +114,16 @@ export default function SeatAllocation() {
     setAllocations(newAllocations);
   };
 
+  const handleSubmit = () => {
+    if (year) {
+      console.log(`Year added: ${year}`);
+      setYear(undefined);
+      onClose();
+    } else {
+      console.error("Year is required");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center flex-col">
       <NavbarAdmin />
@@ -120,7 +141,6 @@ export default function SeatAllocation() {
               allocations={allocations}
               handleChange={handleChange}
               handleSave={handleSave}
-              
             />
           ))}
         </div>
@@ -133,6 +153,39 @@ export default function SeatAllocation() {
           </Card>
         </div>
       </div>
+      <Button className="fixed bottom-4 right-4" onPress={onOpen}>
+        Add Year
+      </Button>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <ModalContent>
+              <ModalHeader>
+                <h2>Add Year</h2>
+              </ModalHeader>
+              <ModalBody>
+                <Input
+                  label="Year"
+                  value={year?.toString() || ""}
+                  onChange={(e) => setYear(Number(e.target.value))}
+                  type="number"
+                  required
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button onClick={handleSubmit}>Add Year</Button>
+                <Button
+                  className="ml-auto bg-[#be185d] text-white hover:bg-[#9d174d] bg-muthootRed"
+                  variant="bordered"
+                  onClick={onClose}
+                >
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

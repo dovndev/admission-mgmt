@@ -112,3 +112,15 @@ model User {
   payment            Payment?
   createdAt          DateTime       @default(now())
 }
+
+model Branches {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String @unique
+  totalSets    Int    @default(9) // Default total sets for each branch
+  occupiedSets Int    @default(0) // Initially no sets are occupied
+  nri          Int    @default(0) // Count of NRI seats
+  oci          Int    @default(0) // Count of OCI seats
+  cwig         Int    @default(0) // Count of CWIG seats
+  year         Int // Year for which the data is applicable
+  waitingList  Int    @default(0) // Count of students on the waiting list
+}
