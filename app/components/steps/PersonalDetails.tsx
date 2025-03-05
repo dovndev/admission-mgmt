@@ -6,6 +6,7 @@ import { Checkbox } from "@nextui-org/checkbox";
 import FileUploadInput from "../FileUploadInput";
 import { personalDetailsAction } from "../../actions/onboarding-actions";
 import { type PersonalDetailsFormData } from "@/schemas";
+import { uploadFile } from "@/app/actions/file-upload-Actions";
 
 export default function PersonalDetails() {
   const [isSelected, setIsSelected] = useState(false);
@@ -145,9 +146,33 @@ export default function PersonalDetails() {
     }
   };
 
-  const handleUpload = () => {
-    //upload photo to db and get the url
-    return;
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    console.log("File upload triggered");
+    if (!event.target.files || event.target.files.length === 0) {
+      console.error("No file selected");
+      return;
+    }
+
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      // Call the server action to upload the file
+      await uploadFile(formData);
+
+      // Update your form state with the file name or URL
+      setFormData((prev) => ({
+        ...prev,
+        photo: file.name, // Or you might want to store the URL returned from the server
+      }));
+
+      console.log("File uploaded successfully");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   };
 
   return (
@@ -215,7 +240,9 @@ export default function PersonalDetails() {
                   id="studentPhoto"
                   label="Photo"
                   required={true}
-                  onChange={handleChange}
+                  onChange={() => {
+                    console.log("File upload triggered");
+                  }}
                 />
               </div>
               <span className="text-red-500 font-thin text-small">

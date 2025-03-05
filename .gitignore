@@ -30,7 +30,9 @@ yarn-error.log*
 .env
 /.env
 ./.env
-
+/gc/*
+./gc/*
+gc*
 # vercel
 .vercel
 

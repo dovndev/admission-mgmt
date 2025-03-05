@@ -12,7 +12,7 @@ import {
   QUOTA_OPTIONS,
 } from "../constants/dropdownOptions";
 import { registerAction } from "../actions/auth-actions";
-import userRegisterSchema from "@/schemas";
+import { userRegisterSchema } from "@/schemas";
 import { useRouter } from "next/navigation";
 
 export default function Register() {

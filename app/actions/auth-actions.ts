@@ -93,7 +93,7 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
             lastName: validatedData.middleName,
             mobileNumber: validatedData.mobileNumber
         })
-        // console.log("password", password)
+        console.log("password", password)
         //need to add code to send email
         // {}
         const salt = await genSalt(10)

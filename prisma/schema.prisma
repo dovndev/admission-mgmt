@@ -115,7 +115,7 @@ model User {
 
 model Branches {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
-  name         String @unique
+  name         String
   totalSets    Int    @default(9) // Default total sets for each branch
   occupiedSets Int    @default(0) // Initially no sets are occupied
   nri          Int    @default(0) // Count of NRI seats
@@ -123,4 +123,6 @@ model Branches {
   cwig         Int    @default(0) // Count of CWIG seats
   year         Int // Year for which the data is applicable
   waitingList  Int    @default(0) // Count of students on the waiting list
+
+  @@unique([name, year])
 }
