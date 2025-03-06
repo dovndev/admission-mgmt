@@ -10,6 +10,7 @@ import { uploadFile } from "@/app/actions/file-upload-Actions";
 
 export default function PersonalDetails() {
   const [isSelected, setIsSelected] = useState(false);
+  const [fileLink, setfileLink] = useState("");
 
   // Initialize form state with proper types
   const [formData, setFormData] = useState<PersonalDetailsFormData>({
@@ -133,8 +134,9 @@ export default function PersonalDetails() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     try {
+      console.log("Submitting personal details", formData);
       const response = await personalDetailsAction(formData);
       if (response.success) {
         console.log(response.message);
@@ -146,40 +148,8 @@ export default function PersonalDetails() {
     }
   };
 
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    console.log("File upload triggered");
-    if (!event.target.files || event.target.files.length === 0) {
-      console.error("No file selected");
-      return;
-    }
-
-    const file = event.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      // Call the server action to upload the file
-      await uploadFile(formData);
-
-      // Update your form state with the file name or URL
-      setFormData((prev) => ({
-        ...prev,
-        photo: file.name, // Or you might want to store the URL returned from the server
-      }));
-
-      console.log("File uploaded successfully");
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
-  };
-
   return (
-    <form
-      className="flex flex-col items-center justify-center w-full p-3"
-      onSubmit={handleSubmit}
-    >
+    <form className="flex flex-col items-center justify-center w-full p-3">
       <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-7xl ">
         <h1 className="p-4 text-2xl">Personal Details</h1>
         <div className="flex flex-col grid-rows-4 gap-10 md:flex-row space-y-4 md:space-y-0 md:space-x-4">
@@ -240,9 +210,13 @@ export default function PersonalDetails() {
                   id="studentPhoto"
                   label="Photo"
                   required={true}
-                  onChange={() => {
-                    console.log("File upload triggered");
+                  setFileLink={(url) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      photo: url,
+                    }));
                   }}
+                  onChange={handleChange}
                 />
               </div>
               <span className="text-red-500 font-thin text-small">

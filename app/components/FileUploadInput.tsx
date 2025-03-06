@@ -8,7 +8,8 @@ interface FileUploadInputProps {
   required?: boolean;
   label: string;
   value?: string;
-  onChange?: (fileName: string) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setFileLink?: (fileLink: string) => void;
 }
 
 const FileUploadInput: React.FC<FileUploadInputProps> = ({
@@ -16,6 +17,7 @@ const FileUploadInput: React.FC<FileUploadInputProps> = ({
   label,
   required = false,
   onChange,
+  setFileLink,
 }) => {
   const [error, setError] = useState<string>("");
   const [isInvalid, setInvalid] = useState<boolean>(false);
@@ -72,9 +74,17 @@ const FileUploadInput: React.FC<FileUploadInputProps> = ({
       console.log("upload result", result);
       if (result && result.success) {
         setUploadStatus("Upload successful!");
+        if (setFileLink) {
+          setFileLink(result.url);
+        }
+
         // Notify parent component about the uploaded file
         if (onChange) {
-          onChange(selectedFile.name);
+          onChange({
+            target: {
+              value: result.url,
+            },
+          } as React.ChangeEvent<HTMLInputElement>);
         }
       } else {
         setError("Upload failed");

@@ -45,9 +45,15 @@ export default function EducationalDetails() {
       throw error;
     }
   };
+  const setFileLink = (fieldName: string, url: string) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: url }));
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center w-full p-3">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center justify-center w-full p-3"
+    >
       <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-7xl ">
         <h1 className="p-4 text-2xl">Educational Details</h1>
         <div className="flex flex-col grid-rows-4 gap-10 md:flex-row space-y-4 md:space-y-0 md:space-x-4">
@@ -85,6 +91,7 @@ export default function EducationalDetails() {
                   label="Mark list upload [10th]"
                   required={true}
                   onChange={handleChange}
+                  setFileLink={(url) => setFileLink("_10thMarklist", url)}
                 ></FileUploadInput>
               </div>
               <span className="text-red-500 font-thin text-small">
@@ -124,6 +131,7 @@ export default function EducationalDetails() {
                   label="Mark list upload [12th]"
                   required={true}
                   onChange={handleChange}
+                  setFileLink={(url) => setFileLink("_12thMarklist", url)}
                 ></FileUploadInput>
               </div>
               <span className="text-red-500 font-thin text-small">
@@ -225,6 +233,7 @@ export default function EducationalDetails() {
                 label="Mark list upload [KEAM]"
                 required={true}
                 onChange={handleChange}
+                setFileLink={(url) => setFileLink("KeamMarklist", url)}
               ></FileUploadInput>
             </div>
             <span className="text-red-500 font-thin text-small">
@@ -236,17 +245,13 @@ export default function EducationalDetails() {
                 Your last change will be saved, you can also use the upload
                 button to change the file later.
               </span>{" "}
-              <Button
-                color="danger"
-                className="ml-auto"
-                type="submit"
-              >
+              <Button color="danger" className="ml-auto" type="submit">
                 Save
               </Button>
             </div>
           </div>
         </div>
       </div>
-      </form>
+    </form>
   );
 }

@@ -30,6 +30,7 @@ export async function personalDetailsAction(data: PersonalDetailsFormData) {
                 mobileNumber: validatedData.mobileNumber,
                 keralaMobileNumber: validatedData.keralaMobileNumber,
                 dob: new Date(validatedData.dob), // Convert string to Date
+                photo: validatedData.photo,
                 contactAddress: {
                     set: {
                         ...validatedData.contactAddress,

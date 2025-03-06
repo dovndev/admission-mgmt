@@ -9,7 +9,7 @@ export const userRegisterSchema = z.object({
     gender: z.string().min(1, "Please provide a gender"),
     dob: z.string().min(1, "Please provide a date of birth"),
     applyingYear: z.string().min(4, "Please provide an valid applying year"),
-    quota: z.enum(["NRI", "CWIG"]).refine(val => val, { message: "Please select a valid quota" }),
+    quota: z.enum(["NRI", "CWIG", "OCI"]).refine(val => val, { message: "Please select a valid quota" }),
     program: z.enum(["BTech", "MCA", "MTech"]).refine(val => val, { message: "Please select a valid program" }),
     aadharNo: z.string().min(12, "Please provide a valid aadhar number").max(12, "Please provide a valid aadhar number"),
     religion: z.string().min(1, "Please provide a religion"),

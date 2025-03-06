@@ -25,6 +25,7 @@ enum Branch {
 enum Quota {
   NRI
   CWIG
+  OCI
 }
 
 enum Program {
@@ -102,6 +103,7 @@ model User {
   applyingYear       String
   aadharNo           Int            @unique
   dob                DateTime
+  photo              String?
   religion           String
   cast               String
   contactAddress     UserAddress?
@@ -111,6 +113,7 @@ model User {
   declaration        Declaration?
   payment            Payment?
   createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
 }
 
 model Branches {
