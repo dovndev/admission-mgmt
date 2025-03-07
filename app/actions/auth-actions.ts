@@ -127,3 +127,25 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
         return { error: "user creation failed", success: false }
     }
 }
+
+export async function getUser(email: string) {
+
+    try {
+
+        const user = await prisma.user.findUnique({
+            where: {
+                email: email
+            }
+        });
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+        return user;
+    }
+    catch (error) {
+        console.error("Error fetching user:", error);
+        throw new Error("Failed to fetch user data");
+    }
+
+}

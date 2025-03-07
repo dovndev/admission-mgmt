@@ -10,6 +10,7 @@ import EducationalDetails from "../components/steps/EducationalDetails";
 import Declaration from "../components/steps/Declaration";
 import FinalVerification from "../components/steps/FinalVerification";
 import Payment from "../components/steps/Payment";
+import { ClientSessionProvider } from "../providers";
 
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -41,34 +42,36 @@ export default function OnBoarding() {
   };
 
   return (
-    <div className="flex flex-col ">
-      <div className="flex justify-center h-20 w-full">
-        <ProgressBar currentStep={currentStep} />
-      </div>
-      <div className="flex flex-col items-center min-h-screen bg-background pb-4 pt-4">
-        <div className="w-full">{renderStepContent()}</div>
+    <ClientSessionProvider>
+      <div className="flex flex-col ">
+        <div className="flex justify-center h-20 w-full">
+          <ProgressBar currentStep={currentStep} />
+        </div>
+        <div className="flex flex-col items-center min-h-screen bg-background pb-4 pt-4">
+          <div className="w-full">{renderStepContent()}</div>
 
-        <div className="flex space-x-4 bg-textBoxBackground items-center shadow-xl p-4 rounded-xl">
-          <Button
-            id="previousPage"
-            className="bg-red-600 border-red-900 text-white"
-            variant="bordered"
-            onPress={handlePrevious}
-            disabled={currentStep === 0}
-          >
-            Previous
-          </Button>
-          <Button
-            id="nextPage"
-            className="bg-green-600 border-green-900 text-white"
-            variant="bordered"
-            onPress={handleNext}
-            disabled={currentStep === REGISTER_STEPS.length - 1}
-          >
-            Next
-          </Button>
+          <div className="flex space-x-4 bg-textBoxBackground items-center shadow-xl p-4 rounded-xl">
+            <Button
+              id="previousPage"
+              className="bg-red-600 border-red-900 text-white"
+              variant="bordered"
+              onPress={handlePrevious}
+              disabled={currentStep === 0}
+            >
+              Previous
+            </Button>
+            <Button
+              id="nextPage"
+              className="bg-green-600 border-green-900 text-white"
+              variant="bordered"
+              onPress={handleNext}
+              disabled={currentStep === REGISTER_STEPS.length - 1}
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </ClientSessionProvider>
   );
 }
