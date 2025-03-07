@@ -34,3 +34,20 @@ export async function addYear(year: number) {
         branch: newBranch
     }
 }
+
+export async function isBranchAvailable(year: number | string, branch: string) {
+    // console.log("year", year, "branch", branch)
+    if (typeof year === "string") {
+        year = parseInt(year)
+    }
+    const branchEntry = await prisma.branches.findFirst({
+        where: {
+            year: year,
+            name: branch
+        }
+    });
+    if (!branch) {
+        throw new Error(`Branch ${branch} not found for the year ${year}`);
+    }
+    return branchEntry;
+}

@@ -5,35 +5,112 @@ import { useEffect, useState } from "react";
 import { BRANCH_OPTIONS } from "../../constants/dropdownOptions";
 import { Checkbox } from "@nextui-org/react";
 import FileUploadInput from "../FileUploadInput";
-import { getUser } from "@/app/actions/auth-actions";
 import { useSession } from "next-auth/react";
-import { IUser } from "@/types/userTypes";
+import { isBranchAvailable } from "@/app/actions/branch-Actions";
+import { z } from "zod";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { updateDeclerationDetails } from "@/app/actions/onboarding-actions";
+import { Branch } from "@/types/userTypes";
+
+// Define the validation schema with Zod
+const declarationSchema = z.object({
+  branch: z.enum(["CSE", "ECE", "EEE", "ME", "CE", "IT"] as const, {
+    required_error: "Branch selection is required",
+    invalid_type_error: "Branch must be one of the available options",
+  }),
+  signature: z.string().min(1, "Applicant signature is required"),
+  parentSignature: z.string().min(1, "Parent signature is required"),
+  agreementChecked: z
+    .boolean()
+    .refine((val) => val === true, {
+      message: "You must agree to the terms and conditions",
+    })
+    .default(false),
+});
+
+type DeclarationFormData = z.infer<typeof declarationSchema>;
+
+// Define the expected response type from isBranchAvailable
+interface BranchAvailabilityResponse {
+  totalSets: number;
+  occupiedSets: number;
+}
+
+// Define user data type
+interface UserData {
+  applyingYear?: number;
+}
 
 export default function Declaration() {
-  const [formData, setFormData] = useState({
-    preferedBranch: "",
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
+  const [branchAlert, setbranchAlert] = useState<string | null>(null);
   const [academic, setacademic] = useState(0);
   const session = useSession();
+
+  // Initialize the form with react-hook-form and zod validation
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<DeclarationFormData>({
+    resolver: zodResolver(declarationSchema),
+    defaultValues: {
+      branch: "" as Branch,
+      signature: "",
+      parentSignature: "",
+      agreementChecked: false,
+    },
+  });
+
+  // Watch form values for display purposes
+  const formValues = watch();
+
+  const handleBranchChange = async (value: Branch) => {
+    setValue("branch", value);
+    const response = (await isBranchAvailable(
+      academic,
+      value
+    )) as BranchAvailabilityResponse | null;
+    console.log(response);
+    if (response && response.totalSets !== response.occupiedSets) {
+      setbranchAlert("Branch is available");
+    } else {
+      setbranchAlert("Branch is not available");
+    }
+  };
+
+  const setFileLink = (
+    fieldName: keyof Pick<DeclarationFormData, "signature" | "parentSignature">,
+    url: string
+  ) => {
+    setValue(fieldName, url);
+  };
+
+  const onSubmit = async (data: DeclarationFormData) => {
+    console.log(data);
+    // Handle form submission
+    const { branch, signature, parentSignature } = data;
+    const response = await updateDeclerationDetails({
+      branch,
+      signature,
+      signatureGuardian: parentSignature,
+    });
+    if (response.success) {
+      alert("Declaration details saved successfully!");
+    } else {
+      alert("Failed to save declaration details.");
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
-        const data = session.data?.user;
-        //@ts-ignore
-        setacademic(data?.applyingYear);
+        const data = session.data?.user as UserData | undefined;
+        if (data?.applyingYear) {
+          setacademic(data.applyingYear);
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -47,16 +124,41 @@ export default function Declaration() {
         <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
           Branch Selection
         </h2>
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-            <DropDownInput
-              id={"branch"}
-              label={"Branch"}
-              required={true}
-              options={BRANCH_OPTIONS}
-              onChange={handleChange}
+            <Controller
+              name="branch"
+              control={control}
+              render={({ field }) => (
+                <div className="w-full">
+                  <DropDownInput
+                    id="branch"
+                    label="Branch"
+                    required={true}
+                    options={BRANCH_OPTIONS}
+                    onChange={(e) =>
+                      handleBranchChange(e.target.value as Branch)
+                    }
+                    value={field.value}
+                  />
+                  {errors.branch && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.branch.message}
+                    </p>
+                  )}
+                </div>
+              )}
             />
           </div>
+          {branchAlert && (
+            <div className="p-2">
+              {branchAlert === "Branch is available" ? (
+                <span className="text-green-600">{branchAlert}</span>
+              ) : (
+                <span className="text-red-600">{branchAlert}</span>
+              )}
+            </div>
+          )}
           <p className="text-xl my-6 text-center underline">Instructions</p>
           <div className="w-full space-y-4 p-2">
             <p className="font-semibold ">
@@ -123,21 +225,69 @@ export default function Declaration() {
               regulations of the institution if admitted
             </p>
           </div>
-          <Checkbox isRequired>
-            I have clearly read the instructions mentioned above and would like
-            to proceed further
-          </Checkbox>
+          <Controller
+            name="agreementChecked"
+            control={control}
+            render={({ field }) => (
+              <div>
+                <Checkbox
+                  isSelected={field.value}
+                  onValueChange={(isSelected) =>
+                    setValue("agreementChecked", isSelected)
+                  }
+                  isRequired
+                >
+                  I have clearly read the instructions mentioned above and would
+                  like to proceed further
+                </Checkbox>
+                {errors.agreementChecked && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.agreementChecked.message}
+                  </p>
+                )}
+              </div>
+            )}
+          />
 
-          <FileUploadInput
-            id={"signature"}
-            label={"Signature of Applicant"}
-            required={true}
-          />
-          <FileUploadInput
-            id={"parentSignature"}
-            label={"Signature of Parent"}
-            required={true}
-          />
+          <div className="space-y-6">
+            <div>
+              <FileUploadInput
+                id="signature"
+                label="Signature of Applicant"
+                required={true}
+                setFileLink={(url) => setFileLink("signature", url)}
+              />
+              {formValues.signature && (
+                <div className="text-sm text-green-600 ml-2 mt-1">
+                  Applicant signature uploaded successfully
+                </div>
+              )}
+              {errors.signature && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.signature.message}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <FileUploadInput
+                id="parentSignature"
+                label="Signature of Parent"
+                required={true}
+                setFileLink={(url) => setFileLink("parentSignature", url)}
+              />
+              {formValues.parentSignature && (
+                <div className="text-sm text-green-600 ml-2 mt-1">
+                  Parent signature uploaded successfully
+                </div>
+              )}
+              {errors.parentSignature && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.parentSignature.message}
+                </p>
+              )}
+            </div>
+          </div>
           <h1 className="text-muthootRed">
             the image should be of filetype (jpeg/png) of size less than 2MB*
           </h1>

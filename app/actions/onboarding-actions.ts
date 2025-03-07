@@ -3,6 +3,7 @@ import { prisma } from "@/prisma/prisma";
 import { auth } from "@/auth/auth";
 import { PersonalDetailsFormData, validatePersonalDetails } from "@/schemas";
 import { EducationalDetailsFormData, EducationalDetailsSchema } from "@/schemas";
+import { Branch } from "@/types/userTypes";
 
 
 export async function personalDetailsAction(data: PersonalDetailsFormData) {
@@ -114,4 +115,48 @@ export async function updateEducationDetails(data: EducationalDetailsFormData) {
         }
         throw new Error("Failed to save educational details");
     }
+}
+
+export async function updateDeclerationDetails(data: {
+    branch: Branch,
+    signature: string,
+    signatureGuardian: string,
+
+}) {
+    const session = await auth();
+    if (!session || !session.user) {
+        throw new Error("Unauthorized");
+    }
+
+    try {
+        // Validate the input data
+        const validatedData = data; // Assuming data is already validated
+
+        // Update user declaration details
+        const user = await prisma.user.update({
+            where: {
+                id: session.user.id
+            },
+            data: {
+                declaration: {
+                    set: {
+                        branch: validatedData.branch,
+                        signature: validatedData.signature,
+                        signatureGuardian: validatedData.signatureGuardian
+                    }
+                }
+            }
+        });
+
+        return {
+            success: true,
+            message: "Declaration details saved successfully",
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(`Failed to save declaration details: ${error.message}`);
+        }
+        throw new Error("Failed to save declaration details");
+    }
+
 }
