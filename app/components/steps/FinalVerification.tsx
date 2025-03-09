@@ -4,14 +4,18 @@ import TableDisplayContent from "../TableDisplayContent";
 import { STUDENTDATA as defaultStudentData } from "@/app/mock/mockData";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { getStructuredUserData, conformSeat } from "@/app/actions/user-Actions";
+import { conformSeat } from "@/app/actions/user-Actions";
 import { useRouter } from "next/navigation";
+import useUserStore from "@/app/store/userStore";
 
 export default function Register() {
   const router = useRouter();
   const session = useSession();
   const { data: sessionData } = session;
-  const [studentData, setStudentData] = useState<any>(defaultStudentData);
+
+  // Use the userStore
+  const { userData, fetchUserData, isLoading } = useUserStore();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;
@@ -29,9 +33,9 @@ export default function Register() {
         throw new Error("User not logged in");
       }
 
-      const quota = studentData["Student Details"]["Quota"];
-      const branch = studentData["Branch Details"]["Branch"];
-      const year = parseInt(studentData["Student Details"]["Academic Year"]);
+      const quota = userData?.["Student Details"]["Quota"];
+      const branch = userData?.["Branch Details"]["Branch"];
+      const year = parseInt(userData?.["Student Details"]["Academic Year"]);
 
       const result = await conformSeat(userId, quota, branch, year);
 
@@ -54,16 +58,13 @@ export default function Register() {
 
   useEffect(() => {
     const uid = sessionData?.user?.id;
-    (async () => {
-      if (uid) {
-        const response = await getStructuredUserData(uid as string);
-        if (response) {
-          console.log("student data", response);
-          setStudentData(response);
-        }
-      }
-    })();
-  }, [sessionData]);
+    if (uid) {
+      fetchUserData(uid as string);
+    }
+  }, [sessionData, fetchUserData]);
+
+  // Use userData from store or fallback to default if not available
+  const studentData = userData || defaultStudentData;
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-3">
@@ -71,6 +72,11 @@ export default function Register() {
         <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
           Verification
         </h2>
+
+        {/* Loading indicator */}
+        {isLoading && (
+          <div className="text-center py-4">Loading student data...</div>
+        )}
 
         {/* Student Profile photo and signature */}
         <div className="flex flex-row justify-between space-x-4">

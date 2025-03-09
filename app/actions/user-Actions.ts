@@ -38,8 +38,8 @@ export async function getStructuredUserData(userId: string) {
             "District, City": `${user.permanentAddress?.district}, ${user.permanentAddress?.city}`,
             "Pin": user.permanentAddress?.pincode,
         },
-        "10th Mark Details": { "Name of Institution": user.education?.tenth.schoolName },
-        "12th Mark Details": { "Name of Institution": user.education?.twelfth.schoolName },
+        "10th Mark Details": { "Name of Institution": user.education?.tenth.schoolName, "Board": user.education?.tenth.board },
+        "12th Mark Details": { "Name of Institution": user.education?.twelfth.schoolName, "Board": user.education?.twelfth.board },
         "Keam Details": {
             "Year": user.education?.keam?.year,
             "Roll No": user.education?.keam?.rollNumber,
@@ -54,6 +54,7 @@ export async function getStructuredUserData(userId: string) {
         "Uploads": {
             "studentPhoto": user.photo || "/no_img.png",
             "studentSignature": user.declaration?.signature || "/no_img.png",
+            "parentSignature": user.declaration?.signatureGuardian || "/no_img.png",
             "tenthCertificate": user.education?.tenth?.markList || "/no_img.png",
             "twelfthCertificate": user.education?.twelfth?.markList || "/no_img.png",
             "keamCertificate": user.education?.keam?.markList || "/no_img.png"

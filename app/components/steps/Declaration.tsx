@@ -12,6 +12,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDeclerationDetails } from "@/app/actions/onboarding-actions";
 import { Branch } from "@/types/userTypes";
+import useUserStore from "@/app/store/userStore";
 
 // Define the validation schema with Zod
 const declarationSchema = z.object({
@@ -47,6 +48,8 @@ export default function Declaration() {
   const [academic, setacademic] = useState(0);
   const session = useSession();
 
+  const { userData } = useUserStore();
+
   // Initialize the form with react-hook-form and zod validation
   const {
     handleSubmit,
@@ -66,6 +69,44 @@ export default function Declaration() {
 
   // Watch form values for display purposes
   const formValues = watch();
+
+  // New useEffect to pre-fill form data from userData when available
+  useEffect(() => {
+    if (userData) {
+      // Set branch if available
+      const branch = userData["Branch Details"]?.Branch as Branch;
+      if (branch) {
+        setValue("branch", branch);
+        // Check branch availability when pre-filling
+        handleBranchChange(branch);
+      }
+
+      // Set signature if available
+      const signature = userData["Uploads"]?.studentSignature;
+      if (signature && signature !== "/no_img.png") {
+        setValue("signature", signature);
+      }
+
+      // Set parent signature if available in userData
+      // Note: The schema doesn't explicitly show where parent signature is stored
+      // This assumes it's in "Uploads" with a key "parentSignature" or similar
+      const parentSignature = userData["Uploads"]?.parentSignature;
+      if (parentSignature && parentSignature !== "/no_img.png") {
+        setValue("parentSignature", parentSignature);
+      }
+
+      // If all required fields are filled, we can assume the user has agreed
+      if (
+        branch &&
+        signature &&
+        parentSignature &&
+        signature !== "/no_img.png" &&
+        parentSignature !== "/no_img.png"
+      ) {
+        setValue("agreementChecked", true);
+      }
+    }
+  }, [userData, setValue]);
 
   const handleBranchChange = async (value: Branch) => {
     setValue("branch", value);
@@ -256,6 +297,7 @@ export default function Declaration() {
                 label="Signature of Applicant"
                 required={true}
                 setFileLink={(url) => setFileLink("signature", url)}
+                value={formValues.signature}
               />
               {formValues.signature && (
                 <div className="text-sm text-green-600 ml-2 mt-1">
@@ -275,6 +317,7 @@ export default function Declaration() {
                 label="Signature of Parent"
                 required={true}
                 setFileLink={(url) => setFileLink("parentSignature", url)}
+                value={formValues.parentSignature}
               />
               {formValues.parentSignature && (
                 <div className="text-sm text-green-600 ml-2 mt-1">

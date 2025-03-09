@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
 import DropDownInput from "../DropDownInput";
 import { Button } from "@nextui-org/react";
@@ -6,8 +6,10 @@ import { _10TH_BOARD, _12TH_BOARD } from "@/app/constants/dropdownOptions";
 import FileUploadInput from "../FileUploadInput";
 import { updateEducationDetails } from "../../actions/onboarding-actions";
 import { EducationalDetailsFormData } from "@/schemas";
+import useUserStore from "@/app/store/userStore";
 
 export default function EducationalDetails() {
+  const { userData, refreshUserData } = useUserStore();
   const [formData, setFormData] = useState<EducationalDetailsFormData>({
     _10thSchool: "",
     _10thBoard: "",
@@ -24,6 +26,32 @@ export default function EducationalDetails() {
     KeamMarklist: "",
   });
 
+  // Pre-populate form with user data if available
+  useEffect(() => {
+    if (userData) {
+      const tenthData = userData["10th Mark Details"] || {};
+      const twelfthData = userData["12th Mark Details"] || {};
+      const keamData = userData["Keam Details"] || {};
+      const uploads = userData["Uploads"] || {};
+
+      setFormData({
+        _10thSchool: tenthData["Name of Institution"] || "",
+        _10thBoard: tenthData["Board"],
+        _10thMarklist: uploads["tenthCertificate"] || "",
+        _12thSchool: twelfthData["Name of Institution"] || "",
+        _12thBoard: twelfthData["Board"],
+        _12thMarklist: uploads["twelfthCertificate"] || "",
+        KeamYear: keamData["Year"] || "",
+        KeamRollNo: keamData["Roll No"] || "",
+        KeamRank: keamData["Rank"] || "",
+        PaperOneScore: keamData["Paper 1 score(Physics and Chemistry)"] || "",
+        PaperTwoScore: keamData["Paper 2 score(Mathematics)"] || "",
+        KeamScore: keamData["Total Keam Score"] || "",
+        KeamMarklist: uploads["keamCertificate"] || "",
+      });
+    }
+  }, [userData]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -37,6 +65,8 @@ export default function EducationalDetails() {
       const response = await updateEducationDetails(formData);
       if (response.success) {
         console.log(response.message);
+        // Refresh user data after successful update
+        await refreshUserData();
       } else {
         throw new Error(response.message);
       }
@@ -47,6 +77,30 @@ export default function EducationalDetails() {
   };
   const setFileLink = (fieldName: string, url: string) => {
     setFormData((prev) => ({ ...prev, [fieldName]: url }));
+  };
+
+  const renderFileUpload = (id: string, label: string, fileUrl: string) => {
+    return (
+      <div className="flex flex-col gap-2">
+        <FileUploadInput
+          id={id}
+          label={label}
+          required={true}
+          onChange={handleChange}
+          setFileLink={(url) => setFileLink(id, url)}
+          value={fileUrl} // Add this prop to pass the current file URL
+        />
+        {fileUrl ? (
+          <div className="text-green-600 text-sm font-medium">
+            File already uploaded. You can upload again to replace it.
+          </div>
+        ) : (
+          <span className="text-red-500 font-thin text-small">
+            Upload an image file of size less than 2mb
+          </span>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -86,17 +140,12 @@ export default function EducationalDetails() {
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
-                <FileUploadInput
-                  id={"_10thMarklist"}
-                  label="Mark list upload [10th]"
-                  required={true}
-                  onChange={handleChange}
-                  setFileLink={(url) => setFileLink("_10thMarklist", url)}
-                ></FileUploadInput>
+                {renderFileUpload(
+                  "_10thMarklist",
+                  "Mark list upload [10th]",
+                  formData._10thMarklist
+                )}
               </div>
-              <span className="text-red-500 font-thin text-small">
-                Upload an image file of size less than 2mb
-              </span>
             </div>
             <div className="flex flex-col gap-4">
               <h1 className="m-4 font-bold">12th Exam Details(optional)</h1>
@@ -126,17 +175,12 @@ export default function EducationalDetails() {
                 />
               </div>
               <div className="flex flex-col gap-4 md:flex-row ">
-                <FileUploadInput
-                  id={"_12thMarklist"}
-                  label="Mark list upload [12th]"
-                  required={true}
-                  onChange={handleChange}
-                  setFileLink={(url) => setFileLink("_12thMarklist", url)}
-                ></FileUploadInput>
+                {renderFileUpload(
+                  "_12thMarklist",
+                  "Mark list upload [12th]",
+                  formData._12thMarklist
+                )}
               </div>
-              <span className="text-red-500 font-thin text-small">
-                Upload an image file of size less than 2mb
-              </span>
             </div>
           </div>
           <div className="flex flex-1 flex-col gap-6">
@@ -228,17 +272,12 @@ export default function EducationalDetails() {
               </div>
             </div>
             <div className="flex flex-col gap-4 md:flex-row">
-              <FileUploadInput
-                id={"KeamMarklist"}
-                label="Mark list upload [KEAM]"
-                required={true}
-                onChange={handleChange}
-                setFileLink={(url) => setFileLink("KeamMarklist", url)}
-              ></FileUploadInput>
+              {renderFileUpload(
+                "KeamMarklist",
+                "Mark list upload [KEAM]",
+                formData.KeamMarklist
+              )}
             </div>
-            <span className="text-red-500 font-thin text-small">
-              Upload an image file of size less than 2mb
-            </span>
             <div className="flex flex-col text-center gap-4 w-full justify-around">
               <span className="text-red-500  bg-opacity-40 p-2 rounded-lg">
                 After selecting the mark list make sure you click UPLOAD button.

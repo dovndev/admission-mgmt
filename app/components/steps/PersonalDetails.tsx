@@ -7,10 +7,16 @@ import FileUploadInput from "../FileUploadInput";
 import { personalDetailsAction } from "../../actions/onboarding-actions";
 import { type PersonalDetailsFormData } from "@/schemas";
 import { uploadFile } from "@/app/actions/file-upload-Actions";
+import useUserStore from "@/app/store/userStore";
+import { useSession } from "next-auth/react";
 
 export default function PersonalDetails() {
   const [isSelected, setIsSelected] = useState(false);
   const [fileLink, setfileLink] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  const session = useSession();
+  const { fetchUserData, userData } = useUserStore();
 
   // Initialize form state with proper types
   const [formData, setFormData] = useState<PersonalDetailsFormData>({
@@ -43,6 +49,127 @@ export default function PersonalDetails() {
     },
   });
 
+  // Fetch user data when component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      if (session?.data?.user?.id) {
+        await fetchUserData(session.data.user.id);
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [session, fetchUserData]);
+
+  // Populate form data when userData changes
+  useEffect(() => {
+    if (userData) {
+      // Extract name parts
+      const fullName = userData["Student Details"]["Name"] || "";
+      const nameParts = fullName.split(" ");
+      const firstName = nameParts[0] || "";
+      const lastName =
+        nameParts.length > 2
+          ? nameParts[2] || ""
+          : nameParts.length > 1
+          ? nameParts[1] || ""
+          : "";
+      const middleName = nameParts.length > 2 ? nameParts[1] || "" : "";
+
+      // Fix date formatting
+      let dobString = "";
+      const dobFromUser = userData["Student Details"]["Date of Birth"];
+      if (dobFromUser && dobFromUser !== "Not provided") {
+        try {
+          // Handle different date formats and ensure proper conversion
+          const dobDate = new Date(dobFromUser);
+
+          // Check if the date is valid
+          if (!isNaN(dobDate.getTime())) {
+            // Format as YYYY-MM-DD for date input
+            const year = dobDate.getFullYear();
+            const month = String(dobDate.getMonth() + 1).padStart(2, "0");
+            const day = String(dobDate.getDate()).padStart(2, "0");
+            dobString = `${year}-${month}-${day}`;
+          } else {
+            // Try to parse DD-MM-YYYY or DD/MM/YYYY format
+            const dateParts = dobFromUser.split(/[-\/]/);
+            if (dateParts.length === 3) {
+              // Assume DD-MM-YYYY or DD/MM/YYYY format
+              const day = dateParts[0].padStart(2, "0");
+              const month = dateParts[1].padStart(2, "0");
+              const year = dateParts[2];
+              dobString = `${year}-${month}-${day}`;
+            }
+          }
+          console.log("Parsed DOB:", dobString);
+        } catch (error) {
+          console.error("Error parsing date:", error);
+        }
+      }
+
+      setFormData({
+        firstName,
+        middleName,
+        lastName,
+        mobileNumber: userData["Student Details"]["Phone"] || "",
+        keralaMobileNumber: userData["Student Details"]["Kerala Phone"] || "",
+        dob: dobString,
+        photo:
+          userData["Uploads"]["studentPhoto"] !== "/no_img.png"
+            ? userData["Uploads"]["studentPhoto"]
+            : "",
+        contactAddress: {
+          houseName: userData["Contact Address"]["House Name"] || "",
+          state: userData["Contact Address"]["State"] || "",
+          district:
+            userData["Contact Address"]["District, City"]
+              ?.split(",")[0]
+              ?.trim() || "",
+          city:
+            userData["Contact Address"]["District, City"]
+              ?.split(",")[1]
+              ?.trim() || "",
+          pincode: userData["Contact Address"]["Pin"]?.toString() || "",
+        },
+        permanentAddress: {
+          houseName: userData["Permanent Address"]["House Name"] || "",
+          state: userData["Permanent Address"]["State"] || "",
+          district:
+            userData["Permanent Address"]["District, City"]
+              ?.split(",")[0]
+              ?.trim() || "",
+          city:
+            userData["Permanent Address"]["District, City"]
+              ?.split(",")[1]
+              ?.trim() || "",
+          pincode: userData["Permanent Address"]["Pin"]?.toString() || "",
+        },
+        parentDetails: {
+          guardian: userData["Student Details"]["Parent Name"] || "",
+          occupation: userData["Student Details"]["Parent Occupation"] || "",
+          sponsor: userData["Student Details"]["NRI Sponsor"] || "",
+          relation:
+            userData["Student Details"]["Relationship with Applicant"] || "",
+        },
+      });
+
+      // Check if permanent address is same as contact address and set checkbox
+      const contactAddr = userData["Contact Address"];
+      const permAddr = userData["Permanent Address"];
+
+      if (
+        contactAddr &&
+        permAddr &&
+        contactAddr["House Name"] === permAddr["House Name"] &&
+        contactAddr["State"] === permAddr["State"] &&
+        contactAddr["District, City"] === permAddr["District, City"] &&
+        contactAddr["Pin"] === permAddr["Pin"]
+      ) {
+        setIsSelected(true);
+      }
+    }
+  }, [userData]);
+
   useEffect(() => {
     if (isSelected) {
       setFormData((prev) => ({
@@ -59,11 +186,11 @@ export default function PersonalDetails() {
     }
   }, [
     isSelected,
-    formData.houseName,
-    formData.state,
-    formData.district,
-    formData.city,
-    formData.pinCode,
+    formData.contactAddress?.houseName,
+    formData.contactAddress?.state,
+    formData.contactAddress?.district,
+    formData.contactAddress?.city,
+    formData.contactAddress?.pincode,
   ]);
 
   const handleChange = (
@@ -140,6 +267,10 @@ export default function PersonalDetails() {
       const response = await personalDetailsAction(formData);
       if (response.success) {
         console.log(response.message);
+        // Refresh user data after successful submission
+        if (session?.data?.user?.id) {
+          await fetchUserData(session.data.user.id);
+        }
       } else {
         throw new Error(response.message);
       }
@@ -147,6 +278,14 @@ export default function PersonalDetails() {
       console.error("Error submitting personal details", error);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        Loading user data...
+      </div>
+    );
+  }
 
   return (
     <form className="flex flex-col items-center justify-center w-full p-3">
@@ -217,11 +356,18 @@ export default function PersonalDetails() {
                     }));
                   }}
                   onChange={handleChange}
+                  value={formData.photo}
                 />
               </div>
-              <span className="text-red-500 font-thin text-small">
-                Upload an image file of size less than 2mb
-              </span>
+              {formData.photo ? (
+                <span className="text-green-500 font-thin text-small">
+                  File already uploaded
+                </span>
+              ) : (
+                <span className="text-red-500 font-thin text-small">
+                  Upload an image file of size less than 2mb
+                </span>
+              )}
             </div>
             <div className="flex flex-col gap-4">
               <h1>Contact Address</h1>
@@ -379,7 +525,7 @@ export default function PersonalDetails() {
             </div>
             <div className="flex w-full items-center justify-around">
               <span className="text-red-400">
-                Note: make sure you click upload button before proceeding
+                Note: make sure you click save button before proceeding
               </span>{" "}
               <Button color="danger" onClick={handleSubmit}>
                 Save
