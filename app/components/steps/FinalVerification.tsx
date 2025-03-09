@@ -1,26 +1,69 @@
 "use client";
 import { Button, Checkbox, Image } from "@nextui-org/react";
 import TableDisplayContent from "../TableDisplayContent";
-import { STUDENTDATA as studentData } from "@/app/mock/mockData";
+import { STUDENTDATA as defaultStudentData } from "@/app/mock/mockData";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { getStructuredUserData, conformSeat } from "@/app/actions/user-Actions";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-  };
+  const router = useRouter();
   const session = useSession();
   const { data: sessionData } = session;
-  const [images, setimages] = useState({
-    studentPhoto: "/no_img.png",
-    studentSignature: "/no_img.png",
-    "10thmark": "/no_img.png",
-    "12thmark": "/no_img.png",
-    keamMark: "/no_img.png",
-  });
+  const [studentData, setStudentData] = useState<any>(defaultStudentData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const userId = sessionData?.user?.id;
+      if (!userId) {
+        throw new Error("User not logged in");
+      }
+
+      const quota = studentData["Student Details"]["Quota"];
+      const branch = studentData["Branch Details"]["Branch"];
+      const year = parseInt(studentData["Student Details"]["Academic Year"]);
+
+      const result = await conformSeat(userId, quota, branch, year);
+
+      setSubmitStatus(result);
+
+      if (result.success) {
+        // Redirect to success page or dashboard after a brief delay
+        console.log("Seat confirmed successfully");
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setSubmitStatus({
+        success: false,
+        message: "An unexpected error occurred. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   useEffect(() => {
-    console.log("sessionData", sessionData);
-  }, [session]);
+    const uid = sessionData?.user?.id;
+    (async () => {
+      if (uid) {
+        const response = await getStructuredUserData(uid as string);
+        if (response) {
+          console.log("student data", response);
+          setStudentData(response);
+        }
+      }
+    })();
+  }, [sessionData]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-3">
@@ -33,7 +76,7 @@ export default function Register() {
         <div className="flex flex-row justify-between space-x-4">
           <div className="flex flex-col items-center justify-end">
             <Image
-              src="/no_img.png"
+              src={studentData?.Uploads?.studentPhoto || "/no_img.png"}
               alt="Student Photo"
               className="w-full h-full p-2 max-h-[20rem] min-h-[20rem] object-contain rounded-xl"
             />
@@ -41,7 +84,7 @@ export default function Register() {
           </div>
           <div className="flex flex-col items-center justify-end">
             <Image
-              src="/no_img.png"
+              src={studentData?.Uploads?.studentSignature || "/no_img.png"}
               alt="Signature"
               className="w-full h-full p-2 max-h-[20rem] min-h-[20rem] object-contain rounded-xl"
             />
@@ -94,8 +137,8 @@ export default function Register() {
               rows={studentData["10th Mark Details"]}
             />
             <Image
-              src="/no_img.png"
-              alt="Student Photo"
+              src={studentData?.Uploads?.tenthCertificate || "/no_img.png"}
+              alt="10th Certificate"
               className="w-full h-full p-2 max-h-[40rem] min-h-[40rem] object-contain rounded-xl"
             />
           </div>
@@ -109,8 +152,8 @@ export default function Register() {
               rows={studentData["12th Mark Details"]}
             />
             <Image
-              src="/no_img.png"
-              alt="Student Photo"
+              src={studentData?.Uploads?.twelfthCertificate || "/no_img.png"}
+              alt="12th Certificate"
               className="w-full h-full p-2 max-h-[40rem] min-h-[40rem] object-contain rounded-xl"
             />
           </div>
@@ -128,8 +171,8 @@ export default function Register() {
             />
           </div>
           <Image
-            src="/no_img.png"
-            alt="Student Photo"
+            src={studentData?.Uploads?.keamCertificate || "/no_img.png"}
+            alt="KEAM Certificate"
             className="w-full h-full p-2 max-h-[40rem] min-h-[40rem] object-contain rounded-xl"
           />
         </div>
@@ -149,11 +192,14 @@ export default function Register() {
             and correct and we will obey the rules and regulations of the
             institution if admitted
           </Checkbox>
+
           <Button
             type="submit"
             className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors"
+            isLoading={isSubmitting}
+            disabled={isSubmitting}
           >
-            Proceed
+            {isSubmitting ? "Processing..." : "Confirm Seat"}
           </Button>
         </form>
       </div>

@@ -17,10 +17,12 @@ export default auth(async (req) => {
         return
     }
     if (isLoggedIn && isAuthRoute) {
+        console.log("redirecting to onboarding")
         return Response.redirect(new URL("/onboarding", req.url))
     }
     if (!isLoggedIn && !isAuthRoute) {
-        return
+        console.log("redirecting to login")
+        return Response.redirect(new URL("/login", req.url))
     }
     if (isProtectedRoute && !isLoggedIn) {
         console.log("redirecting to login")

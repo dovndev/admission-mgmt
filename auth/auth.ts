@@ -21,7 +21,7 @@ export const {
     //callback for jwt
     callbacks: {
         async jwt({ token, session }) {
-            console.log("jwt", token)
+            // console.log("jwt", token)
             if (!token.sub) {
                 return token
             }
@@ -34,8 +34,8 @@ export const {
             return token;
         },
         async session({ session, token }) {
-            console.log("session object", session)
-            console.log("session token ", token)
+            // console.log("session object", session)
+            // console.log("session token ", token)
             session.user = token.user as any;
             return session;
         },
