@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "../components/navbar";
+//import Navbar from "../components/navbar";
 import { Image, Button } from "@nextui-org/react";
 import { STUDENTDATA as studentData } from "../mock/mockData";
 
@@ -21,7 +21,7 @@ export default function Register() {
       />
 
       <div className="flex w-full lg:absolute justify-center top-0 z-10">
-        <Navbar mode="dark" />
+        {/*<Navbar mode="dark" />*/}
       </div>
 
       <div className="flex flex-col lg:flex-row items-center lg:items-stretch justify-center w-full gap-4 p-4 z-10 mt-20">

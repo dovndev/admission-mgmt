@@ -14,7 +14,7 @@ import { FiMenu } from "react-icons/fi";
 // Add navigation options
 const NAV_ITEMS = [
   { key: "adminHome", label: "Admin Home", href: "/adminHome" },
-  { key: "adminNRI", label: "NRI Admissions", href: "/adminNRI" },
+  { key: "adminNRI", label: "NRI Admissions", href: "/status" },
   { key: "settings", label: "Settings", href: "/adminSettings" },
   { key: "logout", label: "Logout", href: "/logout" },
 ];
