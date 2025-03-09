@@ -7,6 +7,7 @@ import { prisma } from "@/prisma/prisma"
 import { generatePassword } from "@/lib/utils"
 import { hash, genSalt } from "bcryptjs"
 import { AuthError } from "next-auth"
+
 export async function isSessonActive() {
     const session = await auth()
     const user = session?.user?.id
