@@ -160,3 +160,44 @@ export async function updateDeclerationDetails(data: {
     }
 
 }
+
+export async function updatePaymentDetails(data: {
+    transactionId: number,
+    transactionSlip: string,
+}) {
+    const session = await auth();
+    if (!session || !session.user) {
+        throw new Error("Unauthorized");
+    }
+
+    try {
+        // Validate the input data
+        const validatedData = data; // Assuming data is already validated
+
+        // Update user payment details
+        await prisma.user.update({
+            where: {
+                id: session.user.id
+            },
+            data: {
+                payment: {
+                    set: {
+                        transactionNumber: validatedData.transactionId,
+                        transactionSlip: validatedData.transactionSlip
+                    }
+                }
+            }
+        });
+
+        return {
+            success: true,
+            message: "Payment details saved successfully",
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new Error(`Failed to save payment details: ${error.message}`);
+        }
+        throw new Error("Failed to save payment details");
+    }
+
+}
