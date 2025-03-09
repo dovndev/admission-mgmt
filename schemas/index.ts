@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const userRegisterSchema = z.object({
     firstName: z.string().min(1, "Please provide a name").max(60, "Name cannot be more than 60 characters"),
-    middleName: z.string().min(1, "Please provide a name").max(60, "Name cannot be more than 60 characters"),
-    lastName: z.string().max(60, "Name cannot be more than 60 characters").optional(),
+    middleName: z.string().max(60, "Name cannot be more than 60 characters").optional(),
+    lastName: z.string().min(1, "Please provide a name").max(60, "Name cannot be more than 60 characters"),
     email: z.string().email("Please provide a valid email"),
     mobileNumber: z.string().min(10, "Please provide a valid mobile number").max(10, "Please provide a valid mobile number"),
     gender: z.string().min(1, "Please provide a gender"),

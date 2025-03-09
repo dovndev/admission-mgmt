@@ -116,6 +116,7 @@ export default function Register() {
                 required={true}
                 options={GENDER_OPTIONS}
                 onChange={handleChange}
+                value={formData.gender}
               />
               <InputDate
                 id={"dob"}
@@ -130,6 +131,7 @@ export default function Register() {
                 required={true}
                 options={APPLYING_YEAR_OPTIONS}
                 onChange={handleChange}
+                value={formData.applyingYear}
               />
             </div>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
@@ -155,6 +157,7 @@ export default function Register() {
                 required={true}
                 options={QUOTA_OPTIONS}
                 onChange={handleChange}
+                value={formData.quota}
               />
               <DropDownInput
                 id={"program"}
@@ -162,6 +165,7 @@ export default function Register() {
                 required={true}
                 options={PROGRAM_OPTIONS}
                 onChange={handleChange}
+                value={formData.program}
               />
             </div>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">

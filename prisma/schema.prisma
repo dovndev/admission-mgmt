@@ -91,8 +91,8 @@ type ParentDetails {
 model User {
   id                 String         @id @default(auto()) @map("_id") @db.ObjectId
   firstName          String
-  middleName         String
-  lastName           String?
+  middleName         String?
+  lastName           String
   email              String         @unique
   password           String?        @unique
   mobileNumber       String         @unique

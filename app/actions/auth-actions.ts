@@ -91,7 +91,7 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
         }
         const password = generatePassword({
             firstName: validatedData.firstName,
-            lastName: validatedData.middleName,
+            lastName: validatedData.lastName,
             mobileNumber: validatedData.mobileNumber
         })
         console.log("password", password)
