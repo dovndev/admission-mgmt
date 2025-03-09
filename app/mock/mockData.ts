@@ -30,8 +30,8 @@ export const STUDENTDATA: StudentSection = {
     "District, City": "ernakulam, kochi" ,
     "Pin": "682507" ,
   },
-  "10th Mark Details": {"Name of Institution": "St. Joseph's School" },
-  "12th Mark Details": {"Name of Institution" : "St. Joseph's School" },
+  "10th Mark Details": {"Name of Institution": "St. Joseph's School","Board": "CBSE" },
+  "12th Mark Details": {"Name of Institution" : "St. Joseph's School","Board": "CBSE" },
   "Keam Details": {
     "Year":"2025" ,
     "Roll No":"123456" ,

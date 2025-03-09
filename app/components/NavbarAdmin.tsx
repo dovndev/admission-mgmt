@@ -14,8 +14,8 @@ import { FiMenu } from "react-icons/fi";
 // Add navigation options
 const NAV_ITEMS = [
   { key: "adminHome", label: "Admin Home", href: "/adminHome" },
-  { key: "adminNRI", label: "NRI Admissions", href: "/status" },
-  { key: "settings", label: "Settings", href: "/adminSettings" },
+  { key: "adminNRI", label: "NRI Admissions", href: "/registrations" },
+  { key: "settings", label: "Settings", href: "/status" },
   { key: "logout", label: "Logout", href: "/logout" },
 ];
 
@@ -52,7 +52,7 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
   };
 
   return (
-      <div className="relative z-10 bg-white bg-opacity-[7%] shadow md:max-w-[90%] w-full h-[60px] mt-5 mx-1 md:mx-4 rounded-3xl flex items-center justify-between gap-1 md:gap-10 px-6">
+      <div className="relative z-10 bg-white bg-opacity-[7%] shadow md:max-w-[90%] w-full h-[60px] mt-5 mx-1 md:mx-4 rounded-3xl flex items-center justify-between gap-1 md:gap-1 px-6">
         <div className="flex items-center md:gap-2">
           
   
@@ -91,7 +91,16 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
 
       {/* Navigation Links */}
       <div className="flex-1 flex justify-end ">
-        <div className="flex gap-1 md:gap-2 items-center w-full md:w-[50%] lg:w-[30%] xl:w-[30%] ">
+        <div className="flex gap-1 md:gap-2  items-center w-full md:w-[50%] lg:w-[30%] xl:w-[30%] ">
+        <Button
+            isIconOnly
+            color={isPowerOn ? "success" : "danger"}
+            variant="shadow"
+            aria-label="Year enable"
+            onPress={handleYearEnable}
+          >
+            <FaPowerOff className={`h-4 w-4 ${isPowerOn ? "text-white" : "text-white"}`} />
+          </Button>
           <DropDownInput
             options={PROGRAM_OPTIONS}
             id="program"
@@ -111,15 +120,7 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
             onChange={handleYearChange}
           />
 
-          <Button
-            isIconOnly
-            color={isPowerOn ? "success" : "danger"}
-            variant="shadow"
-            aria-label="Year enable"
-            onPress={handleYearEnable}
-          >
-            <FaPowerOff className={`h-4 w-4 ${isPowerOn ? "text-white" : "text-white"}`} />
-          </Button>
+
         </div>
       </div>
 
