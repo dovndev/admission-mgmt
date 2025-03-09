@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@nextui-org/checkbox": "^2.3.8",
-    "@nextui-org/react": "^2.6.8",
+    "@nextui-org/react": "^2.6.11",
+    "@react-pdf/renderer": "^4.3.0",
     "admission-mgmt": "file:",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

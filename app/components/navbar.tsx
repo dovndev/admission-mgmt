@@ -8,7 +8,7 @@ import ThemeToggle from "./ThemeToggle";
 
 //this prop is used for forcing the navbar to use white text for the main page and remove the toggle
 interface NavbarProps {
-  mode?: "dark";
+  mode?: "dark" | "light";
 }
 
 const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
@@ -26,16 +26,16 @@ const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
           <Link href="/register" className="headerButton !text-muthootRed">
             Register
           </Link>
-          <Link href="/login" className={`headerButton ${mode === "dark" ? "text-white" : ""}`}>
+          <Link href="/login" className={`headerButton ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} hidden sm:block`}>
             Login
           </Link>
-          <Link href="/about" className={`headerButton ${mode == "dark" ? "text-white" : ""} hidden sm:block`}>
+          <Link href="/about" className={`headerButton ${mode == "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} hidden sm:block`}>
             About
           </Link>
         </div>
       </div>
 
-      <div className={`flex items-center ${mode == "dark" ? "hidden" : ""}`}>
+      <div className={`flex items-center `}>
         <ThemeToggle />
       </div>
     </div>
