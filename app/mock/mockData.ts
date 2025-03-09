@@ -42,3 +42,77 @@ export const STUDENTDATA: StudentSection = {
   },
   "Branch Details": {"Branch Preference" : "Computer Science" },
 };
+
+
+
+
+
+
+
+
+
+export const STUDENTS = [
+  {
+    id: "NBT230002",
+    date: "04/09/2024",
+    name: "Nandu P N",
+    branch: "CY",
+    phone: "8848978215",
+    email: "nandakrishnanunni01@gmail.com",
+    avatar: "/placeholder.svg?height=40&width=40",
+  },
+  {
+    id: "NBT240029",
+    date: "28/09/2024",
+    name: "Kesiya Dinu",
+    branch: "CSE",
+    phone: "9447330100",
+    email: "dinuthampik@gmail.com",
+    avatar: "/placeholder.svg?height=40&width=40",
+  },
+  {
+    id: "NBT250011",
+    date: "01/10/2024",
+    name: "Ann Maria Tony",
+    branch: "CSE",
+    phone: "9539067873",
+    email: "tonyannbalathinkal@gmail.com",
+    avatar: "/placeholder.svg?height=40&width=40",
+  },
+  {
+    id: "NBT250013",
+    date: "01/10/2024",
+    name: "Abhinav Biju",
+    branch: "CSE",
+    phone: "7306485285",
+    email: "abhinavabhinav74220@gmail.com",
+    avatar: "/placeholder.svg?height=40&width=40",
+  },
+  {
+    id: "NBT250014",
+    date: "02/10/2024",
+    name: "Abhinav J Chemmannoor",
+    branch: "CSE",
+    phone: "9447768994",
+    email: "simyjo10@gmail.com",
+    avatar: "/placeholder.svg?height=40&width=40",
+  },
+  {
+    id: "NBT250015",
+    date: "03/10/2024",
+    name: "Jyothika K R",
+    branch: "CSE",
+    phone: "9895932204",
+    email: "dhanya.rajeshks78@gmail.com",
+    avatar: "/placeholder.svg?height=40&width=40",
+  },
+  {
+    id: "NBT250016",
+    date: "03/10/2024",
+    name: "Jeswin George",
+    branch: "CSE",
+    phone: "9846053079",
+    email: "gjosephu@gmail.com",
+    avatar: "/placeholder.svg?height=40&width=40",
+  },
+];
