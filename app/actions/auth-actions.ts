@@ -7,6 +7,7 @@ import { prisma } from "@/prisma/prisma"
 import { generatePassword } from "@/lib/utils"
 import { hash, genSalt } from "bcryptjs"
 import { AuthError } from "next-auth"
+import { sendPasswordEmail } from "./mail-actions"
 
 export async function isSessonActive() {
     const session = await auth()
@@ -95,8 +96,23 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
             mobileNumber: validatedData.mobileNumber
         })
         console.log("password", password)
-        //need to add code to send email
-        // {}
+        try {
+            // Start the email sending without awaiting
+            sendPasswordEmail(validatedData.email, password)
+                .then(mailSend => {
+                    if (!mailSend.success) {
+                        console.log("Email sending failed but user registration continued");
+                    }
+                })
+                .catch(error => {
+                    console.error("Async email error:", error);
+                });
+
+        }
+        catch (e) {
+            console.log("Error initiating email send", e);
+            return { error: "Email could not be sent", success: false };
+        }
         const salt = await genSalt(10)
         const hashedPassword = await hash(password, salt)
         const createdUser = await prisma.user.create({
