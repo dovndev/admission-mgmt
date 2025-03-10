@@ -9,7 +9,7 @@ type StructuredUserData = {
     "12th Mark Details": Record<string, any>;
     "Keam Details": Record<string, any>;
     "Branch Details": Record<string, any>;
-    "Uploads": Record<string, string>;
+    "Uploads": Record<string, string | null | undefined>;
     [key: string]: any;
 }
 type UserStore = {

@@ -1,1 +1,1 @@
-export const protectedRoutes = ["/dashboard", '/onboarding']
+export const protectedRoutes = ["/dashboard", '/onboarding', '/user']

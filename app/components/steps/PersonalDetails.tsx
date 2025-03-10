@@ -16,6 +16,7 @@ export default function PersonalDetails() {
   const [isLoading, setIsLoading] = useState(true);
 
   const session = useSession();
+  // console.log("Session Data:", session.data);
   const { fetchUserData, userData } = useUserStore();
 
   // Initialize form state with proper types
@@ -116,8 +117,8 @@ export default function PersonalDetails() {
         dob: dobString,
         photo:
           userData["Uploads"]["studentPhoto"] !== "/no_img.png"
-            ? userData["Uploads"]["studentPhoto"]
-            : "",
+            ? userData["Uploads"]["studentPhoto"] || undefined
+            : undefined,
         contactAddress: {
           houseName: userData["Contact Address"]["House Name"] || "",
           state: userData["Contact Address"]["State"] || "",
