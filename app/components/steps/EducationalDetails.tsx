@@ -29,6 +29,7 @@ export default function EducationalDetails() {
   // Pre-populate form with user data if available
   useEffect(() => {
     if (userData) {
+      console.log("User data in EducationalDetails:", userData);
       const tenthData = userData["10th Mark Details"] || {};
       const twelfthData = userData["12th Mark Details"] || {};
       const keamData = userData["Keam Details"] || {};

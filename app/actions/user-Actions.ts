@@ -35,7 +35,7 @@ export async function getStructuredUserData(userId: string) {
         "Permanent Address": {
             "House Name": user.permanentAddress?.houseName,
             "State": user.permanentAddress?.state,
-            "District, City": `${user.permanentAddress?.district}, ${user.permanentAddress?.city}`,
+            "District, City": `${user.permanentAddress?.district}, ${user.permanentAddress?.city}`,//if there is not city and district its undefined, undefined
             "Pin": user.permanentAddress?.pincode,
         },
         "10th Mark Details": { "Name of Institution": user.education?.tenth.schoolName, "Board": user.education?.tenth.board },
@@ -52,12 +52,12 @@ export async function getStructuredUserData(userId: string) {
             "Branch": user.declaration?.branch,
         },
         "Uploads": {
-            "studentPhoto": user.photo || "/no_img.png",
-            "studentSignature": user.declaration?.signature || "/no_img.png",
-            "parentSignature": user.declaration?.signatureGuardian || "/no_img.png",
-            "tenthCertificate": user.education?.tenth?.markList || "/no_img.png",
-            "twelfthCertificate": user.education?.twelfth?.markList || "/no_img.png",
-            "keamCertificate": user.education?.keam?.markList || "/no_img.png"
+            "studentPhoto": user.photo,
+            "studentSignature": user.declaration?.signature,
+            "parentSignature": user.declaration?.signatureGuardian,
+            "tenthCertificate": user.education?.tenth?.markList,
+            "twelfthCertificate": user.education?.twelfth?.markList,
+            "keamCertificate": user.education?.keam?.markList
         }
     }
     return structuredUser;
@@ -111,6 +111,8 @@ export async function conformSeat(userId: string, quota: string, branchName: str
             },
             data: {
                 occupiedSets: branch.occupiedSets + 1,
+                occupiedNri: quota == 'NRI' ? branch.occupiedNri + 1 : branch.occupiedNri,
+                occupiedSuper: quota != 'NRI' ? branch.occupiedSuper + 1 : branch.occupiedSuper,
                 //incremetn the quota field
                 [quotaField]: { increment: 1 },
                 // Add student ID to the appropriate array
