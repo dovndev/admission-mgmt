@@ -124,24 +124,40 @@ export default function PersonalDetails() {
           district:
             userData["Contact Address"]["District, City"]
               ?.split(",")[0]
-              ?.trim() || "",
+              ?.trim() === "undefined"
+              ? ""
+              : userData["Contact Address"]["District, City"]
+                  ?.split(",")[0]
+                  ?.trim() || "",
           city:
             userData["Contact Address"]["District, City"]
               ?.split(",")[1]
-              ?.trim() || "",
+              ?.trim() === "undefined"
+              ? ""
+              : userData["Contact Address"]["District, City"]
+                  ?.split(",")[1]
+                  ?.trim() || "",
           pincode: userData["Contact Address"]["Pin"]?.toString() || "",
         },
         permanentAddress: {
           houseName: userData["Permanent Address"]["House Name"] || "",
           state: userData["Permanent Address"]["State"] || "",
           district:
-            userData["Permanent Address"]["District, City"]
+            userData["Contact Address"]["District, City"]
               ?.split(",")[0]
-              ?.trim() || "",
+              ?.trim() === "undefined"
+              ? ""
+              : userData["Contact Address"]["District, City"]
+                  ?.split(",")[0]
+                  ?.trim() || "",
           city:
-            userData["Permanent Address"]["District, City"]
+            userData["Contact Address"]["District, City"]
               ?.split(",")[1]
-              ?.trim() || "",
+              ?.trim() === "undefined"
+              ? ""
+              : userData["Contact Address"]["District, City"]
+                  ?.split(",")[1]
+                  ?.trim() || "",
           pincode: userData["Permanent Address"]["Pin"]?.toString() || "",
         },
         parentDetails: {
