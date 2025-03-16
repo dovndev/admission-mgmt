@@ -8,7 +8,7 @@ interface DropDownInputProps {
   label: string;
   required?: boolean;
   value?: string;
-  size? : "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg";
   color?: "primary" | "secondary" | "success" | "warning" | "default" | undefined;
   variant?: "bordered" | "flat" | "faded" | "underlined";
   labelPlacement?: "inside" | "outside" | "outside-left";
@@ -25,7 +25,14 @@ const DropDownInput: React.FC<DropDownInputProps> = ({
   color = undefined,
   labelPlacement = "inside",
   size = "md",
+  value = "", // Add default value
 }) => {
+  // Find the index of the value in options array
+  const selectedIndex = options.findIndex(option => option === value);
+  
+  // Convert to string index or empty if not found
+  const selectedValue = selectedIndex >= 0 ? selectedIndex.toString() : "";
+
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (onChange) {
       const event = {
@@ -47,9 +54,11 @@ const DropDownInput: React.FC<DropDownInputProps> = ({
       onChange={handleSelect}
       labelPlacement={labelPlacement}
       placeholder={labelPlacement === "outside" ? " " : ""}
+      selectedKeys={selectedValue ? [selectedValue] : []} // Set selected value
+      defaultSelectedKeys={selectedValue ? [selectedValue] : []} // Also set default selected
     >
       {options.map((option, index) => (
-      <SelectItem key={index}>{option}</SelectItem>
+        <SelectItem key={index}>{option}</SelectItem>
       ))}
     </Select>
   );

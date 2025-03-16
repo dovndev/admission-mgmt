@@ -1,43 +1,42 @@
-import { useState } from 'react';
-import { pdf } from '@react-pdf/renderer';
-import StudentPDF from '../components/StudentPDF';
+import { useState } from "react";
+import { pdf } from "@react-pdf/renderer";
+import StudentPDF from "../components/StudentPDF";
+import { StructuredUserData } from "@/types/userTypes";
 
 export const usePrintPDF = () => {
   const [isGenerating, setIsGenerating] = useState(false);
-  
-  const generatePDF = async (studentId: string) => {
+
+  const generatePDF = async (student: StructuredUserData) => {
     try {
       setIsGenerating(true);
-      
+
       // Create the PDF document
       const blob = await pdf(
-        <StudentPDF 
-          studentId={studentId}
-        />
+        <StudentPDF studentId={student.id} student={student} />
       ).toBlob();
-      
+
       // Create a URL for the blob
       const url = URL.createObjectURL(blob);
-      
+
       // Create a link and trigger download
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `Application_${studentId}.pdf`;
+      link.download = `Application_${student.id}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+
       // Clean up
       URL.revokeObjectURL(url);
       setIsGenerating(false);
-      
+
       return true;
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error("Error generating PDF:", error);
       setIsGenerating(false);
       return false;
     }
   };
-  
+
   return { generatePDF, isGenerating };
 };
