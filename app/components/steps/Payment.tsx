@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
-import { Button } from "@nextui-org/react";
-import { Checkbox } from "@nextui-org/checkbox";
+import { Button } from "@heroui/react";
+import { Checkbox } from "@heroui/checkbox";
 import { BANK_ACCOUNT as bankDetails } from "@/app/constants/dropdownOptions";
 import TableDisplayContent from "../TableDisplayContent";
 import FileUploadInput from "../FileUploadInput";

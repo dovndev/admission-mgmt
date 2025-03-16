@@ -11,7 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { FiRefreshCw } from "react-icons/fi";
 
 interface ProgramData {

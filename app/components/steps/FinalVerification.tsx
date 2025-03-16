@@ -1,5 +1,5 @@
 "use client";
-import { Button, Checkbox, Image } from "@nextui-org/react";
+import { Button, Checkbox, Image } from "@heroui/react";
 import TableDisplayContent from "../TableDisplayContent";
 import { STUDENTDATA as defaultStudentData } from "@/app/mock/mockData";
 import { useEffect, useState } from "react";

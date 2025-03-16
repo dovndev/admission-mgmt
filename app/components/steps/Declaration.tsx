@@ -1,9 +1,9 @@
 "use client";
 import DropDownInput from "../DropDownInput";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { BRANCH_OPTIONS } from "../../constants/dropdownOptions";
-import { Checkbox } from "@nextui-org/react";
+import { Checkbox } from "@heroui/react";
 import FileUploadInput from "../FileUploadInput";
 import { useSession } from "next-auth/react";
 import { isBranchAvailable } from "@/app/actions/branch-Actions";

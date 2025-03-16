@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
 import InputDate from "../InputDate";
-import { Button } from "@nextui-org/react";
-import { Checkbox } from "@nextui-org/checkbox";
+import { Button } from "@heroui/react";
+import { Checkbox } from "@heroui/checkbox";
 import FileUploadInput from "../FileUploadInput";
 import { personalDetailsAction } from "../../actions/onboarding-actions";
 import { type PersonalDetailsFormData } from "@/schemas";

@@ -1,6 +1,6 @@
 "use client";
 import ProgressBar from "../components/ProgressBar";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { useState } from "react";
 import { REGISTER_STEPS } from "../constants/dropdownOptions";
 

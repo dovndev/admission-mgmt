@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { DatePicker } from "@nextui-org/date-picker";
+import { DatePicker } from "@heroui/date-picker";
 import { DateValue } from "@react-types/datepicker";
 
 interface DatePickerProps {

@@ -3,7 +3,7 @@ import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/navbar";
 import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { useEffect, useState } from "react";
 import {
   APPLYING_YEAR_OPTIONS,

@@ -1,6 +1,6 @@
 "use client";
 //import Navbar from "../components/navbar";
-import { Image, Button, Spinner } from "@nextui-org/react";
+import { Image, Button, Spinner } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 

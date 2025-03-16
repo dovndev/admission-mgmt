@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
 import DropDownInput from "../DropDownInput";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { _10TH_BOARD, _12TH_BOARD } from "@/app/constants/dropdownOptions";
 import FileUploadInput from "../FileUploadInput";
 import { updateEducationDetails } from "../../actions/onboarding-actions";
