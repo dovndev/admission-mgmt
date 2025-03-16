@@ -32,18 +32,41 @@ export default {
                 if (!validCredentials.success) {
                     return null;
                 }
-                const { email, password } = validCredentials.data;
-                const user = await prisma.user.findUnique({
-                    where: {
-                        email,
-                    },
-                });
-                if (!user || !user.password || !user.email) {
-                    return null;
+                const { email, password, role } = validCredentials.data;
+                if (role === "admin") {
+                    console.log("yeyeyey")
+                    const admin = await prisma.admin.findUnique({
+                        where: {
+                            email: email,
+                        },
+                    });
+                    if (!admin || !admin.password || !admin.email) {
+                        return null;
+                    }
+                    if (admin.password == password) {
+                        console.log("admin password match")
+                        return {
+                            ...admin,
+                            role: "admin",
+                        };
+                    }
                 }
-                const passMatch = await compare(password, user.password);
-                if (passMatch) {
-                    return user;
+                else {
+                    const user = await prisma.user.findUnique({
+                        where: {
+                            email,
+                        },
+                    });
+                    if (!user || !user.password || !user.email) {
+                        return null;
+                    }
+                    const passMatch = await compare(password, user.password);
+                    if (passMatch) {
+                        return {
+                            ...user,
+                            role: "user",
+                        };
+                    }
                 }
                 return null;
             },

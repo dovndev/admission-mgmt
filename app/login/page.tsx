@@ -5,7 +5,11 @@ import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/navbar";
 import Link from "next/link";
 import { Button } from "@nextui-org/react";
-import { isSessonActive, loginAction } from "../actions/auth-actions";
+import {
+  isSessonActive,
+  loginAction,
+  loginAdmin,
+} from "../actions/auth-actions";
 export default function LoginPage() {
   function CheckUserType() {
     const searchParams = useSearchParams();
@@ -26,6 +30,11 @@ export default function LoginPage() {
       if (isAdmin) {
         // Admin login logic
         console.log("Admin Login:", formData);
+        const response = await loginAdmin({
+          email: formData.emailOrReg,
+          password: formData.password,
+        });
+        console.log(response);
         // Implement your admin authentication logic here
       } else {
         // User login logic

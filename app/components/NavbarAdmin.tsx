@@ -17,13 +17,14 @@ import {
 import { FaPowerOff } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { getAllAvailableYears } from "../actions/seat-Management-Actions";
+import useAdminStore from "../store/adminStore";
 
 // Add navigation options
 const NAV_ITEMS = [
-  { key: "adminHome", label: "Admin Home", href: "/adminHome" },
-  { key: "adminNRI", label: "NRI Admissions", href: "/registrations" },
-  { key: "settings", label: "Settings", href: "/status" },
-  { key: "logout", label: "Logout", href: "/logout" },
+  { key: "adminHome", label: "Admin Home", href: "/admin/adminHome" },
+  { key: "adminNRI", label: "NRI Admissions", href: "/admin/registrations" },
+  { key: "settings", label: "Settings", href: "/admin/status" },
+  // { key: "logout", label: "Logout", href: "/logout" },
 ];
 
 interface NavbarAdminProps {
@@ -35,14 +36,16 @@ const YEAR_OPTIONS = ["2025", "2026", "2027"];
 const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
   const router = useRouter();
 
+  const { setYears, years, setSelectedYear, selectedYear } = useAdminStore();
+
   const [selectedProgram, setSelectedProgram] = useState<string>("");
-  const [selectedYear, setSelectedYear] = useState<string>("");
   const [isPowerOn, setIsPowerOn] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
       console.log("Fetching years...");
       const years = await getAllAvailableYears();
+      setYears(years);
       console.log("Years fetched:", years);
     })();
   }, []);
@@ -52,7 +55,7 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
   };
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedYear(e.target.value);
+    setSelectedYear(parseInt(e.target.value));
   };
 
   const handleYearEnable = () => {
@@ -120,12 +123,12 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
             onChange={handleProgramChange}
           />
           <DropDownInput
-            options={YEAR_OPTIONS}
+            options={years.map(String)}
             id="year"
             label="Year"
             labelPlacement="inside"
             size="sm"
-            value={selectedYear}
+            value={selectedYear.toString()}
             onChange={handleYearChange}
           />
         </div>

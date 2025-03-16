@@ -1,5 +1,13 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import { StructuredUserData } from "@/types/userTypes";
 
 // Register fonts if needed
 // Font.register({
@@ -143,30 +151,60 @@ const styles = StyleSheet.create({
     width: "45%",
     textAlign: "center",
     fontSize: 11,
-    
   },
   secondPageSignatureImage: {
     width: 100,
     height: 50,
     marginTop: 10,
   },
-
 });
 
 interface StudentPDFProps {
   studentId: string;
+  student?: StructuredUserData;
 }
 
-const StudentPDF = ({ studentId }: StudentPDFProps) => {
-    const studentData = {
+const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
+  const studentData = student
+    ? {
+        name: student["Student Details"].Name,
+        dob: student["Student Details"].DOB || "Not provided",
+        parentName:
+          student["Student Details"]["Father's Name"] ||
+          student["Student Details"]["Mother's Name"] ||
+          "Not provided",
+        occupation:
+          student["Student Details"]["Father's Occupation"] || "Not provided",
+        address: {
+          line1: `${student["Contact Address"].Address || ""}, ${
+            student["Contact Address"].City || ""
+          }`,
+          city: student["Contact Address"].District || "Not provided",
+          country: student["Contact Address"].State || "Not provided",
+        },
+        state: student["Contact Address"].State || "Kerala",
+        pin: student["Contact Address"].Pincode || "Not provided",
+        email: student["Student Details"].Email || "Not provided",
+        phoneKerala: student["Student Details"].Phone || "Not provided",
+        phoneAlternate:
+          student["Student Details"]["Alternate Phone"] || "Not provided",
+        sponsor: student["Student Details"].Sponsor || "Not provided",
+        relation:
+          student["Student Details"]["Relation to Sponsor"] || "Not provided",
+        branch: student["Branch Details"].Branch || "Not selected",
+        transactionId:
+          student["Student Details"]["Transaction ID"] || "Not provided",
+      }
+    : {
+        // Your default mock data
         name: "John Doe",
         dob: "01/01/2000",
         parentName: "Jane Doe",
         occupation: "Profession",
         address: {
-            line1: "123 Sample St.",
-            city: "Sample City",
-            country: "Sample Country",
+          line1: "123 Sample St.",
+          city: "Sample City",
+          country: "Sample Country",
         },
         state: "Kerala",
         pin: "123456",
@@ -177,318 +215,322 @@ const StudentPDF = ({ studentId }: StudentPDFProps) => {
         relation: "Guardian",
         branch: "Computer Science and Engineering",
         transactionId: "TXN_9876543210",
-    };
+      };
 
-    return (
-        <Document>
-            <Page size="A4" style={styles.page}>
-                {/* Header */}
-                <View style={styles.headerContainer}>
-                    <Image src="/MITS.png" style={styles.logo}  />
-                    <View style={{ ...styles.headerText, alignItems: "flex-end" }}>
-                        <Text>Varikoli P.O, Puthencruz - 682308</Text>
-                        <Text>Ernakulam - Kerala</Text>
-                    </View>
-                </View>
-                <View style={styles.header}>
-                    <Text style={styles.subtitle}>Application for B-Tech NRI Quota</Text>
-                </View>
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <Image src="/MITS.png" style={styles.logo} />
+          <View style={{ ...styles.headerText, alignItems: "flex-end" }}>
+            <Text>Varikoli P.O, Puthencruz - 682308</Text>
+            <Text>Ernakulam - Kerala</Text>
+          </View>
+        </View>
+        <View style={styles.header}>
+          <Text style={styles.subtitle}>Application for B-Tech NRI Quota</Text>
+        </View>
 
-                {/* Photos Section */}
-                <View
-                    style={{
-                        ...styles.photoSection,
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
-                    <View>
-                        <Text style={styles.applicationId}>
-                            Application No: {studentId || "APP_ID_123456"}
-                        </Text>
-                        <Text
-                            style={{
-                                ...styles.applicationId,
-                                fontSize: 25,
-                                fontWeight: "bold",
-                            }}
-                        >
-                            {studentId || "APP_ID_123456"}
-                        </Text>
-                    </View>
-                    <View>
-                        <Image src="/no_img.png" style={styles.photo} />
-                    </View>
-                </View>
+        {/* Photos Section */}
+        <View
+          style={{
+            ...styles.photoSection,
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <View>
+            <Text style={styles.applicationId}>
+              Application No: {student?.id || studentId || "APP_ID_123456"}
+            </Text>
+            <Text
+              style={{
+                ...styles.applicationId,
+                fontSize: 25,
+                fontWeight: "bold",
+              }}
+            >
+              {student?.id || studentId || "APP_ID_123456"}
+            </Text>
+          </View>
+          <View>
+            <Image
+              src={student?.Uploads?.studentPhoto || "/no_img.png"}
+              style={styles.photo}
+            />
+          </View>
+        </View>
 
-                {/* Student Details */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Personal Details</Text>
-                    <View style={styles.table}>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>1. Name of applicant</Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>{studentData.name}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>2. Date of Birth</Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>{studentData.dob}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    3. Name of the parent/guardian
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>{studentData.parentName}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    4. Occupation of the parent/guardian
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>{studentData.occupation}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={{ ...styles.tableCol, width: "100%" }}>
-                                <Text style={styles.tableCell}>5. ADDRESS</Text>
-                                <View style={{ marginTop: 5 }}>
-                                    <Text style={styles.tableCell}>
-                                        {studentData.address.line1}
-                                    </Text>
-                                    <Text style={styles.tableCell}>
-                                        {studentData.address.city}
-                                    </Text>
-                                    <Text style={styles.tableCell}>
-                                        {studentData.address.country}
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    State: {studentData.state}
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>Pin: {studentData.pin}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>6. Email</Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>{studentData.email}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    7. Phone No.(Kerala)
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    {studentData.phoneKerala}
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    8. Phone No.(alternate)
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    {studentData.phoneAlternate}
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>9. Name of sponsor</Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>{studentData.sponsor}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    10. Relation with applicant
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>{studentData.relation}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    11. Selected Branch
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>{studentData.branch}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    12. Transaction ID
-                                </Text>
-                            </View>
-                            <View style={styles.tableCol}>
-                                <Text style={styles.tableCell}>
-                                    {studentData.transactionId}
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
+        {/* Student Details */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Personal Details</Text>
+          <View style={styles.table}>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>1. Name of applicant</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{studentData.name}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>2. Date of Birth</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{studentData.dob}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>
+                  3. Name of the parent/guardian
+                </Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{studentData.parentName}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>
+                  4. Occupation of the parent/guardian
+                </Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{studentData.occupation}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={{ ...styles.tableCol, width: "100%" }}>
+                <Text style={styles.tableCell}>5. ADDRESS</Text>
+                <View style={{ marginTop: 5 }}>
+                  <Text style={styles.tableCell}>
+                    {studentData.address.line1}
+                  </Text>
+                  <Text style={styles.tableCell}>
+                    {studentData.address.city}
+                  </Text>
+                  <Text style={styles.tableCell}>
+                    {studentData.address.country}
+                  </Text>
                 </View>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>State: {studentData.state}</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>Pin: {studentData.pin}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>6. Email</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{studentData.email}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>7. Phone No.(Kerala)</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{studentData.phoneKerala}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>8. Phone No.(alternate)</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>
+                  {studentData.phoneAlternate}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>9. Name of sponsor</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{studentData.sponsor}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>
+                  10. Relation with applicant
+                </Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{studentData.relation}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>11. Selected Branch</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>{studentData.branch}</Text>
+              </View>
+            </View>
+            <View style={styles.tableRow}>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>12. Transaction ID</Text>
+              </View>
+              <View style={styles.tableCol}>
+                <Text style={styles.tableCell}>
+                  {studentData.transactionId}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
 
-                {/* Footer */}
-                <View
-                    style={[
-                        styles.footer,
-                        { position: "absolute", bottom: 20, left: 0, right: 0 },
-                    ]}
-                >
-                    <Text style={{ textAlign: "center", marginTop: 10 }}>
-                        This file was generated on {new Date().toLocaleDateString()}
-                    </Text>
-                    <Text
-                        style={{ textAlign: "center", marginTop: 10 }}
-                        render={({ pageNumber, totalPages }) =>
-                            `Page ${pageNumber} of ${totalPages}`
-                        }
-                        fixed
-                    />
-                </View>
-            </Page>
-            {/* Second Page */}
-            <Page size="A4" style={styles.page}>
-                <View style={styles.headerContainer}>
-                    <Image src="/MITS.png" style={styles.logo} />
-                    <View style={{ ...styles.headerText, alignItems: "flex-end" }}>
-                        <Text>Varikoli P.O, Puthencruz - 682308</Text>
-                        <Text>Ernakulam - Kerala</Text>
-                    </View>
-                </View>
+        {/* Footer */}
+        <View
+          style={[
+            styles.footer,
+            { position: "absolute", bottom: 20, left: 0, right: 0 },
+          ]}
+        >
+          <Text style={{ textAlign: "center", marginTop: 10 }}>
+            This file was generated on {new Date().toLocaleDateString()}
+          </Text>
+          <Text
+            style={{ textAlign: "center", marginTop: 10 }}
+            render={({ pageNumber, totalPages }) =>
+              `Page ${pageNumber} of ${totalPages}`
+            }
+            fixed
+          />
+        </View>
+      </Page>
+      {/* Second Page */}
+      <Page size="A4" style={styles.page}>
+        <View style={styles.headerContainer}>
+          <Image src="/MITS.png" style={styles.logo} />
+          <View style={{ ...styles.headerText, alignItems: "flex-end" }}>
+            <Text>Varikoli P.O, Puthencruz - 682308</Text>
+            <Text>Ernakulam - Kerala</Text>
+          </View>
+        </View>
 
-                <View style={styles.secondPageHeader}>
-                    <Text style={styles.secondPageTitle}>UNDERTAKING</Text>
-                </View>
+        <View style={styles.secondPageHeader}>
+          <Text style={styles.secondPageTitle}>UNDERTAKING</Text>
+        </View>
 
-                <View style={styles.secondPageSection}>
-                    <Text style={styles.secondPageText}>
-                        <Text style={{ fontWeight: "bold" }}>GROUP A</Text>
-                        {"\n"}I am aware about the criteria followed by &quot;Muthoot Institute of
-                        Technology and Science&quot;, for the B-Tech NRI Quota admission for the
-                        year 2024, such that my ward has to attain 80% Marks for Mathematics
-                        individually and 80% put together in Physics, Chemistry & Mathematics,
-                        in the 12th standard, for Qualifying examination (CBSE/ISC) OR attain
-                        80% Marks for Mathematics individually and 80% put together in
-                        Physics, Chemistry & Mathematics, in the 12th standard(Terminal-
-                        evaluation TE), for Qualifying examination(State Board). If my ward
-                        failed to do so, there is no claim, from my side for the admission.
-                    </Text>
-                </View>
+        <View style={styles.secondPageSection}>
+          <Text style={styles.secondPageText}>
+            <Text style={{ fontWeight: "bold" }}>GROUP A</Text>
+            {"\n"}I am aware about the criteria followed by &quot;Muthoot
+            Institute of Technology and Science&quot;, for the B-Tech NRI Quota
+            admission for the year 2024, such that my ward has to attain 80%
+            Marks for Mathematics individually and 80% put together in Physics,
+            Chemistry & Mathematics, in the 12th standard, for Qualifying
+            examination (CBSE/ISC) OR attain 80% Marks for Mathematics
+            individually and 80% put together in Physics, Chemistry &
+            Mathematics, in the 12th standard(Terminal- evaluation TE), for
+            Qualifying examination(State Board). If my ward failed to do so,
+            there is no claim, from my side for the admission.
+          </Text>
+        </View>
 
-                <View style={styles.secondPageSection}>
-                    <Text style={styles.secondPageText}>
-                        <Text style={{ fontWeight: "bold" }}>GROUP B</Text>
-                        {"\n"}I am aware about the criteria followed by &quot;Muthoot Institute of
-                        Technology and Science&quot;, for the B-Tech NRI Quota admission for the
-                        year 2024, such that my ward has to attain 75% Marks for Mathematics
-                        individually and 75% put together in Physics, Chemistry & Mathematics,
-                        in the 12th standard, for Qualifying examination (CBSE/ISC) OR attain
-                        75% Marks for Mathematics individually and 75% put together in
-                        Physics, Chemistry & Mathematics, in the 12th standard(Terminal-
-                        evaluation TE), for Qualifying examination(State Board). If my ward
-                        failed to do so, there is no claim, from my side for the admission.
-                    </Text>
-                </View>
+        <View style={styles.secondPageSection}>
+          <Text style={styles.secondPageText}>
+            <Text style={{ fontWeight: "bold" }}>GROUP B</Text>
+            {"\n"}I am aware about the criteria followed by &quot;Muthoot
+            Institute of Technology and Science&quot;, for the B-Tech NRI Quota
+            admission for the year 2024, such that my ward has to attain 75%
+            Marks for Mathematics individually and 75% put together in Physics,
+            Chemistry & Mathematics, in the 12th standard, for Qualifying
+            examination (CBSE/ISC) OR attain 75% Marks for Mathematics
+            individually and 75% put together in Physics, Chemistry &
+            Mathematics, in the 12th standard(Terminal- evaluation TE), for
+            Qualifying examination(State Board). If my ward failed to do so,
+            there is no claim, from my side for the admission.
+          </Text>
+        </View>
 
-                <View style={styles.secondPageSection}>
-                    <Text style={styles.secondPageText}>
-                        <Text style={{ fontWeight: "bold" }}>EXIT OPTION</Text>
-                        {"\n"}1. A student can opt to{" "}
-                        <Text style={{ backgroundColor: "yellow" }}> EXIT </Text>
-                        from NRI quota before 5 days, after the publication of{" "}
-                        <Text style={{ backgroundColor: "yellow" }}>
-                            KEAM 2024 SCORE/answer key
-                        </Text>{" "}
-                        and will be reimbursed with the entire amount after deducting Rs 1000 as
-                        processing fee. However, a student will be automatically considered
-                        for MITS Management Merit Quota from NRI quota if he desires so and has
-                        to{" "}
-                        <Text style={{ backgroundColor: "yellow" }}>freeze</Text> the
-                        registration in MITS by sending an email to admissions@mgits.ac.in.{" "}
-                        <Text style={{ backgroundColor: "yellow" }}>Request</Text> for exit should
-                        be mailed to{" "}
-                        <Text style={{ backgroundColor: "yellow" }}>
-                            admissions@mgits.ac.in
-                        </Text>{" "}
-                        within the stipulated time. There after the registered choice will be
-                        frozen and will not be eligible for any refund, if the admission is
-                        cancelled after 5 days from the date of KEAM SCORE publication.
-                    </Text>
-                </View>
+        <View style={styles.secondPageSection}>
+          <Text style={styles.secondPageText}>
+            <Text style={{ fontWeight: "bold" }}>EXIT OPTION</Text>
+            {"\n"}1. A student can opt to{" "}
+            <Text style={{ backgroundColor: "yellow" }}> EXIT </Text>
+            from NRI quota before 5 days, after the publication of{" "}
+            <Text style={{ backgroundColor: "yellow" }}>
+              KEAM 2024 SCORE/answer key
+            </Text>{" "}
+            and will be reimbursed with the entire amount after deducting Rs
+            1000 as processing fee. However, a student will be automatically
+            considered for MITS Management Merit Quota from NRI quota if he
+            desires so and has to{" "}
+            <Text style={{ backgroundColor: "yellow" }}>freeze</Text> the
+            registration in MITS by sending an email to admissions@mgits.ac.in.{" "}
+            <Text style={{ backgroundColor: "yellow" }}>Request</Text> for exit
+            should be mailed to{" "}
+            <Text style={{ backgroundColor: "yellow" }}>
+              admissions@mgits.ac.in
+            </Text>{" "}
+            within the stipulated time. There after the registered choice will
+            be frozen and will not be eligible for any refund, if the admission
+            is cancelled after 5 days from the date of KEAM SCORE publication.
+          </Text>
+        </View>
 
-                <View style={styles.secondPageSignatureSection}>
-                    <View style={{ ...styles.secondPageSignature, alignItems: "flex-start" }}>
-                        <Text style={{ marginBottom: 5 }}>
-                            Name of the parent/guardian: {studentData.parentName}
-                        </Text>
-                        <Text style={{ marginBottom: 5 }}>Date: 04/09/2024</Text>
-                        <Text style={{ marginBottom: 5 }}>
-                            Signature of parent/guardian
-                        </Text>
-                        <Image src="/no_img.png" style={styles.secondPageSignatureImage}  />
-                    </View>
-                    <View style={{ ...styles.secondPageSignature, alignItems: "flex-end" }}>
-                        <Text style={{ marginBottom: 5 }}>Signature of applicant</Text>
-                        <Image src="/no_img.png" style={styles.secondPageSignatureImage}  />
-                    </View>
-                </View>
+        <View style={styles.secondPageSignatureSection}>
+          <View
+            style={{ ...styles.secondPageSignature, alignItems: "flex-start" }}
+          >
+            <Text style={{ marginBottom: 5 }}>
+              Name of the parent/guardian: {studentData.parentName}
+            </Text>
+            <Text style={{ marginBottom: 5 }}>Date: 04/09/2024</Text>
+            <Text style={{ marginBottom: 5 }}>
+              Signature of parent/guardian
+            </Text>
+            {/* <Image src="/no_img.png" style={styles.secondPageSignatureImage} /> */}
+            <Image
+              src={student?.Uploads?.parentSignature || "/no_img.png"}
+              style={styles.photo}
+            />
+          </View>
+          <View
+            style={{ ...styles.secondPageSignature, alignItems: "flex-end" }}
+          >
+            <Text style={{ marginBottom: 5 }}>Signature of applicant</Text>
+            <Image
+              src={student?.Uploads?.studentSignature || "/no_img.png"}
+              style={styles.secondPageSignatureImage}
+            />
+          </View>
+        </View>
 
-                {/* Footer */}
-                <View
-                    style={[
-                        styles.footer,
-                        { position: "absolute", bottom: 20, left: 0, right: 0 },
-                    ]}
-                >
-                    <Text style={{ textAlign: "center", marginTop: 10 }}>
-                        This file was generated on {new Date().toLocaleDateString()}
-                    </Text>
-                    <Text
-                        style={{ textAlign: "center", marginTop: 10 }}
-                        render={({ pageNumber, totalPages }) =>
-                            `Page ${pageNumber} of ${totalPages}`
-                        }
-                        fixed
-                    />
-                </View>
-            </Page>
-        </Document>
-    );
+        {/* Footer */}
+        <View
+          style={[
+            styles.footer,
+            { position: "absolute", bottom: 20, left: 0, right: 0 },
+          ]}
+        >
+          <Text style={{ textAlign: "center", marginTop: 10 }}>
+            This file was generated on {new Date().toLocaleDateString()}
+          </Text>
+          <Text
+            style={{ textAlign: "center", marginTop: 10 }}
+            render={({ pageNumber, totalPages }) =>
+              `Page ${pageNumber} of ${totalPages}`
+            }
+            fixed
+          />
+        </View>
+      </Page>
+    </Document>
+  );
 };
 
 export default StudentPDF;

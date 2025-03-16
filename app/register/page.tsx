@@ -4,7 +4,7 @@ import Navbar from "../components/navbar";
 import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
 import { Button } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   APPLYING_YEAR_OPTIONS,
   GENDER_OPTIONS,
@@ -14,6 +14,7 @@ import {
 import { registerAction } from "../actions/auth-actions";
 import { userRegisterSchema } from "@/schemas";
 import { useRouter } from "next/navigation";
+import { getAllAvailableYears } from "../actions/seat-Management-Actions";
 
 export default function Register() {
   const router = useRouter();
@@ -32,6 +33,7 @@ export default function Register() {
     religion: "",
     cast: "",
   });
+  const [availableYears, setavailableYears] = useState<number[]>([]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -60,6 +62,15 @@ export default function Register() {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const years = await getAllAvailableYears();
+      console.log("years", years);
+      setavailableYears(years);
+    })();
+  }, []);
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-background">
       <Navbar />
@@ -129,7 +140,7 @@ export default function Register() {
                 id={"applyingYear"}
                 label={"Applying Year"}
                 required={true}
-                options={APPLYING_YEAR_OPTIONS}
+                options={availableYears.map((year) => year.toString())}
                 onChange={handleChange}
                 value={formData.applyingYear}
               />

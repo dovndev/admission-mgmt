@@ -1,17 +1,8 @@
 import { create } from 'zustand'
 import { getStructuredUserData } from '../actions/user-Actions';
+import { StructuredUserData } from '@/types/userTypes';
 
-type StructuredUserData = {
-    "Student Details": Record<string, any>;
-    "Contact Address": Record<string, any>;
-    "Permanent Address": Record<string, any>;
-    "10th Mark Details": Record<string, any>;
-    "12th Mark Details": Record<string, any>;
-    "Keam Details": Record<string, any>;
-    "Branch Details": Record<string, any>;
-    "Uploads": Record<string, string | null | undefined>;
-    [key: string]: any;
-}
+
 type UserStore = {
     // Existing state
     years: string[];

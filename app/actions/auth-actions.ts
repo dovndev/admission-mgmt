@@ -18,6 +18,64 @@ export async function isSessonActive() {
     return false
 }
 
+export async function loginAdmin(data: z.infer<typeof userLoginSchema>) {
+    const validatedData = userLoginSchema.parse(data)
+    if (!validatedData) {
+        return {
+            error: "Invalid data",
+            success: false
+        }
+    }
+
+    const { email, password } = validatedData;
+
+    const userExists = await prisma.admin.findUnique({
+        where: {
+            email: email
+        }
+    })
+
+    if (!userExists || !userExists.password || !userExists.email) {
+        return {
+            error: "User not found",
+            success: false
+        }
+    }
+
+    try {
+        await signIn("credentials", {
+            email: userExists.email,
+            password: password,
+            role: "admin",
+            redirectTo: "/admin/adminHome",
+        })
+    }
+    catch (e) {
+        if (e instanceof AuthError) {
+            switch (e.type) {
+                case "CredentialsSignin":
+                    return {
+                        error: "Invalid credentials",
+                        success: false
+                    };
+                default:
+                    return {
+                        error: "Email or password is incorrect",
+                        success: false
+                    };
+            }
+        }
+
+        throw e;
+    }
+
+    return {
+        message: "login success",
+        success: true
+    }
+
+}
+
 export async function loginAction(data: z.infer<typeof userLoginSchema>): Promise<LoginActionResult> {
 
     const validatedData = userLoginSchema.parse(data)

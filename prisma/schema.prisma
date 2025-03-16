@@ -118,18 +118,31 @@ model User {
 }
 
 model Branches {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  totalSets    Int      @default(9) // Default total sets for each branch
-  occupiedSets Int      @default(0) // Initially no sets are occupied
-  nri          Int      @default(0) // Count of NRI seats
-  oci          Int      @default(0) // Count of OCI seats
-  cwig         Int      @default(0) // Count of CWIG seats
-  nriStudents  String[] // List of NRI students
-  ociStudents  String[] // List of OCI students
-  cwigStudents String[] // List of CWIG students
-  year         Int // Year for which the data is applicable
-  waitingList  Int      @default(0) // Count of students on the waiting list
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  totalSets     Int      @default(18) // Default total sets for each branch
+  superSeats    Int      @default(9) // Initially no super sets
+  nriSeats      Int      @default(9) // Initially no NRI seats
+  mngtSeats     Int      @default(0) // Initially no management seats
+  occupiedSets  Int      @default(0) // Initially no sets are occupied
+  occupiedNri   Int      @default(0) // Initially no NRI seats are occupied
+  occupiedMngt  Int      @default(0) // Initially no management seats are occupied
+  occupiedSuper Int      @default(0) // Initially no super seats are occupied
+  nri           Int      @default(0) // Count of NRI seats
+  oci           Int      @default(0) // Count of OCI seats
+  cwig          Int      @default(0) // Count of CWIG seats
+  nriStudents   String[] // List of NRI students
+  ociStudents   String[] // List of OCI students
+  cwigStudents  String[] // List of CWIG students
+  year          Int // Year for which the data is applicable
+  waitingList   Int      @default(0) // Count of students on the waiting list
 
   @@unique([name, year])
+}
+
+model Admin {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  adminName String
+  email     String @unique
+  password  String
 }

@@ -19,6 +19,7 @@ export const userRegisterSchema = z.object({
 export const userLoginSchema = z.object({
     email: z.string().email("Please provide a valid email"),
     password: z.string().min(8, "Password must be atleast 8 characters"),
+    role: z.enum(["admin", "user"]).optional(),
 });
 
 const addressSchema = z.object({
