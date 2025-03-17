@@ -1,18 +1,26 @@
-export const GENDER_OPTIONS: string[] = ["Male", "Female", "Other"];
+type NonEmptyArray<T> = [T, ...T[]];
 
-export const APPLYING_YEAR_OPTIONS: string[] = ["2025", "2026"];
+export const GENDER_OPTIONS: NonEmptyArray<string> = ["Male", "Female", "Other"];
 
-export const QUOTA_OPTIONS: string[] = ["NRI", "OCI", "CIWG"];
+export const APPLYING_YEAR_OPTIONS: NonEmptyArray<string> = ["2025", "2026"];
 
-export const PROGRAM_OPTIONS: string[] = ["BTech", "MTech", "MCA"];
+export const QUOTA_OPTIONS: NonEmptyArray<string> = ["NRI", "OCI", "CIWG", "PIO"];
 
-export const _12TH_BOARD: string[] = ["CBSE", "ICSE", "STATE"];
+export const PROGRAM_OPTIONS: NonEmptyArray<string> = ["BTech", "MTech", "MCA"];
 
-export const _10TH_BOARD: string[] = ["CBSE", "ICSE", "STATE"];
+export const _12TH_BOARD: NonEmptyArray<string> = ["CBSE", "ICSE", "STATE"];
 
-export const REGISTER_STEPS: string[] = ["Personal Details", "Educational Details", "Declaration", "Final Verification", "Payment"];
+export const _10TH_BOARD: NonEmptyArray<string> = ["CBSE", "ICSE", "STATE"];
 
-export const BRANCH_OPTIONS: string[] = ["CSE", "ECE", "EEE", "MECH", "CIVIL"];
+export const REGISTER_STEPS: NonEmptyArray<string> = [
+    "Personal Details",
+    "Educational Details",
+    "Declaration",
+    "Final Verification",
+    "Payment"
+];
+
+export const BRANCH_OPTIONS: NonEmptyArray<string> = ["CSE", "ECE", "EEE", "MECH", "CIVIL"];
 
 
 

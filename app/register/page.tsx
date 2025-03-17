@@ -3,10 +3,10 @@ import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/navbar";
 import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
-import { Button } from "@heroui/react";
+import { addToast, Button } from "@heroui/react";
 import { useEffect, useState } from "react";
 import {
-  APPLYING_YEAR_OPTIONS,
+  
   GENDER_OPTIONS,
   PROGRAM_OPTIONS,
   QUOTA_OPTIONS,
@@ -43,6 +43,11 @@ export default function Register() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    addToast({
+      title: "Toast title",
+      description: "Toast displayed successfully",
+      radius: 'lg',
+    })
     e.preventDefault();
     try {
       const validatedData = userRegisterSchema.parse(formData);
@@ -186,6 +191,7 @@ export default function Register() {
                 autoComplete="off"
                 type={"number"}
                 onChange={handleChange}
+                
               />
             </div>
             <h1 className="text-center">
