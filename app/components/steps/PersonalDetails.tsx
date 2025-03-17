@@ -357,7 +357,8 @@ export default function PersonalDetails() {
                   id={"dob"}
                   label={"Date of Birth"}
                   required={true}
-                  value={formData.dob}
+                  value={'2022-01-01'}
+                  
                   onChange={handleChange}
                 />
               </div>

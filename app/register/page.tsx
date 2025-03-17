@@ -3,8 +3,6 @@ import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/navbar";
 import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
-import { addToast, Button } from "@heroui/react";
-import { useEffect, useState } from "react";
 import {
   
   GENDER_OPTIONS,
@@ -15,6 +13,8 @@ import { registerAction } from "../actions/auth-actions";
 import { userRegisterSchema } from "@/schemas";
 import { useRouter } from "next/navigation";
 import { getAllAvailableYears } from "../actions/seat-Management-Actions";
+import { useEffect, useState } from "react";
+import { Button } from "@heroui/react";
 
 export default function Register() {
   const router = useRouter();
@@ -43,11 +43,7 @@ export default function Register() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    addToast({
-      title: "Toast title",
-      description: "Toast displayed successfully",
-      radius: 'lg',
-    })
+    
     e.preventDefault();
     try {
       const validatedData = userRegisterSchema.parse(formData);

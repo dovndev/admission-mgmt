@@ -96,7 +96,7 @@ model User {
   email              String         @unique
   password           String?        @unique
   mobileNumber       String         @unique
-  keralaMobileNumber String?        @unique
+  keralaMobileNumber String?        
   gender             String
   quota              Quota
   program            Program

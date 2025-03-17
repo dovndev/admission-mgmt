@@ -80,13 +80,13 @@ export default function EducationalDetails() {
     setFormData((prev) => ({ ...prev, [fieldName]: url }));
   };
 
-  const renderFileUpload = (id: string, label: string, fileUrl: string) => {
+  const renderFileUpload = (id: string, label: string, fileUrl: string, isRequired: boolean = true) => {
     return (
       <div className="flex flex-col gap-2">
         <FileUploadInput
           id={id}
           label={label}
-          required={true}
+          required={isRequired}
           onChange={handleChange}
           setFileLink={(url) => setFileLink(id, url)}
           value={fileUrl} // Add this prop to pass the current file URL
@@ -274,10 +274,11 @@ export default function EducationalDetails() {
             </div>
             <div className="flex flex-col gap-4 md:flex-row">
               {renderFileUpload(
-                "KeamMarklist",
-                "Mark list upload [KEAM]",
-                formData.KeamMarklist
-              )}
+                              "KeamMarklist",
+                              "Mark list upload [KEAM]",
+                              formData.KeamMarklist,
+                              false
+                            )}
             </div>
             <div className="flex flex-col text-center gap-4 w-full justify-around">
               <span className="text-red-500  bg-opacity-40 p-2 rounded-lg">

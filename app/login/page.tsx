@@ -4,12 +4,13 @@ import { useSearchParams } from "next/navigation";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/navbar";
 import Link from "next/link";
-import { Button } from "@heroui/react";
+import {  Button } from "@heroui/react";
 import {
   isSessonActive,
   loginAction,
   loginAdmin,
 } from "../actions/auth-actions";
+import CustomToast from "../components/CustomToast";
 export default function LoginPage() {
   function CheckUserType() {
     const searchParams = useSearchParams();
@@ -27,6 +28,8 @@ export default function LoginPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
+      CustomToast({title: "Logging in", description: ""});
+
       if (isAdmin) {
         // Admin login logic
         console.log("Admin Login:", formData);

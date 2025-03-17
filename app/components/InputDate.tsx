@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { DatePicker } from "@heroui/date-picker";
+import {parseDate} from "@internationalized/date";
 import { DateValue } from "@react-types/datepicker";
 
 interface DatePickerProps {
@@ -11,7 +12,7 @@ interface DatePickerProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputDate: React.FC<DatePickerProps> = ({ id, label, required = false, onChange }) => {
+const InputDate: React.FC<DatePickerProps> = ({ id, label, required = false, value,onChange }) => {
   const handleDateChange = (date: DateValue | null) => {
     if (date && onChange) {
       const event = {
@@ -21,7 +22,16 @@ const InputDate: React.FC<DatePickerProps> = ({ id, label, required = false, onC
     }
   };
 
-  return <DatePicker isRequired={required} id={id} label={label} variant="bordered" onChange={handleDateChange} />;
+  return (
+    <DatePicker
+      isRequired={required}
+      id={id}
+      label={label}
+      defaultValue={value ? parseDate(value): null}
+      variant="bordered"
+      onChange={handleDateChange}
+    />
+  );
 };
 
 export default InputDate;
