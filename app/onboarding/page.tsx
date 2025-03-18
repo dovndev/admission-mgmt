@@ -1,6 +1,6 @@
 "use client";
 import ProgressBar from "../components/ProgressBar";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { useState } from "react";
 import { REGISTER_STEPS } from "../constants/dropdownOptions";
 
@@ -14,7 +14,9 @@ import Payment from "../components/steps/Payment";
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const handleNext = () => {
-    setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
+    setCurrentStep((prev) =>
+      prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev
+    );
   };
 
   const handlePrevious = () => {
@@ -47,10 +49,22 @@ export default function OnBoarding() {
         <div className="w-full">{renderStepContent()}</div>
 
         <div className="flex space-x-4 bg-textBoxBackground items-center shadow-xl p-4 rounded-xl">
-          <Button id="previousPage" className="bg-red-600 border-red-900 text-white" variant="bordered" onPress={handlePrevious} disabled={currentStep === 0}>
+          <Button
+            id="previousPage"
+            className="bg-red-600 border-red-900 text-white"
+            variant="bordered"
+            onPress={handlePrevious}
+            disabled={currentStep === 0}
+          >
             Previous
           </Button>
-          <Button id="nextPage"  className="bg-green-600 border-green-900 text-white" variant="bordered" onPress={handleNext} disabled={currentStep === REGISTER_STEPS.length - 1}>
+          <Button
+            id="nextPage"
+            className="bg-green-600 border-green-900 text-white"
+            variant="bordered"
+            onPress={handleNext}
+            disabled={currentStep === REGISTER_STEPS.length - 1}
+          >
             Next
           </Button>
         </div>

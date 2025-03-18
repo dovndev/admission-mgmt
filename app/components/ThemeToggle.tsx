@@ -1,4 +1,4 @@
-import { Switch } from "@nextui-org/switch";
+import { Switch } from "@heroui/switch";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 

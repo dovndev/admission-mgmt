@@ -1,8 +1,17 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import NavbarAdmin from "../components/NavbarAdmin";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Button } from "@nextui-org/react";
+import NavbarAdmin from "../../components/NavbarAdmin";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { Button } from "@heroui/react";
 import { FiRefreshCw } from "react-icons/fi";
 
 interface ProgramData {
@@ -50,13 +59,11 @@ export default function AdminHome() {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="h-20">
+      <div className="h-20 flex items-center justify-center">
         <NavbarAdmin />
       </div>
 
-
       <div className="flex-1 flex flex-col lg:flex-row gap-4 p-4 overflow-hidden lg:items-center justify-center">
-
         <div className="flex-1 bg-textBoxBackground rounded-3xl shadow-xl p-4 h-[400px] lg:h-full lg:p-6 lg:max-w-[50%]">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Registration Statistics</h2>
@@ -67,7 +74,9 @@ export default function AdminHome() {
               onPress={loadData}
               isLoading={isLoading}
             >
-              <FiRefreshCw className={`h-5 w-5 ${isLoading ? "animate-spin" : ""}`} />
+              <FiRefreshCw
+                className={`h-5 w-5 ${isLoading ? "animate-spin" : ""}`}
+              />
             </Button>
           </div>
           <div className="h-[calc(100%-3rem)]">
@@ -82,8 +91,16 @@ export default function AdminHome() {
                 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="program" label="Branches" angle={-45} textAnchor="end" height={80} />
-                <YAxis label={{ value: "Count", angle: -90, position: "insideLeft" }} />
+                <XAxis
+                  dataKey="program"
+                  label="Branches"
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                />
+                <YAxis
+                  label={{ value: "Count", angle: -90, position: "insideLeft" }}
+                />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="applications" fill="orange" name="Applications" />
@@ -110,13 +127,14 @@ export default function AdminHome() {
             </div>
           </div>
 
-
           <div className="flex-1 bg-textBoxBackground p-4 shadow-xl rounded-3xl">
             <div className="flex gap-4 items-center justify-center">
               {quotaData.map((option) => (
                 <div key={option.quota} className="text-center">
                   <div className="text-xl">{option.quota}</div>
-                  <div className="text-4xl font-bold">{option.applications}</div>
+                  <div className="text-4xl font-bold">
+                    {option.applications}
+                  </div>
                 </div>
               ))}
             </div>
