@@ -7,6 +7,7 @@ import FileUploadInput from "../FileUploadInput";
 import { updateEducationDetails } from "../../actions/onboarding-actions";
 import { EducationalDetailsFormData } from "@/schemas";
 import useUserStore from "@/app/store/userStore";
+import CustomToast from "../CustomToast";
 
 export default function EducationalDetails() {
   const { userData, refreshUserData } = useUserStore();
@@ -63,16 +64,19 @@ export default function EducationalDetails() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      CustomToast({title:"Saving"})
       const response = await updateEducationDetails(formData);
       if (response.success) {
         console.log(response.message);
         // Refresh user data after successful update
+        CustomToast({title:"Saved"})
         await refreshUserData();
       } else {
         throw new Error(response.message);
       }
     } catch (error) {
       console.error("Error submitting educational details", error);
+      CustomToast({title:"Error", description: "Error submitting details"});
       throw error;
     }
   };
@@ -86,7 +90,7 @@ export default function EducationalDetails() {
         <FileUploadInput
           id={id}
           label={label}
-          required={isRequired}
+          required={isRequired && !fileUrl}
           onChange={handleChange}
           setFileLink={(url) => setFileLink(id, url)}
           value={fileUrl} // Add this prop to pass the current file URL

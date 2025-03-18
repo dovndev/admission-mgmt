@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { conformSeat } from "@/app/actions/user-Actions";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/app/store/userStore";
+import CustomToast from "../CustomToast";
 
 export default function Register() {
   const router = useRouter();
@@ -17,6 +18,9 @@ export default function Register() {
   const { userData, fetchUserData, isLoading } = useUserStore();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAgreed, setIsAgreed] = useState(false); // Initialize agreement state
+  const [agreementError, setAgreementError] = useState(""); // State for agreement error
+
   const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;
     message: string;
@@ -27,15 +31,26 @@ export default function Register() {
     setIsSubmitting(true);
     setSubmitStatus(null);
 
+    // Agreement validation
+    if (!isAgreed) {
+      setAgreementError("You must agree to the terms and conditions.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const userId = sessionData?.user?.id;
       if (!userId) {
         throw new Error("User not logged in");
       }
 
-      const quota = userData?.["Student Details"]["Quota"];
-      const branch = userData?.["Branch Details"]["Branch"];
-      const year = parseInt(userData?.["Student Details"]["Academic Year"]);
+      const quota = userData?.["Student Details"]?.["Quota"]; // Use optional chaining
+      const branch = userData?.["Branch Details"]?.["Branch"]; // Use optional chaining
+      const year = parseInt(userData?.["Student Details"]?.["Academic Year"] || ""); // Use optional chaining
+
+      if (!quota || !branch || isNaN(year)) {
+        throw new Error("Missing required student data.");
+      }
 
       const result = await conformSeat(userId, quota, branch, year);
 
@@ -43,13 +58,21 @@ export default function Register() {
 
       if (result.success) {
         // Redirect to success page or dashboard after a brief delay
+        CustomToast({
+          title: "Seat Confirmed",
+          description: "Seat confirmed successfully",
+        });
         console.log("Seat confirmed successfully");
       }
-    } catch (error) {
+    } catch (error: any) { // Type the error as any
       console.error("Form submission error:", error);
+      CustomToast({
+        title: "Error",
+        description: error.message || "Error occurred while confirming seat", // Display specific error message
+      });
       setSubmitStatus({
         success: false,
-        message: "An unexpected error occurred. Please try again.",
+        message: error.message || "An unexpected error occurred. Please try again.", // Display specific error message
       });
     } finally {
       setIsSubmitting(false);
@@ -193,11 +216,22 @@ export default function Register() {
 
         {/* Final submit*/}
         <form className="space-y-6" onSubmit={handleSubmit}>
-          <Checkbox className="" isRequired>
+          <Checkbox
+            className=""
+            required={true}
+            checked={isAgreed}
+            onChange={(e) => {
+              setIsAgreed(e.target.checked);
+              if (e.target.checked) setAgreementError("");
+            }}
+          >
             I hereby declare that all the information furnished above are true
             and correct and we will obey the rules and regulations of the
             institution if admitted
           </Checkbox>
+          {agreementError && (
+            <p className="text-red-500 text-sm mt-1">{agreementError}</p>
+          )}
 
           <Button
             type="submit"

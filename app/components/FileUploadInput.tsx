@@ -120,7 +120,7 @@ const FileUploadInput: React.FC<FileUploadInputProps> = ({
           type="button"
           color="warning"
           variant="ghost"
-          className="mt-5"
+          className=""
           isLoading={isUploading}
           isDisabled={!selectedFile || isUploading}
         >

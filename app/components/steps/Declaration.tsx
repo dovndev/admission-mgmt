@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDeclerationDetails } from "@/app/actions/onboarding-actions";
 import { Branch } from "@/types/userTypes";
 import useUserStore from "@/app/store/userStore";
+import CustomToast from "../CustomToast";
 
 // Define the validation schema with Zod
 const declarationSchema = z.object({
@@ -139,9 +140,15 @@ export default function Declaration() {
       signatureGuardian: parentSignature,
     });
     if (response.success) {
+      CustomToast({
+        title: "Declaration details saved successfully!",})
       alert("Declaration details saved successfully!");
+      
     } else {
+      CustomToast({
+        title: "Failed to save declaration details.",})
       alert("Failed to save declaration details.");
+      
     }
   };
 
@@ -276,7 +283,8 @@ export default function Declaration() {
                   onValueChange={(isSelected) =>
                     setValue("agreementChecked", isSelected)
                   }
-                  isRequired
+                  required={true}
+                  
                 >
                   I have clearly read the instructions mentioned above and would
                   like to proceed further
@@ -295,7 +303,7 @@ export default function Declaration() {
               <FileUploadInput
                 id="signature"
                 label="Signature of Applicant"
-                required={true}
+                required={formValues.signature ? false : true}
                 setFileLink={(url) => setFileLink("signature", url)}
                 value={formValues.signature}
               />
@@ -315,7 +323,7 @@ export default function Declaration() {
               <FileUploadInput
                 id="parentSignature"
                 label="Signature of Parent"
-                required={true}
+                required={formValues.signature ? false : true}
                 setFileLink={(url) => setFileLink("parentSignature", url)}
                 value={formValues.parentSignature}
               />

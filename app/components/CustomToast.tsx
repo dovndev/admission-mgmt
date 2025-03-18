@@ -9,15 +9,16 @@ interface CustomToastProps {
 }
 
 export default function CustomToast({
-  title = "Toast title",
-  description = "Toast displayed successfully",
+  title = "",
+  description = "",
 }: CustomToastProps) {
 
     addToast({
       title,
       description,
       radius : "lg",
-      variant: "flat"
+      variant: "flat",
+      timeout: 5000,
     });
 
 
