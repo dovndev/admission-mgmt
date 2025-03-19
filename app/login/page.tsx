@@ -34,13 +34,14 @@ export default function LoginPage() {
           password: formData.password,
         });
         console.log(response);
-        if (response.error) {
-          CustomToast({
-            title: "Error",
-            description: response.error,
-          });
-        }
-
+        try {
+          if (response.error) {
+            CustomToast({
+              title: "Error",
+              description: response.error,
+            });
+          }
+        } catch {}
       } else {
         // User login logic
         // console.log("User Login:", formData);
@@ -55,10 +56,9 @@ export default function LoginPage() {
             description: response.error,
           });
         }
-
       }
       CustomToast({
-        title: "Logging in"
+        title: "Logging in",
       });
     };
 

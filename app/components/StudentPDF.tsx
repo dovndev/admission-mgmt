@@ -167,33 +167,25 @@ interface StudentPDFProps {
 const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
   const studentData = student
     ? {
-        name: student["Student Details"].Name,
-        dob: student["Student Details"].DOB || "Not provided",
-        parentName:
-          student["Student Details"]["Father's Name"] ||
-          student["Student Details"]["Mother's Name"] ||
-          "Not provided",
-        occupation:
-          student["Student Details"]["Father's Occupation"] || "Not provided",
+        name: student["Student Details"].Name || "Not provided",
+        dob: student["Student Details"]["Date of Birth"] || "Not provided",
+        parentName: student["Student Details"]["Parent Name"] || "Not provided",
+        occupation: student["Student Details"]["Parent Occupation"] || "Not provided",
         address: {
-          line1: `${student["Contact Address"].Address || ""}, ${
-            student["Contact Address"].City || ""
-          }`,
-          city: student["Contact Address"].District || "Not provided",
-          country: student["Contact Address"].State || "Not provided",
+          line1: `${student["Contact Address"]["House Name"] || ""}, ${student["Contact Address"]["District, City"] || ""}`,
+          city: student["Contact Address"]["District, City"] || "Not provided",
+          country: student["Contact Address"]["State"] || "Not provided",
         },
-        state: student["Contact Address"].State || "Kerala",
-        pin: student["Contact Address"].Pincode || "Not provided",
+        state: student["Contact Address"]["State"] || "Not provided",
+        pin: student["Contact Address"].Pin ? student["Contact Address"].Pin.toString() : "Not provided",
         email: student["Student Details"].Email || "Not provided",
-        phoneKerala: student["Student Details"].Phone || "Not provided",
-        phoneAlternate:
-          student["Student Details"]["Alternate Phone"] || "Not provided",
-        sponsor: student["Student Details"].Sponsor || "Not provided",
-        relation:
-          student["Student Details"]["Relation to Sponsor"] || "Not provided",
-        branch: student["Branch Details"].Branch || "Not selected",
-        transactionId:
-          student["Student Details"]["Transaction ID"] || "Not provided",
+        phoneKerala: student["Student Details"]["Kerala Phone"] || "Not provided",
+        phoneAlternate: student["Student Details"].Phone || "Not provided",
+        sponsor: student["Student Details"]["NRI Sponsor"] || "Not provided",
+        relation: student["Student Details"]["Relationship with Applicant"] || "Not provided",
+        branch: student["Branch Details"].Branch || "CSE",
+        transactionId: student["Student Details"]["Transaction Number"] || "Not provided",
+        applyingYear: student["Student Details"]["Academic Year"] || "Not provided",
       }
     : {
         // Your default mock data
@@ -429,7 +421,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
             <Text style={{ fontWeight: "bold" }}>GROUP A</Text>
             {"\n"}I am aware about the criteria followed by &quot;Muthoot
             Institute of Technology and Science&quot;, for the B-Tech NRI Quota
-            admission for the year 2024, such that my ward has to attain 80%
+            admission for the year {studentData.applyingYear}, such that my ward has to attain 80%
             Marks for Mathematics individually and 80% put together in Physics,
             Chemistry & Mathematics, in the 12th standard, for Qualifying
             examination (CBSE/ISC) OR attain 80% Marks for Mathematics
@@ -445,7 +437,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
             <Text style={{ fontWeight: "bold" }}>GROUP B</Text>
             {"\n"}I am aware about the criteria followed by &quot;Muthoot
             Institute of Technology and Science&quot;, for the B-Tech NRI Quota
-            admission for the year 2024, such that my ward has to attain 75%
+            admission for the year {studentData.applyingYear}, such that my ward has to attain 75%
             Marks for Mathematics individually and 75% put together in Physics,
             Chemistry & Mathematics, in the 12th standard, for Qualifying
             examination (CBSE/ISC) OR attain 75% Marks for Mathematics
@@ -463,7 +455,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
             <Text style={{ backgroundColor: "yellow" }}> EXIT </Text>
             from NRI quota before 5 days, after the publication of{" "}
             <Text style={{ backgroundColor: "yellow" }}>
-              KEAM 2024 SCORE/answer key
+              KEAM {studentData.applyingYear} SCORE/answer key
             </Text>{" "}
             and will be reimbursed with the entire amount after deducting Rs
             1000 as processing fee. However, a student will be automatically
@@ -489,7 +481,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
             <Text style={{ marginBottom: 5 }}>
               Name of the parent/guardian: {studentData.parentName}
             </Text>
-            <Text style={{ marginBottom: 5 }}>Date: 04/09/2024</Text>
+            <Text style={{ marginBottom: 5 }}>Date: 04/09/{studentData.applyingYear}</Text>
             <Text style={{ marginBottom: 5 }}>
               Signature of parent/guardian
             </Text>

@@ -58,6 +58,10 @@ export async function getStructuredUserData(userId: string) {
             "tenthCertificate": user.education?.tenth?.markList,
             "twelfthCertificate": user.education?.twelfth?.markList,
             "keamCertificate": user.education?.keam?.markList
+        },
+        "Payment": {
+            "Transaction Number": user.payment?.transactionNumber,
+            "Transaction Slip": user.payment?.transactionSlip
         }
     }
     return structuredUser;
@@ -232,6 +236,10 @@ export async function getStructuredUsersByYear(year: string, page: number = 1, l
                 "tenthCertificate": user.education?.tenth?.markList,
                 "twelfthCertificate": user.education?.twelfth?.markList,
                 "keamCertificate": user.education?.keam?.markList
+            },
+            "Payment": {
+                "Transaction Number": user.payment?.transactionNumber,
+                "Transaction Slip": user.payment?.transactionSlip
             }
         }));
 
