@@ -1,5 +1,6 @@
 "use server"
 import { prisma } from "@/prisma/prisma"
+import { QUOTA_OPTIONS } from "../constants/dropdownOptions";
 
 export async function getStructuredUserData(userId: string) {
     const user = await prisma.user.findUnique({
@@ -86,25 +87,15 @@ export async function conformSeat(userId: string, quota: string, branchName: str
             return { success: false, message: "No seats available" };
         }
 
-        let quotaField: 'nri' | 'oci' | 'cwig';
-        let studentsField: 'nriStudents' | 'ociStudents' | 'cwigStudents';
 
-        switch (quota) {
-            case 'NRI':
-                quotaField = 'nri';
-                studentsField = 'nriStudents';
-                break;
-            case 'OCI':
-                quotaField = 'oci';
-                studentsField = 'ociStudents';
-                break;
-            case 'CIWG':
-                quotaField = 'cwig';
-                studentsField = 'cwigStudents';
-                break;
-            default:
-                return { success: false, message: "Invalid quota type" };
+
+        if (!QUOTA_OPTIONS.includes(quota)) {
+            return { success: false, message: "Invalid quota" };
         }
+
+        const quotaField =  quota.toLowerCase();
+
+        const studentsField = `${quotaField}Students`;
 
         await prisma.branches.update({
             where: {
