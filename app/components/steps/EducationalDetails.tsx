@@ -183,7 +183,8 @@ export default function EducationalDetails() {
                 {renderFileUpload(
                   "_12thMarklist",
                   "Mark list upload [12th]",
-                  formData._12thMarklist
+                  formData._12thMarklist,
+                  false
                 )}
               </div>
             </div>
