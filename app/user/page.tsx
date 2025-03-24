@@ -15,6 +15,9 @@ import {
 import { FaGraduationCap } from "react-icons/fa";
 import useUserStore from "../store/userStore";
 import { useSession, signOut } from "next-auth/react";
+import ThemeToggle from "../components/ThemeToggle";
+import { StructuredUserData } from "@/types/userTypes";
+import { usePrintPDF } from "../hooks/usePrintPDF";
 
 export default function Register() {
   const { userData, fetchUserData, clearUserData, isLoading, error } =
@@ -23,7 +26,10 @@ export default function Register() {
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
   const { data: sessionData, status: sessionStatus } = session;
-
+  const { generatePDF, isGenerating } = usePrintPDF();
+  const handlePrintStudent = async (student: StructuredUserData) => {
+    await generatePDF(student);
+  };
   useEffect(() => {
     // In a real app, you would get the userId from authentication
     // This is just a placeholder - replace with your auth logic
@@ -75,7 +81,7 @@ export default function Register() {
       <div
         className="absolute top-0 left-0 w-full h-[25vh] bg-cover bg-center z-0"
         style={{
-          backgroundImage: "url('no_img.png')",
+          backgroundImage: "url('background_image.png')",
           backgroundBlendMode: "overlay",
           backgroundColor: "rgba(0, 0, 0, 0.1)",
         }}
@@ -202,10 +208,11 @@ export default function Register() {
             <Button className="m-1" variant="bordered" onPress={handleLogout}>
               Log out
             </Button>
-            <Button className="m-1" onPress={() => window.print()}>
+            <Button className="m-1" onPress={() => handlePrintStudent(userData)}>
               Print
             </Button>
           </div>
+          <ThemeToggle></ThemeToggle>
         </div>
       </div>
     </div>
