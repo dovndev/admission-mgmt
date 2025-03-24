@@ -7,11 +7,13 @@ import TableDisplayContent from "../TableDisplayContent";
 import FileUploadInput from "../FileUploadInput";
 import { updatePaymentDetails } from "@/app/actions/onboarding-actions";
 import CustomToast from "../CustomToast";
+import { useRouter } from "next/navigation";
 
 export default function Payment() {
   const [isSelected, setIsSelected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
   const [formData, setFormData] = useState({
     transactionNo: "",
     transactionSlip: "",
@@ -27,7 +29,7 @@ export default function Payment() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    
+
     if (!isSelected) {
       setError("Please agree to the declaration to proceed");
       return;
@@ -42,7 +44,7 @@ export default function Payment() {
       setError("Please upload a transaction slip");
       return;
     }
-    CustomToast({title: "Submitting"})
+    CustomToast({ title: "Submitting" });
     try {
       setIsLoading(true);
       const result = await updatePaymentDetails({
@@ -52,6 +54,8 @@ export default function Payment() {
 
       if (result.success) {
         console.log(result.message || "Payment details saved successfully");
+        CustomToast({ title: "Payment details saved successfully" });
+        router.push("/user");
       } else {
         setError(result.message || "Failed to submit payment details");
       }
@@ -62,7 +66,7 @@ export default function Payment() {
           : "Failed to submit payment details"
       );
       setError("Failed to submit payment details. Please try again.");
-      CustomToast({title: "Failed to submit payment details"})
+      CustomToast({ title: "Failed to submit payment details" });
     } finally {
       setIsLoading(false);
     }

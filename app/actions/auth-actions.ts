@@ -28,7 +28,7 @@ export async function loginAdmin(data: z.infer<typeof userLoginSchema>) {
     }
     const validatedData = parsedResult.data;
 
-    
+
     if (!validatedData) {
         return {
             error: "Invalid data",

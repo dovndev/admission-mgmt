@@ -10,9 +10,12 @@ interface StudentDetailsProps {
   student?: StructuredUserData;
 }
 
-export default function StudentDetails({ studentId, student }: StudentDetailsProps) {
+export default function StudentDetails({
+  studentId,
+  student,
+}: StudentDetailsProps) {
   const [studentData, setStudentData] = useState<any>(null);
-  
+
   useEffect(() => {
     // If full student object is provided, use it
     if (student) {
@@ -62,7 +65,10 @@ export default function StudentDetails({ studentId, student }: StudentDetailsPro
             <h1 className="text-center font-extrabold">
               Student Details<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Student Data" rows={studentData["Student Details"]} />
+            <TableDisplayContent
+              id="Student Data"
+              rows={studentData["Student Details"]}
+            />
           </div>
 
           {/* Contact and Permanent Address */}
@@ -70,11 +76,17 @@ export default function StudentDetails({ studentId, student }: StudentDetailsPro
             <h1 className="text-center font-extrabold">
               Contact Address<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Student Data" rows={studentData["Contact Address"]} />
+            <TableDisplayContent
+              id="Student Data"
+              rows={studentData["Contact Address"]}
+            />
             <h1 className="text-center font-extrabold pt-1">
               Permanent Address<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Address" rows={studentData["Permanent Address"]} />
+            <TableDisplayContent
+              id="Address"
+              rows={studentData["Permanent Address"]}
+            />
           </div>
         </div>
 
@@ -85,7 +97,10 @@ export default function StudentDetails({ studentId, student }: StudentDetailsPro
             <h1 className="text-center font-extrabold">
               10th Mark Details<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="10th Mark Details" rows={studentData["10th Mark Details"]} />
+            <TableDisplayContent
+              id="10th Mark Details"
+              rows={studentData["10th Mark Details"]}
+            />
             <Image
               src={studentData.Uploads?.tenthCertificate || "/no_img.png"}
               alt="10th Certificate"
@@ -95,7 +110,10 @@ export default function StudentDetails({ studentId, student }: StudentDetailsPro
 
           <div className="flex flex-col w-full items-center justify-start">
             <h1 className="text-center font-extrabold">12th Mark Details</h1>
-            <TableDisplayContent id="12th Mark Details" rows={studentData["12th Mark Details"]} />
+            <TableDisplayContent
+              id="12th Mark Details"
+              rows={studentData["12th Mark Details"]}
+            />
             <Image
               src={studentData.Uploads?.twelfthCertificate || "/no_img.png"}
               alt="12th Certificate"
@@ -110,7 +128,10 @@ export default function StudentDetails({ studentId, student }: StudentDetailsPro
             <h1 className="text-center font-extrabold">
               KEAM Details<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Keam Details" rows={studentData["Keam Details"]} />
+            <TableDisplayContent
+              id="Keam Details"
+              rows={studentData["Keam Details"]}
+            />
           </div>
           <Image
             src={studentData.Uploads?.keamCertificate || "/no_img.png"}
@@ -138,7 +159,10 @@ export default function StudentDetails({ studentId, student }: StudentDetailsPro
         </div>
         {/* Branch Details */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-5 pb-2  ">
-          <TableDisplayContent id="Branch Details" rows={studentData["Branch Details"]} />
+          <TableDisplayContent
+            id="Branch Details"
+            rows={studentData["Branch Details"]}
+          />
         </div>
       </div>
     </div>
