@@ -1,6 +1,6 @@
 "use client";
 //import Navbar from "../components/navbar";
-import { Image, Button, Spinner } from "@nextui-org/react";
+import { Image, Button, Spinner } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -199,10 +199,10 @@ export default function Register() {
             </div>
           )}
           <div className="pt-2 w-full">
-            <Button className="m-1" variant="bordered" onClick={handleLogout}>
+            <Button className="m-1" variant="bordered" onPress={handleLogout}>
               Log out
             </Button>
-            <Button className="m-1" onClick={() => window.print()}>
+            <Button className="m-1" onPress={() => window.print()}>
               Print
             </Button>
           </div>

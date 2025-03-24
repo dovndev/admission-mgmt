@@ -3,5 +3,5 @@ type RegisterActionResult =
     | { success: false; error: string };
 
 type LoginActionResult =
-    | { success: true; message: string }
+    | { success: true; message: string; error?: null }
     | { success: false; error: string };

@@ -3,10 +3,8 @@ import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/navbar";
 import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
-import { Button } from "@nextui-org/react";
-import { useEffect, useState } from "react";
 import {
-  APPLYING_YEAR_OPTIONS,
+  
   GENDER_OPTIONS,
   PROGRAM_OPTIONS,
   QUOTA_OPTIONS,
@@ -15,6 +13,9 @@ import { registerAction } from "../actions/auth-actions";
 import { userRegisterSchema } from "@/schemas";
 import { useRouter } from "next/navigation";
 import { getAllAvailableYears } from "../actions/seat-Management-Actions";
+import { useEffect, useState } from "react";
+import { Button } from "@heroui/react";
+import CustomToast from "../components/CustomToast";
 
 export default function Register() {
   const router = useRouter();
@@ -43,11 +44,12 @@ export default function Register() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    
     e.preventDefault();
     try {
       const validatedData = userRegisterSchema.parse(formData);
       if (!validatedData) {
-        return { error: "Invalid data" };
+        throw new Error("Invalid data");
       }
       const response: RegisterActionResult = await registerAction(
         validatedData
@@ -57,9 +59,12 @@ export default function Register() {
         router.push("/login");
       } else {
         console.log(response.error);
+        throw new Error("Invalid data");
       }
+      
     } catch (error) {
-      console.error(error);
+      console.log(error);
+      CustomToast({title: "Error",description: "Invalid data"});
     }
   };
 
@@ -186,6 +191,7 @@ export default function Register() {
                 autoComplete="off"
                 type={"number"}
                 onChange={handleChange}
+                
               />
             </div>
             <h1 className="text-center">

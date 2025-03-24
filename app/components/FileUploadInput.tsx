@@ -1,5 +1,5 @@
 "use client";
-import { Input, Button } from "@nextui-org/react";
+import { Input, Button } from "@heroui/react";
 import React, { useState, useRef } from "react";
 import { uploadFile } from "../actions/file-upload-Actions";
 
@@ -120,7 +120,7 @@ const FileUploadInput: React.FC<FileUploadInputProps> = ({
           type="button"
           color="warning"
           variant="ghost"
-          className="mt-5"
+          className=""
           isLoading={isUploading}
           isDisabled={!selectedFile || isUploading}
         >

@@ -4,12 +4,10 @@ import { useSearchParams } from "next/navigation";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/navbar";
 import Link from "next/link";
-import { Button } from "@nextui-org/react";
-import {
-  isSessonActive,
-  loginAction,
-  loginAdmin,
-} from "../actions/auth-actions";
+import { Button } from "@heroui/react";
+import { isSessonActive, loginAction, loginAdmin } from "../actions/auth-actions";
+import CustomToast from "../components/CustomToast";
+
 export default function LoginPage() {
   function CheckUserType() {
     const searchParams = useSearchParams();
@@ -27,6 +25,7 @@ export default function LoginPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
+
       if (isAdmin) {
         // Admin login logic
         console.log("Admin Login:", formData);
@@ -35,7 +34,13 @@ export default function LoginPage() {
           password: formData.password,
         });
         console.log(response);
-        // Implement your admin authentication logic here
+        
+          if (response.error) {
+            CustomToast({
+              title: "Error",
+              description: response.error,
+            });
+          }
       } else {
         // User login logic
         // console.log("User Login:", formData);
@@ -44,8 +49,16 @@ export default function LoginPage() {
           password: formData.password,
         });
         console.log(response);
-        // Implement your user authentication logic here
+        if (response?.error) {
+          CustomToast({
+            title: "Error",
+            description: response?.error,
+          });
+        }
       }
+      CustomToast({
+        title: "Logging in",
+      });
     };
 
     useEffect(() => {
@@ -72,7 +85,7 @@ export default function LoginPage() {
                 <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
                   <FloatingLabelInput
                     id="emailOrReg"
-                    label={isAdmin ? "Email Address" : "Registration Number"}
+                    label={"Email Address"}
                     type={"email"}
                     required
                     autoComplete={"email"}
@@ -100,21 +113,13 @@ export default function LoginPage() {
                 </Button>
               </form>
               <div className="h-[40px] w-full flex justify-end items-end">
-                <Link
-                  href={
-                    isAdmin ? "/forgotPassword?admin=true" : "/forgotPassword"
-                  }
-                  className="border-b mauto"
-                >
+                <Link href={"/forgotpassword"} className="border-b mauto">
                   Forgot password
                 </Link>
               </div>
             </div>
           </div>
-          <Link
-            href={isAdmin ? "/login" : "/login?admin=true"}
-            className="absolute bottom-1 right-0 m-4 "
-          >
+          <Link href={isAdmin ? "/login" : "/login?admin=true"} className="absolute bottom-1 right-0 m-4 ">
             {isAdmin ? "Login" : "Admin Login"}
           </Link>
         </div>

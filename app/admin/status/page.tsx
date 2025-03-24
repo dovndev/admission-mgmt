@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/input";
-import { Card, CardHeader, CardBody } from "@nextui-org/card";
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { Card, CardHeader, CardBody } from "@heroui/card";
 import NavbarAdmin from "../../components/NavbarAdmin";
 import {
   ModalHeader,
@@ -12,7 +12,7 @@ import {
   ModalContent,
   ModalFooter,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { addYear, getAllBreanchesByYear } from "../../actions/branch-Actions";
 import useAdminStore from "@/app/store/adminStore";
 import { updateBranchAllocation } from "@/app/actions/seat-Management-Actions";

@@ -19,7 +19,16 @@ export async function isSessonActive() {
 }
 
 export async function loginAdmin(data: z.infer<typeof userLoginSchema>) {
-    const validatedData = userLoginSchema.parse(data)
+    const parsedResult = userLoginSchema.safeParse(data);
+    if (!parsedResult.success) {
+        return {
+            error: "Invalid data",
+            success: false
+        };
+    }
+    const validatedData = parsedResult.data;
+
+    
     if (!validatedData) {
         return {
             error: "Invalid data",
@@ -78,7 +87,16 @@ export async function loginAdmin(data: z.infer<typeof userLoginSchema>) {
 
 export async function loginAction(data: z.infer<typeof userLoginSchema>): Promise<LoginActionResult> {
 
-    const validatedData = userLoginSchema.parse(data)
+    const parsedResult = userLoginSchema.safeParse(data);
+    if (!parsedResult.success) {
+        return {
+            error: "Invalid data",
+            success: false
+        };
+    }
+    const validatedData = parsedResult.data;
+
+
     if (!validatedData) {
         return {
             error: "Invalid data",

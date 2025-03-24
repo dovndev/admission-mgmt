@@ -1,5 +1,5 @@
 "use client";
-import { Image } from "@nextui-org/react";
+import { Image } from "@heroui/react";
 import TableDisplayContent from "./TableDisplayContent";
 import { STUDENTDATA as mockData } from "@/app/mock/mockData";
 import { useState, useEffect } from "react";

@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
 import DropDownInput from "../DropDownInput";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { _10TH_BOARD, _12TH_BOARD } from "@/app/constants/dropdownOptions";
 import FileUploadInput from "../FileUploadInput";
 import { updateEducationDetails } from "../../actions/onboarding-actions";
 import { EducationalDetailsFormData } from "@/schemas";
 import useUserStore from "@/app/store/userStore";
+import CustomToast from "../CustomToast";
 
 export default function EducationalDetails() {
   const { userData, refreshUserData } = useUserStore();
@@ -63,16 +64,19 @@ export default function EducationalDetails() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      CustomToast({title:"Saving"})
       const response = await updateEducationDetails(formData);
       if (response.success) {
         console.log(response.message);
         // Refresh user data after successful update
+        CustomToast({title:"Saved"})
         await refreshUserData();
       } else {
         throw new Error(response.message);
       }
     } catch (error) {
       console.error("Error submitting educational details", error);
+      CustomToast({title:"Error", description: "Error submitting details"});
       throw error;
     }
   };
@@ -80,13 +84,13 @@ export default function EducationalDetails() {
     setFormData((prev) => ({ ...prev, [fieldName]: url }));
   };
 
-  const renderFileUpload = (id: string, label: string, fileUrl: string) => {
+  const renderFileUpload = (id: string, label: string, fileUrl: string, isRequired: boolean = true) => {
     return (
       <div className="flex flex-col gap-2">
         <FileUploadInput
           id={id}
           label={label}
-          required={true}
+          required={isRequired && !fileUrl}
           onChange={handleChange}
           setFileLink={(url) => setFileLink(id, url)}
           value={fileUrl} // Add this prop to pass the current file URL
@@ -179,7 +183,8 @@ export default function EducationalDetails() {
                 {renderFileUpload(
                   "_12thMarklist",
                   "Mark list upload [12th]",
-                  formData._12thMarklist
+                  formData._12thMarklist,
+                  false
                 )}
               </div>
             </div>
@@ -274,10 +279,11 @@ export default function EducationalDetails() {
             </div>
             <div className="flex flex-col gap-4 md:flex-row">
               {renderFileUpload(
-                "KeamMarklist",
-                "Mark list upload [KEAM]",
-                formData.KeamMarklist
-              )}
+                              "KeamMarklist",
+                              "Mark list upload [KEAM]",
+                              formData.KeamMarklist,
+                              false
+                            )}
             </div>
             <div className="flex flex-col text-center gap-4 w-full justify-around">
               <span className="text-red-500  bg-opacity-40 p-2 rounded-lg">

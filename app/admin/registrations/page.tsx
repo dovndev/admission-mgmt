@@ -22,7 +22,7 @@ import {
   useDisclosure,
   Spinner,
   Chip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import { Download, Search, FileDown } from "lucide-react";
 import NavbarAdmin from "../../components/NavbarAdmin";

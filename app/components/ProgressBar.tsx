@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React from "react";
 import ThemeToggle from "./ThemeToggle";
-import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
+import { Breadcrumbs, BreadcrumbItem } from "@heroui/react";
 import { REGISTER_STEPS } from "../constants/dropdownOptions";
  
 interface ProgressBarProps {
