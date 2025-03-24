@@ -49,10 +49,10 @@ export default function LoginPage() {
           password: formData.password,
         });
         console.log(response);
-        if (response.error) {
+        if (response?.error) {
           CustomToast({
             title: "Error",
-            description: response.error,
+            description: response?.error,
           });
         }
       }

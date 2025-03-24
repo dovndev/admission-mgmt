@@ -13,7 +13,7 @@ import Payment from "../components/steps/Payment";
 
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const seatConfirmed = true;
+  const seatConfirmed = false;
   const handleNext = () => {
     setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
   };
