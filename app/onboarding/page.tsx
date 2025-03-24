@@ -1,7 +1,7 @@
 "use client";
 import ProgressBar from "../components/ProgressBar";
 import { Button } from "@heroui/react";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { REGISTER_STEPS } from "../constants/dropdownOptions";
 
 //step components
@@ -10,12 +10,17 @@ import EducationalDetails from "../components/steps/EducationalDetails";
 import Declaration from "../components/steps/Declaration";
 import FinalVerification from "../components/steps/FinalVerification";
 import Payment from "../components/steps/Payment";
+import useUserStore from "../store/userStore";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const seatConfirmed = false;
+  const [seatConfirmed, setSeatConfirmed] = useState<boolean>(false);
   const handleNext = () => {
-    setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
+    setCurrentStep((prev) =>
+      prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev
+    );
   };
 
   const handlePrevious = () => {
@@ -41,6 +46,21 @@ export default function OnBoarding() {
         return null;
     }
   };
+  const { fetchUserData } = useUserStore();
+  const session = useSession();
+  useEffect(() => {
+    (async () => {
+      if (!session.data?.user) return;
+      const user = await fetchUserData(session.data.user.id);
+      if (!user) {
+        return;
+      }
+      if (user["Student Details"]["Seat Confirmed"]) {
+        setSeatConfirmed(true);
+      }
+      console.log("Fetched user data:", user);
+    })();
+  }, []);
 
   return (
     <div className="flex flex-col ">

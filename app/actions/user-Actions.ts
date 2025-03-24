@@ -26,6 +26,7 @@ export async function getStructuredUserData(userId: string) {
             'Academic Year': user.applyingYear,
             'NRI Sponsor': user.parentDetails?.sponsor,
             'Relationship with Applicant': user.parentDetails?.relation,
+            'Seat Confirmed': user.seatConfirmed,
         },
         "Contact Address": {
             "House Name": user.contactAddress?.houseName,
@@ -93,7 +94,7 @@ export async function conformSeat(userId: string, quota: string, branchName: str
             return { success: false, message: "Invalid quota" };
         }
 
-        const quotaField =  quota.toLowerCase();
+        const quotaField = quota.toLowerCase();
 
         const studentsField = `${quotaField}Students`;
 
