@@ -46,24 +46,26 @@ export default function Register() {
 
       const quota = userData?.["Student Details"]?.["Quota"]; // Use optional chaining
       const branch = userData?.["Branch Details"]?.["Branch"]; // Use optional chaining
-      const year = parseInt(userData?.["Student Details"]?.["Academic Year"] || ""); // Use optional chaining
+      const year = parseInt(
+        userData?.["Student Details"]?.["Academic Year"] || ""
+      ); // Use optional chaining
 
       if (!quota || !branch || isNaN(year)) {
         throw new Error("Missing required student data.");
       }
 
-      const result = await conformSeat(userId, quota, branch, year);
+      // const result = await conformSeat(userId, quota, branch, year);
 
-      setSubmitStatus(result);
+      // setSubmitStatus(result);
 
-      if (result.success) {
-        // Redirect to success page or dashboard after a brief delay
-        CustomToast({
-          title: "Seat Confirmed",
-          description: "Seat confirmed successfully",
-        });
-        console.log("Seat confirmed successfully");
-      }
+      CustomToast({
+        title: "Seat Confirmed",
+        description: "Please move to the next step",
+      });
+      // if (result.success) {
+      //   // Redirect to success page or dashboard after a brief delay
+      //   console.log("Seat confirmed successfully");
+      // }
     } catch (error: any) {
       // Type the error as any
       console.error("Form submission error:", error);
@@ -73,7 +75,8 @@ export default function Register() {
       });
       setSubmitStatus({
         success: false,
-        message: error.message || "An unexpected error occurred. Please try again.", // Display specific error message
+        message:
+          error.message || "An unexpected error occurred. Please try again.", // Display specific error message
       });
     } finally {
       setIsSubmitting(false);
@@ -93,10 +96,14 @@ export default function Register() {
   return (
     <div className="flex flex-col items-center justify-center w-full p-3">
       <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-4xl ">
-        <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">Verification</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
+          Verification
+        </h2>
 
         {/* Loading indicator */}
-        {isLoading && <div className="text-center py-4">Loading student data...</div>}
+        {isLoading && (
+          <div className="text-center py-4">Loading student data...</div>
+        )}
 
         {/* Student Profile photo and signature */}
         <div className="flex flex-row justify-between space-x-4">
@@ -125,7 +132,10 @@ export default function Register() {
             <h1 className="text-center font-extrabold">
               Student Details<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Student Data" rows={studentData["Student Details"]} />
+            <TableDisplayContent
+              id="Student Data"
+              rows={studentData["Student Details"]}
+            />
           </div>
 
           {/* Contact and Permanent Address */}
@@ -133,11 +143,17 @@ export default function Register() {
             <h1 className="text-center font-extrabold">
               Contact Address<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Student Data" rows={studentData["Contact Address"]} />
+            <TableDisplayContent
+              id="Student Data"
+              rows={studentData["Contact Address"]}
+            />
             <h1 className="text-center font-extrabold pt-1">
               Permanent Address<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="Address" rows={studentData["Permanent Address"]} />
+            <TableDisplayContent
+              id="Address"
+              rows={studentData["Permanent Address"]}
+            />
           </div>
         </div>
 
@@ -149,7 +165,10 @@ export default function Register() {
             <h1 className="text-center font-extrabold">
               10th Mark Details<span className="text-muthootRed">*</span>
             </h1>
-            <TableDisplayContent id="10th Mark Details" rows={studentData["10th Mark Details"]} />
+            <TableDisplayContent
+              id="10th Mark Details"
+              rows={studentData["10th Mark Details"]}
+            />
             <Image
               src={studentData?.Uploads?.tenthCertificate || "/no_img.png"}
               alt="10th Certificate"
@@ -158,8 +177,13 @@ export default function Register() {
           </div>
           {studentData?.Uploads?.keamCertificate && (
             <div className="flex flex-col w-full items-center justify-start">
-              <h1 className="text-center font-extrabold pt-1">12th Mark Details</h1>
-              <TableDisplayContent id="12th Mark Details" rows={studentData["12th Mark Details"]} />
+              <h1 className="text-center font-extrabold pt-1">
+                12th Mark Details
+              </h1>
+              <TableDisplayContent
+                id="12th Mark Details"
+                rows={studentData["12th Mark Details"]}
+              />
               <Image
                 src={studentData?.Uploads?.twelfthCertificate || "/no_img.png"}
                 alt="12th Certificate"
@@ -176,7 +200,10 @@ export default function Register() {
               <h1 className="text-center font-extrabold">
                 KEAM Details<span className="text-muthootRed">*</span>
               </h1>
-              <TableDisplayContent id="Keam Details" rows={studentData["Keam Details"]} />
+              <TableDisplayContent
+                id="Keam Details"
+                rows={studentData["Keam Details"]}
+              />
             </div>
             <Image
               src={studentData?.Uploads?.keamCertificate || "/no_img.png"}
@@ -187,7 +214,10 @@ export default function Register() {
         )}
         {/* Branch Details */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-5 pb-2  ">
-          <TableDisplayContent id="Branch Details" rows={studentData["Branch Details"]} />
+          <TableDisplayContent
+            id="Branch Details"
+            rows={studentData["Branch Details"]}
+          />
         </div>
 
         {/* Final submit*/}
@@ -201,10 +231,13 @@ export default function Register() {
               if (e.target.checked) setAgreementError("");
             }}
           >
-            I hereby declare that all the information furnished above are true and correct and we will obey the rules
-            and regulations of the institution if admitted
+            I hereby declare that all the information furnished above are true
+            and correct and we will obey the rules and regulations of the
+            institution if admitted
           </Checkbox>
-          {agreementError && <p className="text-red-500 text-sm mt-1">{agreementError}</p>}
+          {agreementError && (
+            <p className="text-red-500 text-sm mt-1">{agreementError}</p>
+          )}
 
           <Button
             type="submit"

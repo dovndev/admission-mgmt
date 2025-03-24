@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FloatingLabelInput from "../FloatingLabelInput";
 import { Button } from "@heroui/react";
 import { Checkbox } from "@heroui/checkbox";
@@ -8,12 +8,26 @@ import FileUploadInput from "../FileUploadInput";
 import { updatePaymentDetails } from "@/app/actions/onboarding-actions";
 import CustomToast from "../CustomToast";
 import { useRouter } from "next/navigation";
+import { conformSeat } from "@/app/actions/user-Actions";
+import { useSession } from "next-auth/react";
+import useUserStore from "@/app/store/userStore";
 
 export default function Payment() {
   const [isSelected, setIsSelected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const session = useSession();
+  const { userData, fetchUserData } = useUserStore();
+
+  // Initialize userData on component mount
+  useEffect(() => {
+    const userId = session.data?.user?.id;
+    if (userId) {
+      fetchUserData(userId);
+    }
+  }, [session.data, fetchUserData]);
+
   const [formData, setFormData] = useState({
     transactionNo: "",
     transactionSlip: "",
@@ -44,29 +58,75 @@ export default function Payment() {
       setError("Please upload a transaction slip");
       return;
     }
+
     CustomToast({ title: "Submitting" });
     try {
       setIsLoading(true);
+
+      // Step 1: Submit payment details
       const result = await updatePaymentDetails({
         transactionId: Number(formData.transactionNo),
         transactionSlip: formData.transactionSlip,
       });
 
       if (result.success) {
-        console.log(result.message || "Payment details saved successfully");
-        CustomToast({ title: "Payment details saved successfully" });
-        router.push("/user");
+        // Get user information needed for seat confirmation
+        const userId = session.data?.user?.id;
+        if (!userId) {
+          throw new Error("User not logged in");
+        }
+
+        // Extract required data from userData
+        const quota = userData?.["Student Details"]?.["Quota"];
+        const branch = userData?.["Branch Details"]?.["Branch"];
+        const year = parseInt(
+          userData?.["Student Details"]?.["Academic Year"] || ""
+        );
+
+        if (!quota || !branch || isNaN(year)) {
+          throw new Error(
+            "Missing required student data for seat confirmation"
+          );
+        }
+
+        // Step 2: Confirm seat
+        const seatResult = await conformSeat(userId, quota, branch, year);
+
+        if (seatResult.success) {
+          CustomToast({
+            title: "Success",
+            description:
+              "Payment details saved and seat confirmed successfully",
+          });
+          router.push("/user");
+        } else {
+          setError(
+            `Payment submitted but seat confirmation failed: ${seatResult.message}`
+          );
+          CustomToast({
+            title: "Warning",
+            description: "Payment submitted but seat confirmation failed",
+          });
+        }
       } else {
         setError(result.message || "Failed to submit payment details");
+        CustomToast({ title: "Failed to submit payment details" });
       }
     } catch (error) {
       console.error(
         error instanceof Error
           ? error.message
-          : "Failed to submit payment details"
+          : "Failed to complete the process"
       );
-      setError("Failed to submit payment details. Please try again.");
-      CustomToast({ title: "Failed to submit payment details" });
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to submit payment details. Please try again."
+      );
+      CustomToast({
+        title: "Process failed",
+        description: error instanceof Error ? error.message : "Unknown error",
+      });
     } finally {
       setIsLoading(false);
     }
