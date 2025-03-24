@@ -26,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
           <Link href="/register" className="headerButton !text-muthootRed">
             Register
           </Link>
-          <Link href="/login" className={`headerButton ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} hidden sm:block`}>
+          <Link href="/login" className={`headerButton ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""}`}>
             Login
           </Link>
           <Link href="/about" className={`headerButton ${mode == "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} hidden sm:block`}>

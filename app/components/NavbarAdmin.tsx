@@ -7,13 +7,7 @@ import React, { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 import DropDownInput from "./DropDownInput";
 import { PROGRAM_OPTIONS } from "../constants/dropdownOptions";
-import {
-  Button,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@heroui/react";
+import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
 import { FaPowerOff } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { getAllAvailableYears } from "../actions/seat-Management-Actions";
@@ -39,12 +33,11 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
   const { setYears, years, setSelectedYear, selectedYear } = useAdminStore();
   const { clearUserData } = useUserStore();
   const [selectedProgram, setSelectedProgram] = useState<string>("");
-  const [isPowerOn, setIsPowerOn] = useState<boolean>(false);
-    const handleLogout = () => {
-      clearUserData();
-      signOut({ callbackUrl: "/login" });
-    };
-  
+
+  const handleLogout = () => {
+    clearUserData();
+    signOut({ callbackUrl: "/login" });
+  };
 
   useEffect(() => {
     (async () => {
@@ -61,10 +54,6 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedYear(parseInt(e.target.value));
-  };
-
-  const handleYearEnable = () => {
-    setIsPowerOn(!isPowerOn);
   };
 
   const handleNavigation = (key: string) => {
@@ -84,10 +73,7 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
               <FiMenu className="h-6 w-6" />
             </Button>
           </DropdownTrigger>
-          <DropdownMenu
-            aria-label="Navigation Menu"
-            onAction={(key) => handleNavigation(key.toString())}
-          >
+          <DropdownMenu aria-label="Navigation Menu" onAction={(key) => handleNavigation(key.toString())}>
             {NAV_ITEMS.map((item) => (
               <DropdownItem key={item.key}>{item.label}</DropdownItem>
             ))}
@@ -107,17 +93,6 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
       {/* Navigation Links */}
       <div className="flex-1 flex justify-end ">
         <div className="flex gap-1 md:gap-2  items-center w-full md:w-[50%] lg:w-[30%] xl:w-[30%] ">
-          <Button
-            isIconOnly
-            color={isPowerOn ? "success" : "danger"}
-            variant="shadow"
-            aria-label="Year enable"
-            onPress={handleLogout}
-          >
-            <FaPowerOff
-              className={`h-4 w-4 ${isPowerOn ? "text-white" : "text-white"}`}
-            />
-          </Button>
           <DropDownInput
             options={PROGRAM_OPTIONS}
             id="program"
@@ -142,6 +117,9 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
       <div className={`${mode === "dark" ? "hidden" : ""}`}>
         <ThemeToggle />
       </div>
+      <Button isIconOnly color={"danger"} variant="shadow" aria-label="Year enable" onPress={handleLogout}>
+        <FaPowerOff className={`h-4 w-4 "text-white"}`} />
+      </Button>
     </div>
   );
 };

@@ -52,11 +52,12 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, handleLogout }) 
         </div>
       </div>
 
-      <div className={`flex gap-1 md:gap-2 items-center`}>
+      <div className={`flex gap-6 md:gap-2 items-center`}>
+
+        <ThemeToggle />
         <Button isIconOnly color={"danger"} variant="shadow" aria-label="Logout" onPress={handleLogout}>
           <FaPowerOff className="h-4 w-4 text-white" />
         </Button>
-        <ThemeToggle />
       </div>
     </div>
   );
