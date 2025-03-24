@@ -28,7 +28,7 @@ export default function Register() {
   const { data: sessionData, status: sessionStatus } = session;
   const { generatePDF, isGenerating } = usePrintPDF();
   const handlePrintStudent = async (student: StructuredUserData) => {
-    await generatePDF(student);
+    await generatePDF(student,sessionData?.user?.id);
   };
   useEffect(() => {
     // In a real app, you would get the userId from authentication
@@ -66,7 +66,7 @@ export default function Register() {
           Error loading user data. Please try again.
         </p>
         <Button
-          onClick={() => userId && fetchUserData(userId)}
+          onPress={() => userId && fetchUserData(userId)}
           className="mt-4"
         >
           Retry
@@ -204,6 +204,10 @@ export default function Register() {
               {userData["Student Details"]["Kerala Phone"]}
             </div>
           )}
+          <div className="flex items-center">
+            <MdPeopleAlt className="mr-1" />
+            {userData["userid"]}
+          </div>
           <div className="pt-2 w-full">
             <Button className="m-1" variant="bordered" onPress={handleLogout}>
               Log out
