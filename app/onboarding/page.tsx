@@ -1,7 +1,7 @@
 "use client";
 import ProgressBar from "../components/ProgressBar";
 import { Button } from "@heroui/react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { REGISTER_STEPS } from "../constants/dropdownOptions";
 
 //step components
@@ -11,20 +11,22 @@ import Declaration from "../components/steps/Declaration";
 import FinalVerification from "../components/steps/FinalVerification";
 import Payment from "../components/steps/Payment";
 import useUserStore from "../store/userStore";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [seatConfirmed, setSeatConfirmed] = useState<boolean>(false);
+  const { clearUserData } = useUserStore();
   const handleNext = () => {
-    setCurrentStep((prev) =>
-      prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev
-    );
+    setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
   };
 
   const handlePrevious = () => {
     setCurrentStep((prev) => (prev > 0 ? prev - 1 : prev));
+  };
+  const handleLogout = () => {
+    clearUserData();
+    signOut({ callbackUrl: "/login" });
   };
 
   const renderStepContent = () => {
@@ -65,7 +67,7 @@ export default function OnBoarding() {
   return (
     <div className="flex flex-col ">
       <div className="flex justify-center h-20 w-full">
-        <ProgressBar currentStep={seatConfirmed ? 4 : currentStep} />
+        <ProgressBar currentStep={seatConfirmed ? 4 : currentStep} handleLogout={handleLogout} />
       </div>
       <div className="flex flex-col items-center min-h-screen bg-background pb-4 pt-4">
         <div className="w-full">{renderStepContent()}</div>

@@ -18,6 +18,8 @@ import { FaPowerOff } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { getAllAvailableYears } from "../actions/seat-Management-Actions";
 import useAdminStore from "../store/adminStore";
+import { signOut } from "next-auth/react";
+import useUserStore from "../store/userStore";
 
 // Add navigation options
 const NAV_ITEMS = [
@@ -31,15 +33,18 @@ interface NavbarAdminProps {
   mode?: "dark";
 }
 
-const YEAR_OPTIONS = ["2025", "2026", "2027"];
-
 const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
   const router = useRouter();
 
   const { setYears, years, setSelectedYear, selectedYear } = useAdminStore();
-
+  const { clearUserData } = useUserStore();
   const [selectedProgram, setSelectedProgram] = useState<string>("");
   const [isPowerOn, setIsPowerOn] = useState<boolean>(false);
+    const handleLogout = () => {
+      clearUserData();
+      signOut({ callbackUrl: "/login" });
+    };
+  
 
   useEffect(() => {
     (async () => {
@@ -107,7 +112,7 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
             color={isPowerOn ? "success" : "danger"}
             variant="shadow"
             aria-label="Year enable"
-            onPress={handleYearEnable}
+            onPress={handleLogout}
           >
             <FaPowerOff
               className={`h-4 w-4 ${isPowerOn ? "text-white" : "text-white"}`}
