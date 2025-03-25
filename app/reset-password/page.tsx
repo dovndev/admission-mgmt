@@ -42,7 +42,7 @@ export default function ResetPassword() {
             description: "This reset link is invalid or has expired",
           });
         }
-      } catch (error) {
+      } catch {
         CustomToast({
           title: "Error",
           description: "Failed to validate reset token",
@@ -84,7 +84,7 @@ export default function ResetPassword() {
           description: response.error || "Failed to reset password",
         });
       }
-    } catch (error) {
+    } catch {
       CustomToast({
         title: "Error",
         description: "An unexpected error occurred",

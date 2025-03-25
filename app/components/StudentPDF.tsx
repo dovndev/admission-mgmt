@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   secondPageSignatureImage: {
+    border: "1px solid #000",
     width: 100,
     height: 50,
     marginTop: 10,
@@ -231,7 +232,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
           </View>
         </View>
         <View style={styles.header}>
-          <Text style={styles.subtitle}>Application for B-Tech NRI Quota</Text>
+          <Text style={styles.subtitle}>Application for B-Tech NRI Quota <Text style={styles.subtitle}>{studentData.applyingYear}</Text></Text>
         </View>
 
         {/* Photos Section */}

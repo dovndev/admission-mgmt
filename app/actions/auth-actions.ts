@@ -10,6 +10,7 @@ import { AuthError } from "next-auth"
 import { sendPasswordEmail } from "./mail-actions"
 import { randomBytes } from 'crypto';
 import nodemailer from 'nodemailer';
+import { Quota, Program } from "@prisma/client"
 
 export async function isSessonActive() {
     const session = await auth()
@@ -204,8 +205,8 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
                 gender: validatedData.gender,
                 dob: new Date(validatedData.dob),
                 applyingYear: validatedData.applyingYear,
-                quota: validatedData.quota,
-                program: validatedData.program,
+                quota: validatedData.quota as unknown as Quota,
+                program: validatedData.program as unknown as Program,
                 aadharNo: parseInt(validatedData.aadharNo),
                 religion: validatedData.religion,
                 cast: validatedData.cast,

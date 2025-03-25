@@ -14,6 +14,7 @@ export default function StudentDetails({
   studentId,
   student,
 }: StudentDetailsProps) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [studentData, setStudentData] = useState<any>(null);
 
   useEffect(() => {
