@@ -6,7 +6,10 @@ import { StructuredUserData } from "@/types/userTypes";
 export const usePrintPDF = () => {
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generatePDF = async (student: StructuredUserData,id?) => {
+  const generatePDF = async (
+    student: StructuredUserData,
+    id?: string | undefined
+  ) => {
     try {
       setIsGenerating(true);
 

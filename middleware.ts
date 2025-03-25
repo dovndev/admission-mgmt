@@ -9,7 +9,7 @@ export default auth(async (req) => {
     console.log("middleware called on", req.nextUrl.pathname)
     console.log("middleware called with auth", req.auth?.user)
     const isLoggedIn = !!req.auth;
-    const isAuthRoute = req.nextUrl.pathname.startsWith("/login") || req.nextUrl.pathname.startsWith("/register") || req.nextUrl.pathname.startsWith("/forgotpassword");
+    const isAuthRoute = req.nextUrl.pathname.startsWith("/login") || req.nextUrl.pathname.startsWith("/register") || req.nextUrl.pathname.startsWith("/forgotpassword") || req.nextUrl.pathname.startsWith("/reset-password");
     const isApiAuthRoute = req.nextUrl.pathname.includes("/api");
     const isAdminRoute = req.nextUrl.pathname.startsWith("/admin");
     const isProtectedRoute = protectedRoutes.includes(req.nextUrl.pathname);
