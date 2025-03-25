@@ -34,13 +34,17 @@ export default function LoginPage() {
           password: formData.password,
         });
         console.log(response);
-        
-          if (response.error) {
-            CustomToast({
-              title: "Error",
-              description: response.error,
-            });
-          }
+
+        if (response?.error) {
+          CustomToast({
+            title: "Error",
+            description: response?.error,
+          });
+        } else {
+          CustomToast({
+            title: "Logging in",
+          });
+        }
       } else {
         // User login logic
         // console.log("User Login:", formData);
@@ -54,11 +58,12 @@ export default function LoginPage() {
             title: "Error",
             description: response?.error,
           });
+        } else {
+          CustomToast({
+            title: "Logging in",
+          });
         }
       }
-      CustomToast({
-        title: "Logging in",
-      });
     };
 
     useEffect(() => {

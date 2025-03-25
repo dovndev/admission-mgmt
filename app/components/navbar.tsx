@@ -22,11 +22,11 @@ const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
 
       {/* Navigation Links */}
       <div className="flex-1 flex justify-center">
-        <div className="flex space-x-4 sm:space-x-6 md:space-x-8 lg:space-x-10 items-center">
+        <div className="flex space-x-4 sm:space-x-6 md:space-x-8 lg:space-x-10 items-center md:gap-10">
           <Link href="/register" className="headerButton !text-muthootRed">
             Register
           </Link>
-          <Link href="/login" className={`headerButton ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} hidden sm:block`}>
+          <Link href="/login" className={`headerButton ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""}`}>
             Login
           </Link>
           <Link href="/about" className={`headerButton ${mode == "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} hidden sm:block`}>

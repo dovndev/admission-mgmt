@@ -3,18 +3,26 @@
 import Image from "next/image";
 import React from "react";
 import ThemeToggle from "./ThemeToggle";
-import { Breadcrumbs, BreadcrumbItem } from "@heroui/react";
+import { Breadcrumbs, BreadcrumbItem, Button } from "@heroui/react";
 import { REGISTER_STEPS } from "../constants/dropdownOptions";
- 
+import { FaPowerOff } from "react-icons/fa";
+
 interface ProgressBarProps {
   currentStep: number;
+  handleLogout: () => void;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep }) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, handleLogout }) => {
   return (
     <div className="fixed z-50 bg-textBoxBackground shadow max-w-[90%] w-full h-[60px] mt-5 mx-4 rounded-3xl flex items-center justify-between px-6">
       <div className="flex items-center">
-        <Image src="/muthoot_logo.png" alt="Muthoot Logo" width={40} height={40} className="mr-4 rounded-xl cursor-pointer" />
+        <Image
+          src="/muthoot_logo.png"
+          alt="Muthoot Logo"
+          width={40}
+          height={40}
+          className="mr-4 rounded-xl cursor-pointer"
+        />
       </div>
 
       <div className="flex-1 flex justify-center">
@@ -32,7 +40,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep }) => {
             }}
           >
             {REGISTER_STEPS.map((step, index) => (
-              <BreadcrumbItem key={index} isCurrent={index === currentStep} className={`${index !== currentStep ? "hidden sm:flex" : ""}`}
+              <BreadcrumbItem
+                key={index}
+                isCurrent={index === currentStep}
+                className={`${index !== currentStep ? "hidden sm:flex" : ""}`}
               >
                 {step}
               </BreadcrumbItem>
@@ -41,8 +52,12 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep }) => {
         </div>
       </div>
 
-      <div className={`flex items-center`}>
+      <div className={`flex gap-6 md:gap-2 items-center`}>
+
         <ThemeToggle />
+        <Button isIconOnly color={"danger"} variant="shadow" aria-label="Logout" onPress={handleLogout}>
+          <FaPowerOff className="h-4 w-4 text-white" />
+        </Button>
       </div>
     </div>
   );
