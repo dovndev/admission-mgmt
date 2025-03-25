@@ -4,13 +4,10 @@ import TableDisplayContent from "../TableDisplayContent";
 import { STUDENTDATA as defaultStudentData } from "@/app/mock/mockData";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { conformSeat } from "@/app/actions/user-Actions";
-import { useRouter } from "next/navigation";
 import useUserStore from "@/app/store/userStore";
 import CustomToast from "../CustomToast";
 
 export default function Register() {
-  const router = useRouter();
   const session = useSession();
   const { data: sessionData } = session;
 
@@ -21,7 +18,7 @@ export default function Register() {
   const [isAgreed, setIsAgreed] = useState(false); // Initialize agreement state
   const [agreementError, setAgreementError] = useState(""); // State for agreement error
 
-  const [submitStatus, setSubmitStatus] = useState<{
+  const [, setSubmitStatus] = useState<{
     success: boolean;
     message: string;
   } | null>(null);
@@ -66,17 +63,16 @@ export default function Register() {
       //   // Redirect to success page or dashboard after a brief delay
       //   console.log("Seat confirmed successfully");
       // }
-    } catch (error: any) {
+    } catch (error) {
       // Type the error as any
       console.error("Form submission error:", error);
       CustomToast({
         title: "Error",
-        description: error.message || "Error occurred while confirming seat", // Display specific error message
+        description: "Error occurred while confirming seat", // Display specific error message
       });
       setSubmitStatus({
         success: false,
-        message:
-          error.message || "An unexpected error occurred. Please try again.", // Display specific error message
+        message: "An unexpected error occurred. Please try again.", // Display specific error message
       });
     } finally {
       setIsSubmitting(false);

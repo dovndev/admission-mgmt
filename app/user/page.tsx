@@ -26,9 +26,9 @@ export default function Register() {
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
   const { data: sessionData, status: sessionStatus } = session;
-  const { generatePDF, isGenerating } = usePrintPDF();
+  const { generatePDF } = usePrintPDF();
   const handlePrintStudent = async (student: StructuredUserData) => {
-    await generatePDF(student,sessionData?.user?.id);
+    await generatePDF(student, sessionData?.user?.id);
   };
   useEffect(() => {
     // In a real app, you would get the userId from authentication
@@ -212,7 +212,10 @@ export default function Register() {
             <Button className="m-1" variant="bordered" onPress={handleLogout}>
               Log out
             </Button>
-            <Button className="m-1" onPress={() => handlePrintStudent(userData)}>
+            <Button
+              className="m-1"
+              onPress={() => handlePrintStudent(userData)}
+            >
               Print
             </Button>
           </div>

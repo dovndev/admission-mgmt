@@ -170,22 +170,32 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
         name: student["Student Details"].Name || "Not provided",
         dob: student["Student Details"]["Date of Birth"] || "Not provided",
         parentName: student["Student Details"]["Parent Name"] || "Not provided",
-        occupation: student["Student Details"]["Parent Occupation"] || "Not provided",
+        occupation:
+          student["Student Details"]["Parent Occupation"] || "Not provided",
         address: {
-          line1: `${student["Contact Address"]["House Name"] || ""}, ${student["Contact Address"]["District, City"] || ""}`,
+          line1: `${student["Contact Address"]["House Name"] || ""}, ${
+            student["Contact Address"]["District, City"] || ""
+          }`,
           city: student["Contact Address"]["District, City"] || "Not provided",
           country: student["Contact Address"]["State"] || "Not provided",
         },
         state: student["Contact Address"]["State"] || "Not provided",
-        pin: student["Contact Address"].Pin ? student["Contact Address"].Pin.toString() : "Not provided",
+        pin: student["Contact Address"].Pin
+          ? student["Contact Address"].Pin.toString()
+          : "Not provided",
         email: student["Student Details"].Email || "Not provided",
-        phoneKerala: student["Student Details"]["Kerala Phone"] || "Not provided",
+        phoneKerala:
+          student["Student Details"]["Kerala Phone"] || "Not provided",
         phoneAlternate: student["Student Details"].Phone || "Not provided",
         sponsor: student["Student Details"]["NRI Sponsor"] || "Not provided",
-        relation: student["Student Details"]["Relationship with Applicant"] || "Not provided",
+        relation:
+          student["Student Details"]["Relationship with Applicant"] ||
+          "Not provided",
         branch: student["Branch Details"].Branch || "CSE",
-        transactionId: student["Student Details"]["Transaction Number"] || "Not provided",
-        applyingYear: student["Student Details"]["Academic Year"] || "Not provided",
+        transactionId:
+          student["Student Details"]["Transaction Number"] || "Not provided",
+        applyingYear:
+          student["Student Details"]["Academic Year"] || "Not provided",
       }
     : {
         // Your default mock data
@@ -421,12 +431,12 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
             <Text style={{ fontWeight: "bold" }}>GROUP A</Text>
             {"\n"}I am aware about the criteria followed by &quot;Muthoot
             Institute of Technology and Science&quot;, for the B-Tech NRI Quota
-            admission for the year {studentData.applyingYear}, such that my ward has to attain 80%
-            Marks for Mathematics individually and 80% put together in Physics,
-            Chemistry & Mathematics, in the 12th standard, for Qualifying
-            examination (CBSE/ISC) OR attain 80% Marks for Mathematics
-            individually and 80% put together in Physics, Chemistry &
-            Mathematics, in the 12th standard(Terminal- evaluation TE), for
+            admission for the year {studentData.applyingYear}, such that my ward
+            has to attain 80% Marks for Mathematics individually and 80% put
+            together in Physics, Chemistry & Mathematics, in the 12th standard,
+            for Qualifying examination (CBSE/ISC) OR attain 80% Marks for
+            Mathematics individually and 80% put together in Physics, Chemistry
+            & Mathematics, in the 12th standard(Terminal- evaluation TE), for
             Qualifying examination(State Board). If my ward failed to do so,
             there is no claim, from my side for the admission.
           </Text>
@@ -437,12 +447,12 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
             <Text style={{ fontWeight: "bold" }}>GROUP B</Text>
             {"\n"}I am aware about the criteria followed by &quot;Muthoot
             Institute of Technology and Science&quot;, for the B-Tech NRI Quota
-            admission for the year {studentData.applyingYear}, such that my ward has to attain 75%
-            Marks for Mathematics individually and 75% put together in Physics,
-            Chemistry & Mathematics, in the 12th standard, for Qualifying
-            examination (CBSE/ISC) OR attain 75% Marks for Mathematics
-            individually and 75% put together in Physics, Chemistry &
-            Mathematics, in the 12th standard(Terminal- evaluation TE), for
+            admission for the year {studentData.applyingYear}, such that my ward
+            has to attain 75% Marks for Mathematics individually and 75% put
+            together in Physics, Chemistry & Mathematics, in the 12th standard,
+            for Qualifying examination (CBSE/ISC) OR attain 75% Marks for
+            Mathematics individually and 75% put together in Physics, Chemistry
+            & Mathematics, in the 12th standard(Terminal- evaluation TE), for
             Qualifying examination(State Board). If my ward failed to do so,
             there is no claim, from my side for the admission.
           </Text>
@@ -481,7 +491,9 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
             <Text style={{ marginBottom: 5 }}>
               Name of the parent/guardian: {studentData.parentName}
             </Text>
-            <Text style={{ marginBottom: 5 }}>Date: 04/09/{studentData.applyingYear}</Text>
+            <Text style={{ marginBottom: 5 }}>
+              Date: 04/09/{studentData.applyingYear}
+            </Text>
             <Text style={{ marginBottom: 5 }}>
               Signature of parent/guardian
             </Text>

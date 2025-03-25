@@ -74,7 +74,7 @@ export async function updateEducationDetails(data: EducationalDetailsFormData) {
         const validatedData = EducationalDetailsSchema.parse(data);
 
         // Update user education details
-        const user = await prisma.user.update({
+        await prisma.user.update({
             where: {
                 id: session.user.id
             },
@@ -133,7 +133,7 @@ export async function updateDeclerationDetails(data: {
         const validatedData = data; // Assuming data is already validated
 
         // Update user declaration details
-        const user = await prisma.user.update({
+        await prisma.user.update({
             where: {
                 id: session.user.id
             },

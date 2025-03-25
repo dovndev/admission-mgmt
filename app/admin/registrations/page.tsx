@@ -24,7 +24,7 @@ import {
   Chip,
 } from "@heroui/react";
 
-import { Download, Search, FileDown } from "lucide-react";
+import { Download, Search } from "lucide-react";
 import NavbarAdmin from "../../components/NavbarAdmin";
 import { useState, useMemo, useEffect } from "react";
 import StudentDetails from "../../components/StudentDetails";
@@ -36,16 +36,16 @@ import { StructuredUserData } from "@/types/userTypes";
 // Define interfaces for our data structures
 
 // In the StudentDetails component definition
-type StudentDetailsProps = {
-  student: StructuredUserData | null | undefined;
-};
+// type StudentDetailsProps = {
+//   student: StructuredUserData | null | undefined;
+// };
 
 export default function RegistrationDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("newest");
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState<StructuredUserData[]>([]);
-  const [totalUsers, setTotalUsers] = useState(0);
+  const [, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedStudent, setSelectedStudent] =

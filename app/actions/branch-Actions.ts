@@ -3,6 +3,13 @@
 import { prisma } from "@/prisma/prisma";
 
 const branchesList = ["CSE", "EEE", "CSAI", "ECE", "CE", "ME", "AIDS", "CY"];
+interface BranchData {
+    mngtSeats: number;
+    nriSeats: number;
+    superSeats: number;
+    waitingList: number;
+}
+
 
 export async function addYear(year: number) {
     const existingBranch = await prisma.branches.findFirst({
@@ -75,7 +82,7 @@ export async function getAllBreanchesByYear() {
         };
 
         return acc;
-    }, {} as Record<number, Record<string, any>>);
+    }, {} as Record<number, Record<string, BranchData>>);
 
     return groupedByYear;
 }

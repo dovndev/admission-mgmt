@@ -6,14 +6,14 @@ import { Checkbox } from "@heroui/checkbox";
 import FileUploadInput from "../FileUploadInput";
 import { personalDetailsAction } from "../../actions/onboarding-actions";
 import { type PersonalDetailsFormData } from "@/schemas";
-import { uploadFile } from "@/app/actions/file-upload-Actions";
+
 import useUserStore from "@/app/store/userStore";
 import { useSession } from "next-auth/react";
 import CustomToast from "../CustomToast";
 
 export default function PersonalDetails() {
   const [isSelected, setIsSelected] = useState(false);
-  const [fileLink, setfileLink] = useState("");
+  // const [fileLink, setFileLink] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const session = useSession();
@@ -280,29 +280,26 @@ export default function PersonalDetails() {
 
   const handleSubmit = async () => {
     // e.preventDefault();
-    
+
     try {
-      CustomToast({title:"Saving"});
+      CustomToast({ title: "Saving" });
       console.log("Submitting personal details", formData);
       const response = await personalDetailsAction(formData);
       if (response.success) {
         console.log(response.message);
-        
+
         // Refresh user data after successful submission
         if (session?.data?.user?.id) {
           await fetchUserData(session.data.user.id);
-          CustomToast({title:"Saved"})
+          CustomToast({ title: "Saved" });
         }
-          
       } else {
         throw new Error(response.message);
       }
-      
     } catch (error) {
       console.error("Error submitting personal details", error);
-      CustomToast({title:"Error", description: "Error submitting details"});
+      CustomToast({ title: "Error", description: "Error submitting details" });
     }
-    
   };
 
   if (isLoading) {
@@ -314,7 +311,10 @@ export default function PersonalDetails() {
   }
 
   return (
-    <form className="flex flex-col items-center justify-center w-full p-3" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col items-center justify-center w-full p-3"
+      onSubmit={handleSubmit}
+    >
       <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-7xl ">
         <h1 className="p-4 text-2xl">Personal Details</h1>
         <div className="flex flex-col grid-rows-4 gap-10 md:flex-row space-y-4 md:space-y-0 md:space-x-4">
@@ -366,8 +366,7 @@ export default function PersonalDetails() {
                   id={"dob"}
                   label={"Date of Birth"}
                   required={true}
-                  value={'2022-01-01'}
-                  
+                  value={"2022-01-01"}
                   onChange={handleChange}
                 />
               </div>

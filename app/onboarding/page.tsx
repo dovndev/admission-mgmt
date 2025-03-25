@@ -12,13 +12,16 @@ import FinalVerification from "../components/steps/FinalVerification";
 import Payment from "../components/steps/Payment";
 import useUserStore from "../store/userStore";
 import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [seatConfirmed, setSeatConfirmed] = useState<boolean>(false);
+  const [seatConfirmed] = useState<boolean>(false);
   const { clearUserData } = useUserStore();
   const handleNext = () => {
-    setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
+    setCurrentStep((prev) =>
+      prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev
+    );
   };
 
   const handlePrevious = () => {
@@ -64,12 +67,15 @@ export default function OnBoarding() {
       }
       console.log("Fetched user data:", user);
     })();
-  }, []);
+  }, [fetchUserData, router, session.data?.user]);
 
   return (
     <div className="flex flex-col ">
       <div className="flex justify-center h-20 w-full">
-        <ProgressBar currentStep={seatConfirmed ? 4 : currentStep} handleLogout={handleLogout} />
+        <ProgressBar
+          currentStep={seatConfirmed ? 4 : currentStep}
+          handleLogout={handleLogout}
+        />
       </div>
       <div className="flex flex-col items-center min-h-screen bg-background pb-4 pt-4">
         <div className="w-full">{renderStepContent()}</div>

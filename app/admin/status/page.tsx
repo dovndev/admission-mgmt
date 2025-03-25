@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Card, CardHeader, CardBody } from "@heroui/card";
@@ -131,16 +131,19 @@ function BranchAllocation({
 
 export default function SeatAllocation() {
   // Initialize with all branch codes
-  const initialAllocationsState: Record<BranchCode, SeatAllocation> = {
-    CSE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-    ECE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-    ME: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-    CE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-    AIDS: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-    EEE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-    CSAI: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-    CY: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-  };
+  const initialAllocationsState = useMemo<Record<BranchCode, SeatAllocation>>(
+    () => ({
+      CSE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
+      ECE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
+      ME: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
+      CE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
+      AIDS: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
+      EEE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
+      CSAI: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
+      CY: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
+    }),
+    []
+  );
 
   const [allocations, setAllocations] = useState<
     Record<BranchCode, SeatAllocation>
@@ -339,7 +342,7 @@ export default function SeatAllocation() {
     }
 
     loadBranchData();
-  }, [selectedYear]);
+  }, [selectedYear, setLoading, setAllocations, initialAllocationsState]);
 
   return (
     <div className="min-h-screen flex flex-col">

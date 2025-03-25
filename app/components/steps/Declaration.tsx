@@ -141,14 +141,14 @@ export default function Declaration() {
     });
     if (response.success) {
       CustomToast({
-        title: "Declaration details saved successfully!",})
+        title: "Declaration details saved successfully!",
+      });
       alert("Declaration details saved successfully!");
-      
     } else {
       CustomToast({
-        title: "Failed to save declaration details.",})
+        title: "Failed to save declaration details.",
+      });
       alert("Failed to save declaration details.");
-      
     }
   };
 
@@ -284,7 +284,6 @@ export default function Declaration() {
                     setValue("agreementChecked", isSelected)
                   }
                   required={true}
-                  
                 >
                   I have clearly read the instructions mentioned above and would
                   like to proceed further
