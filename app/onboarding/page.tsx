@@ -50,6 +50,7 @@ export default function OnBoarding() {
   };
   const { fetchUserData } = useUserStore();
   const session = useSession();
+  const router = useRouter();
   useEffect(() => {
     (async () => {
       if (!session.data?.user) return;
@@ -58,7 +59,8 @@ export default function OnBoarding() {
         return;
       }
       if (user["Student Details"]["Seat Confirmed"]) {
-        setSeatConfirmed(true);
+        router.push("/user");
+        // setSeatConfirmed(true);
       }
       console.log("Fetched user data:", user);
     })();
