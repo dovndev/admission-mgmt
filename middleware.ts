@@ -13,6 +13,7 @@ export default auth(async (req) => {
     const isApiAuthRoute = req.nextUrl.pathname.includes("/api");
     const isAdminRoute = req.nextUrl.pathname.startsWith("/admin");
     const isProtectedRoute = protectedRoutes.includes(req.nextUrl.pathname);
+    const isHomePage = req.nextUrl.pathname === "/";
     //middleware logic
     if (isApiAuthRoute) {
         return
@@ -35,6 +36,9 @@ export default auth(async (req) => {
     //         return Response.redirect(new URL("/", req.url))
     //     }
     // }
+    if (isHomePage) {
+        return; // Let the request continue without redirection
+    }
     if (isLoggedIn && isAuthRoute) {
         console.log("redirecting to onboarding")
         return Response.redirect(new URL("/onboarding", req.url))
