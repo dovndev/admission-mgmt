@@ -24,7 +24,7 @@ export default function PDFPreviewPage() {
             border: 'none',
           }}
         >
-          <StudentPDF studentId="NBT230002" />
+          <StudentPDF />
         </PDFViewer>
         
       ) : (
