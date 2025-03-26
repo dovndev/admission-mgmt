@@ -25,7 +25,7 @@ export async function loginAdmin(data: z.infer<typeof userLoginSchema>) {
     const parsedResult = userLoginSchema.safeParse(data);
     if (!parsedResult.success) {
         return {
-            error: "Invalid data",
+            error: "Wrong Credentials",
             success: false
         };
     }
@@ -34,7 +34,7 @@ export async function loginAdmin(data: z.infer<typeof userLoginSchema>) {
 
     if (!validatedData) {
         return {
-            error: "Invalid data",
+            error: "Wrong Credentials",
             success: false
         }
     }

@@ -194,13 +194,13 @@ export default function RegistrationDashboard() {
                   size="sm"
                   aria-label="Sort by"
                 >
-                  <SelectItem key="newest" value="newest">
+                  <SelectItem key="newest" >
                     Newest first
                   </SelectItem>
-                  <SelectItem key="oldest" value="oldest">
+                  <SelectItem key="oldest" >
                     Oldest first
                   </SelectItem>
-                  <SelectItem key="name" value="name">
+                  <SelectItem key="name">
                     Name (A-Z)
                   </SelectItem>
                 </Select>
