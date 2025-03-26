@@ -166,6 +166,12 @@ interface StudentPDFProps {
   student?: StructuredUserData;
 }
 
+const getProxiedImageUrl = (url: string) => {
+  // If it’s a relative URL (e.g. "/no_img.png"), use it directly.
+  if (url.startsWith("/")) return url;
+  return `/api/proxyImage?url=${encodeURIComponent(url)}`;
+};
+
 const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
   const studentData = student
     ? {
@@ -260,7 +266,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
           </View>
           <View>
             <Image
-              src={student?.Uploads?.studentPhoto || "/no_img.png"}
+              src={getProxiedImageUrl(student?.Uploads?.studentPhoto || "/no_img.png")}
               style={styles.photo}
             />
           </View>
@@ -494,14 +500,14 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
               Name of the parent/guardian: {studentData.parentName}
             </Text>
             <Text style={{ marginBottom: 5 }}>
-              Date: 04/09/{studentData.applyingYear}
+              Date: {new Date().toLocaleDateString()}
             </Text>
             <Text style={{ marginBottom: 5 }}>
               Signature of parent/guardian
             </Text>
             {/* <Image src="/no_img.png" style={styles.secondPageSignatureImage} /> */}
             <Image
-              src={student?.Uploads?.parentSignature || "/no_img.png"}
+              src={getProxiedImageUrl(student?.Uploads?.parentSignature || "/no_img.png")}
               style={styles.photo}
             />
           </View>
@@ -510,7 +516,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
           >
             <Text style={{ marginBottom: 5 }}>Signature of applicant</Text>
             <Image
-              src={student?.Uploads?.studentSignature || "/no_img.png"}
+              src={getProxiedImageUrl(student?.Uploads?.studentSignature || "/no_img.png")}
               style={styles.secondPageSignatureImage}
             />
           </View>
