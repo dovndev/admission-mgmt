@@ -11,6 +11,7 @@ import { sendPasswordEmail } from "./mail-actions"
 import { randomBytes } from 'crypto';
 import nodemailer from 'nodemailer';
 import { Quota, Program } from "@prisma/client"
+import { generateApplicationNo } from "@/lib/generateApplicationNo"
 
 export async function isSessonActive() {
     const session = await auth()
@@ -194,6 +195,10 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
         }
         const salt = await genSalt(10)
         const hashedPassword = await hash(password, salt)
+
+        
+        const applicationNo = await generateApplicationNo(validatedData.quota as Quota, validatedData.program as Program, validatedData.applyingYear);
+
         const createdUser = await prisma.user.create({
             data: {
                 firstName: validatedData.firstName,
@@ -205,12 +210,13 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
                 gender: validatedData.gender,
                 dob: new Date(validatedData.dob),
                 applyingYear: validatedData.applyingYear,
-                quota: validatedData.quota as unknown as Quota,
-                program: validatedData.program as unknown as Program,
+                quota: validatedData.quota as Quota,
+                program: validatedData.program  as Program,
                 aadharNo: parseInt(validatedData.aadharNo),
                 religion: validatedData.religion,
                 cast: validatedData.cast,
                 createdAt: new Date(),
+                applicationNo: applicationNo
             },
         })
         if (!createdUser) {

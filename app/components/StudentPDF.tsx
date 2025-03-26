@@ -162,7 +162,6 @@ const styles = StyleSheet.create({
 });
 
 interface StudentPDFProps {
-  studentId: string;
   student?: StructuredUserData;
 }
 
@@ -172,7 +171,7 @@ const getProxiedImageUrl = (url: string) => {
   return `/api/proxyImage?url=${encodeURIComponent(url)}`;
 };
 
-const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
+const StudentPDF = ({ student }: StudentPDFProps) => {
   const studentData = student
     ? {
         name: student["Student Details"].Name || "Not provided",
@@ -252,7 +251,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
         >
           <View>
             <Text style={styles.applicationId}>
-              Application No: {student?.id || studentId || "APP_ID_123456"}
+              Application No: 
             </Text>
             <Text
               style={{
@@ -261,7 +260,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
                 fontWeight: "bold",
               }}
             >
-              {student?.id || studentId || "APP_ID_123456"}
+              {student?.applicationNo || "Id not found"}
             </Text>
           </View>
           <View>
@@ -508,7 +507,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
             {/* <Image src="/no_img.png" style={styles.secondPageSignatureImage} /> */}
             <Image
               src={getProxiedImageUrl(student?.Uploads?.parentSignature || "/no_img.png")}
-              style={styles.photo}
+              style={styles.secondPageSignatureImage}
             />
           </View>
           <View
