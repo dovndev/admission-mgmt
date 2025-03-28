@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import {
   Document,
@@ -153,6 +154,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   secondPageSignatureImage: {
+    border: "1px solid #000",
     width: 100,
     height: 50,
     marginTop: 10,
@@ -160,11 +162,16 @@ const styles = StyleSheet.create({
 });
 
 interface StudentPDFProps {
-  studentId: string;
   student?: StructuredUserData;
 }
 
-const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
+const getProxiedImageUrl = (url: string) => {
+  // If it’s a relative URL (e.g. "/no_img.png"), use it directly.
+  if (url.startsWith("/")) return url;
+  return `/api/proxyImage?url=${encodeURIComponent(url)}`;
+};
+
+const StudentPDF = ({ student }: StudentPDFProps) => {
   const studentData = student
     ? {
         name: student["Student Details"].Name || "Not provided",
@@ -231,7 +238,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
           </View>
         </View>
         <View style={styles.header}>
-          <Text style={styles.subtitle}>Application for B-Tech NRI Quota</Text>
+          <Text style={styles.subtitle}>Application for B-Tech NRI Quota <Text style={styles.subtitle}>{studentData.applyingYear}</Text></Text>
         </View>
 
         {/* Photos Section */}
@@ -244,7 +251,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
         >
           <View>
             <Text style={styles.applicationId}>
-              Application No: {student?.id || studentId || "APP_ID_123456"}
+              Application No: 
             </Text>
             <Text
               style={{
@@ -253,12 +260,12 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
                 fontWeight: "bold",
               }}
             >
-              {student?.id || studentId || "APP_ID_123456"}
+              {student?.applicationNo || "Id not found"}
             </Text>
           </View>
           <View>
             <Image
-              src={student?.Uploads?.studentPhoto || "/no_img.png"}
+              src={getProxiedImageUrl(student?.Uploads?.studentPhoto || "/no_img.png")}
               style={styles.photo}
             />
           </View>
@@ -492,15 +499,15 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
               Name of the parent/guardian: {studentData.parentName}
             </Text>
             <Text style={{ marginBottom: 5 }}>
-              Date: 04/09/{studentData.applyingYear}
+              Date: {new Date().toLocaleDateString()}
             </Text>
             <Text style={{ marginBottom: 5 }}>
               Signature of parent/guardian
             </Text>
             {/* <Image src="/no_img.png" style={styles.secondPageSignatureImage} /> */}
             <Image
-              src={student?.Uploads?.parentSignature || "/no_img.png"}
-              style={styles.photo}
+              src={getProxiedImageUrl(student?.Uploads?.parentSignature || "/no_img.png")}
+              style={styles.secondPageSignatureImage}
             />
           </View>
           <View
@@ -508,7 +515,7 @@ const StudentPDF = ({ studentId, student }: StudentPDFProps) => {
           >
             <Text style={{ marginBottom: 5 }}>Signature of applicant</Text>
             <Image
-              src={student?.Uploads?.studentSignature || "/no_img.png"}
+              src={getProxiedImageUrl(student?.Uploads?.studentSignature || "/no_img.png")}
               style={styles.secondPageSignatureImage}
             />
           </View>

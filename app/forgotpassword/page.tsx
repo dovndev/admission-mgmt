@@ -8,6 +8,7 @@ import Navbar from "../components/navbar";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
 import Link from "next/link";
+import Footer from "../components/Footer";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -34,7 +35,7 @@ export default function ForgotPassword() {
           description: response.error || "Failed to send reset link",
         });
       }
-    } catch (error) {
+    } catch {
       CustomToast({
         title: "Error",
         description: "An unexpected error occurred",
@@ -45,40 +46,43 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-      <Navbar />
-      <div className="flex flex-auto justify-center items-center w-full">
-        <div className="bg-textBoxBackground relative shadow rounded-3xl p-8 max-w-2xl w-full">
-          <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
-            Reset Password
-          </h2>
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <FloatingLabelInput
-                id="email"
-                label="Email Address"
-                type="email"
-                required
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+    <>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+        <Navbar />
+        <div className="flex flex-auto justify-center items-center w-full">
+          <div className="bg-textBoxBackground relative shadow rounded-3xl p-8 max-w-2xl w-full">
+            <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
+              Reset Password
+            </h2>
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                <FloatingLabelInput
+                  id="email"
+                  label="Email Address"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <Button
+                type="submit"
+                className="w-full bg-muthootRed text-white py-2 rounded-lg hover:bg-red-600 transition-colors"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Sending..." : "Send Reset Link"}
+              </Button>
+            </form>
+            <div className="h-[40px] w-full flex justify-end items-end">
+              <Link href="/login" className="border-b mauto">
+                Back to Login
+              </Link>
             </div>
-            <Button
-              type="submit"
-              className="w-full bg-muthootRed text-white py-2 rounded-lg hover:bg-red-600 transition-colors"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Sending..." : "Send Reset Link"}
-            </Button>
-          </form>
-          <div className="h-[40px] w-full flex justify-end items-end">
-            <Link href="/login" className="border-b mauto">
-              Back to Login
-            </Link>
           </div>
         </div>
       </div>
-    </div>
+      <Footer></Footer>
+    </>
   );
 }

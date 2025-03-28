@@ -44,6 +44,8 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
           ? (value) => value.length===0 || value.length === 12 || "Aadhar number must be 12 digits"
           : id == "pinCode" || id== "pinCodePermanent"
           ? (value) => value.length === 6 || " Pin Code must be 6 digits"
+          : type=="password"
+          ? (value) => value.length >= 8 || "Password must be atleast 8 characters"
           : undefined
       }
       placeholder={labelPlacement === 'outside' ? " ":""}

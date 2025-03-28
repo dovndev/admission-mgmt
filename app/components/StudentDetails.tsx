@@ -14,6 +14,7 @@ export default function StudentDetails({
   studentId,
   student,
 }: StudentDetailsProps) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [studentData, setStudentData] = useState<any>(null);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function StudentDetails({
     <div className="flex flex-col items-center justify-center w-full p-3">
       <div className="bg-textBoxBackground relative shadow-xl rounded-3xl p-4 sm:p-8 w-full max-w-[100%] sm:max-w-4xl ">
         <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
-          Details of <span>{studentData.id || studentId} </span>
+          Details of <span>{studentData['applicationNo'] || studentId} </span>
         </h2>
 
         {/* Student Profile photo and signature */}

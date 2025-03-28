@@ -7,9 +7,14 @@ import Link from "next/link";
 import { Button } from "@heroui/react";
 import { isSessonActive, loginAction, loginAdmin } from "../actions/auth-actions";
 import CustomToast from "../components/CustomToast";
+import Footer from "../components/Footer";
 
 export default function LoginPage() {
   function CheckUserType() {
+    const [feedback, setFeedback] = useState(
+      {text : "Please check your registered email for password"}
+    )
+
     const searchParams = useSearchParams();
     const isAdmin = searchParams.get("admin") === "true";
 
@@ -110,6 +115,7 @@ export default function LoginPage() {
                     onChange={handleChange}
                   />
                 </div>
+                <div id="feedback" className=" p-2 rounded-md"><span className="text-muthootRed text-xl">*</span>{feedback.text}</div>
                 <Button
                   type="submit"
                   className="w-full bg-muthootRed text-white py-2 rounded-lg hover:bg-red-600 transition-colors"
@@ -128,6 +134,7 @@ export default function LoginPage() {
             {isAdmin ? "Login" : "Admin Login"}
           </Link>
         </div>
+        <Footer></Footer>
       </Suspense>
     );
   }
