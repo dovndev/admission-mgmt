@@ -7,6 +7,7 @@ import { resetPassword, validateResetToken } from "../actions/auth-actions";
 import Navbar from "../components/navbar";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
+import Footer from "../components/Footer";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -119,44 +120,47 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-      <Navbar />
-      <div className="flex flex-auto justify-center items-center w-full">
-        <div className="bg-textBoxBackground relative shadow rounded-3xl p-8 max-w-2xl w-full">
-          <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
-            Create New Password
-          </h2>
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="flex flex-col space-y-4">
-              <FloatingLabelInput
-                id="password"
-                label="New Password"
-                type="password"
-                required
-                autoComplete="new-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <FloatingLabelInput
-                id="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                required
-                autoComplete="new-password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-            <Button
-              type="submit"
-              className="w-full bg-muthootRed text-white py-2 rounded-lg hover:bg-red-600 transition-colors"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Resetting..." : "Reset Password"}
-            </Button>
-          </form>
+    <>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+        <Navbar />
+        <div className="flex flex-auto justify-center items-center w-full">
+          <div className="bg-textBoxBackground relative shadow rounded-3xl p-8 max-w-2xl w-full">
+            <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
+              Create New Password
+            </h2>
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="flex flex-col space-y-4">
+                <FloatingLabelInput
+                  id="password"
+                  label="New Password"
+                  type="password"
+                  required
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <FloatingLabelInput
+                  id="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
+                  required
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+              <Button
+                type="submit"
+                className="w-full bg-muthootRed text-white py-2 rounded-lg hover:bg-red-600 transition-colors"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Resetting..." : "Reset Password"}
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+      <Footer></Footer>
+    </>
   );
 }
