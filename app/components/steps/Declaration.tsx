@@ -1,8 +1,7 @@
 "use client";
+import { useEffect, useState, useCallback } from "react";
 import DropDownInput from "../DropDownInput";
 import { Button } from "@heroui/react";
-import { useEffect, useState } from "react";
-import { BRANCH_OPTIONS } from "../../constants/dropdownOptions";
 import { Checkbox } from "@heroui/react";
 import FileUploadInput from "../FileUploadInput";
 import { useSession } from "next-auth/react";
@@ -14,6 +13,7 @@ import { updateDeclerationDetails } from "@/app/actions/onboarding-actions";
 import { Branch } from "@/types/userTypes";
 import useUserStore from "@/app/store/userStore";
 import CustomToast from "../CustomToast";
+import { BRANCH_OPTIONS } from "@/app/constants/dropdownOptions";
 
 // Define the validation schema with Zod
 const declarationSchema = z.object({
@@ -51,7 +51,6 @@ export default function Declaration() {
 
   const { userData } = useUserStore();
 
-  // Initialize the form with react-hook-form and zod validation
   const {
     handleSubmit,
     control,
@@ -68,10 +67,21 @@ export default function Declaration() {
     },
   });
 
-  // Watch form values for display purposes
   const formValues = watch();
 
-  // New useEffect to pre-fill form data from userData when available
+  // Memoize handleBranchChange to prevent its reference from changing on every render.
+  const handleBranchChange = useCallback(async (value: Branch) => {
+    setValue("branch", value);
+    const response = (await isBranchAvailable(academic, value)) as BranchAvailabilityResponse | null;
+    console.log(response);
+    if (response && response.totalSets !== response.occupiedSets) {
+      setbranchAlert("Branch is available");
+    } else {
+      setbranchAlert("Branch is not available");
+    }
+  }, [academic, setValue]);
+
+  // Use effect to pre-fill form data from userData when available.
   useEffect(() => {
     if (userData) {
       // Set branch if available
@@ -89,8 +99,6 @@ export default function Declaration() {
       }
 
       // Set parent signature if available in userData
-      // Note: The schema doesn't explicitly show where parent signature is stored
-      // This assumes it's in "Uploads" with a key "parentSignature" or similar
       const parentSignature = userData["Uploads"]?.parentSignature;
       if (parentSignature && parentSignature !== "/no_img.png") {
         setValue("parentSignature", parentSignature);
@@ -99,29 +107,15 @@ export default function Declaration() {
       // If all required fields are filled, we can assume the user has agreed
       if (
         branch &&
-        signature &&
-        parentSignature &&
-        signature !== "/no_img.png" &&
-        parentSignature !== "/no_img.png"
+        userData["Uploads"]?.studentSignature &&
+        userData["Uploads"]?.parentSignature &&
+        userData["Uploads"]?.studentSignature !== "/no_img.png" &&
+        userData["Uploads"]?.parentSignature !== "/no_img.png"
       ) {
         setValue("agreementChecked", true);
       }
     }
-  }, [userData, setValue]);
-
-  const handleBranchChange = async (value: Branch) => {
-    setValue("branch", value);
-    const response = (await isBranchAvailable(
-      academic,
-      value
-    )) as BranchAvailabilityResponse | null;
-    console.log(response);
-    if (response && response.totalSets !== response.occupiedSets) {
-      setbranchAlert("Branch is available");
-    } else {
-      setbranchAlert("Branch is not available");
-    }
-  };
+  }, [userData, setValue, handleBranchChange]);
 
   const setFileLink = (
     fieldName: keyof Pick<DeclarationFormData, "signature" | "parentSignature">,

@@ -10,6 +10,7 @@ export async function getStructuredUserData(userId: string) {
         throw new Error("User not found")
     }
     const structuredUser = {
+        applicationNo: user.applicationNo,
         "Student Details": {
             "Name": `${user.firstName} ${user.middleName} ${user.lastName}`,
             "Religion": user.religion,
@@ -172,6 +173,7 @@ export async function getStructuredUsersByYear(year: string, page: number = 1, l
         // Format each user with the same structure as getStructuredUserData
         const structuredUsers = users.map(user => ({
             id: user.id,
+            applicationNo: user.applicationNo,
             "Student Details": {
                 "Name": `${user.firstName} ${user.middleName || ''} ${user.lastName}`,
                 "Religion": user.religion,

@@ -35,7 +35,7 @@ export default function ForgotPassword() {
           description: response.error || "Failed to send reset link",
         });
       }
-    } catch (error) {
+    } catch {
       CustomToast({
         title: "Error",
         description: "An unexpected error occurred",
