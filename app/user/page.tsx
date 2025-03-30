@@ -28,7 +28,7 @@ export default function Register() {
   const { data: sessionData, status: sessionStatus } = session;
   const { generatePDF } = usePrintPDF();
   const handlePrintStudent = async (student: StructuredUserData) => {
-    await generatePDF(student, sessionData?.user?.id);
+    await generatePDF(student);
   };
   useEffect(() => {
     // In a real app, you would get the userId from authentication

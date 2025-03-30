@@ -8,14 +8,13 @@ export const usePrintPDF = () => {
 
   const generatePDF = async (
     student: StructuredUserData,
-    id?: string | undefined
   ) => {
     try {
       setIsGenerating(true);
 
       // Create the PDF document
       const blob = await pdf(
-        <StudentPDF studentId={student.id || id} student={student} />
+        <StudentPDF student={student} />
       ).toBlob();
 
       // Create a URL for the blob
@@ -24,7 +23,7 @@ export const usePrintPDF = () => {
       // Create a link and trigger download
       const link = document.createElement("a");
       link.href = url;
-      link.download = `Application_${student.id || id}.pdf`;
+      link.download = `Application_${student?.applicationNo || "_not_found"}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

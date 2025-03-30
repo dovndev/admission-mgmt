@@ -111,7 +111,7 @@ export default function RegistrationDashboard() {
         user["Student Details"].Name.toLowerCase().includes(searchLower) ||
         user["Student Details"].Email.toLowerCase().includes(searchLower) ||
         user["Student Details"].Phone.toLowerCase().includes(searchLower) ||
-        user.id.toLowerCase().includes(searchLower)
+        user.applicationNo.toLowerCase().includes(searchLower)
       );
     });
 
@@ -120,9 +120,9 @@ export default function RegistrationDashboard() {
     switch (sortBy) {
       case "newest":
         // Assuming newer users have more recent IDs
-        return sorted.sort((a, b) => b.id.localeCompare(a.id));
+        return sorted.sort((a, b) => b.applicationNo.localeCompare(a.applicationNo));
       case "oldest":
-        return sorted.sort((a, b) => a.id.localeCompare(b.id));
+        return sorted.sort((a, b) => a.applicationNo.localeCompare(b.applicationNo));
       case "name":
         return sorted.sort((a, b) =>
           a["Student Details"].Name.localeCompare(b["Student Details"].Name)
@@ -194,13 +194,13 @@ export default function RegistrationDashboard() {
                   size="sm"
                   aria-label="Sort by"
                 >
-                  <SelectItem key="newest" value="newest">
+                  <SelectItem key="newest" >
                     Newest first
                   </SelectItem>
-                  <SelectItem key="oldest" value="oldest">
+                  <SelectItem key="oldest" >
                     Oldest first
                   </SelectItem>
-                  <SelectItem key="name" value="name">
+                  <SelectItem key="name">
                     Name (A-Z)
                   </SelectItem>
                 </Select>
@@ -252,7 +252,7 @@ export default function RegistrationDashboard() {
                 </TableHeader>
                 <TableBody className="bg-textBoxBackground">
                   {filteredAndSortedUsers.map((student) => (
-                    <TableRow className="bg-textBoxBackground" key={student.id}>
+                    <TableRow className="bg-textBoxBackground" key={student.applicationNo}>
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <Avatar
@@ -268,7 +268,7 @@ export default function RegistrationDashboard() {
                               {student["Student Details"].Name}
                             </div>
                             <div className="text-xs text-default-500">
-                              {student.id.substring(0, 10)}
+                              {student.applicationNo}
                             </div>
                           </div>
                         </div>
