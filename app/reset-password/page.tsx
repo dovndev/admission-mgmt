@@ -7,7 +7,6 @@ import { resetPassword, validateResetToken } from "../actions/auth-actions";
 import Navbar from "../components/navbar";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
-import Footer from "../components/Footer";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");

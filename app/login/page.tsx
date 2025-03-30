@@ -7,7 +7,6 @@ import Link from "next/link";
 import { Button } from "@heroui/react";
 import { isSessonActive, loginAction, loginAdmin } from "../actions/auth-actions";
 import CustomToast from "../components/CustomToast";
-import Footer from "../components/Footer";
 
 export default function LoginPage() {
   function CheckUserType() {
@@ -134,7 +133,6 @@ export default function LoginPage() {
             {isAdmin ? "Login" : "Admin Login"}
           </Link>
         </div>
-        <Footer></Footer>
       </Suspense>
     );
   }

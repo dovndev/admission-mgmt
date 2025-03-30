@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import ThemeToggle from "./ThemeToggle";
+import Contact from "./Contact";
 
 
 //this prop is used for forcing the navbar to use white text for the main page and remove the toggle
@@ -38,6 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
       <div className={`flex items-center `}>
         <ThemeToggle />
       </div>
+      <Contact/>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import Footer from "./components/Footer";
 import Navbar from "./components/navbar";
 
 export default function Home() {
@@ -48,7 +47,6 @@ export default function Home() {
         </div>
       </div>
       <div className="shadow-lg shadow-white bg-white">
-        <Footer bg="black" text="white"></Footer>
       </div>
     </>
   );

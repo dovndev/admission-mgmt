@@ -8,7 +8,6 @@ import Navbar from "../components/navbar";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
 import Link from "next/link";
-import Footer from "../components/Footer";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -46,7 +45,6 @@ export default function ForgotPassword() {
   };
 
   return (
-    <>
       <div className="flex flex-col items-center justify-center min-h-screen bg-background">
         <Navbar />
         <div className="flex flex-auto justify-center items-center w-full">
@@ -82,7 +80,5 @@ export default function ForgotPassword() {
           </div>
         </div>
       </div>
-      <Footer></Footer>
-    </>
   );
 }
