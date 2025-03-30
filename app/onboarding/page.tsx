@@ -13,15 +13,14 @@ import Payment from "../components/steps/Payment";
 import useUserStore from "../store/userStore";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Contact from "../components/Contact";
 
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [seatConfirmed] = useState<boolean>(false);
   const { clearUserData } = useUserStore();
   const handleNext = () => {
-    setCurrentStep((prev) =>
-      prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev
-    );
+    setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
   };
 
   const handlePrevious = () => {
@@ -72,37 +71,40 @@ export default function OnBoarding() {
   return (
     <div className="flex flex-col ">
       <div className="flex justify-center h-20 w-full">
-        <ProgressBar
-          currentStep={seatConfirmed ? 4 : currentStep}
-          handleLogout={handleLogout}
-        />
+        <ProgressBar currentStep={seatConfirmed ? 4 : currentStep} handleLogout={handleLogout} />
       </div>
-      <div className="flex flex-col items-center min-h-screen bg-background pb-4 pt-4">
-        <div className="w-full">{renderStepContent()}</div>
-        {!seatConfirmed && (
-          <div className="flex space-x-4 bg-textBoxBackground items-center shadow-xl p-4 rounded-xl">
-            <Button
-              id="previousPage"
-              className="bg-red-600 border-red-900 text-white"
-              variant="bordered"
-              onPress={handlePrevious}
-              disabled={currentStep === 0}
-            >
-              Previous
-            </Button>
-            <Button
-              id="nextPage"
-              className="bg-green-600 border-green-900 text-white"
-              variant="bordered"
-              onPress={handleNext}
-              disabled={currentStep === REGISTER_STEPS.length - 1}
-            >
-              Next
-            </Button>
+      <div>
+        <div className="flex flex-col items-center min-h-screen bg-background pb-4 pt-4">
+          <div className="w-full">{renderStepContent()}</div>
+          <div className="flex flex-row items-center justify-between w-full px-10 pb-10 md:max-w-[70%]">
+          <Contact className="!relative" />
+            {!seatConfirmed && (
+              <div className="flex space-x-4 bg-textBoxBackground items-center shadow-xl p-4 rounded-xl">
+                <Button
+                  id="previousPage"
+                  className="bg-red-600 border-red-900 text-white"
+                  variant="bordered"
+                  onPress={handlePrevious}
+                  disabled={currentStep === 0}
+                >
+                  Previous
+                </Button>
+                <Button
+                  id="nextPage"
+                  className="bg-green-600 border-green-900 text-white"
+                  variant="bordered"
+                  onPress={handleNext}
+                  disabled={currentStep === REGISTER_STEPS.length - 1}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
+
+            
           </div>
-        )}
+        </div>
       </div>
     </div>
-    
   );
 }

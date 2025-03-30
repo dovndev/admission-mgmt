@@ -39,7 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
       <div className={`flex items-center `}>
         <ThemeToggle />
       </div>
-      <Contact/>
+      
     </div>
   );
 };

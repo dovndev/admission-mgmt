@@ -18,7 +18,7 @@ export default function CustomToast({
       description,
       radius : "lg",
       variant: "flat",
-      timeout: 5000,
+      timeout: 2500,
     });
 
 

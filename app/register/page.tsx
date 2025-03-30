@@ -3,12 +3,7 @@ import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/navbar";
 import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
-import {
-  
-  GENDER_OPTIONS,
-  PROGRAM_OPTIONS,
-  QUOTA_OPTIONS,
-} from "../constants/dropdownOptions";
+import { GENDER_OPTIONS, PROGRAM_OPTIONS, QUOTA_OPTIONS } from "../constants/dropdownOptions";
 import { registerAction } from "../actions/auth-actions";
 import { userRegisterSchema } from "@/schemas";
 import { useRouter } from "next/navigation";
@@ -16,6 +11,7 @@ import { getAllAvailableYears } from "../actions/seat-Management-Actions";
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import CustomToast from "../components/CustomToast";
+import Contact from "../components/Contact";
 
 export default function Register() {
   const router = useRouter();
@@ -36,24 +32,19 @@ export default function Register() {
   });
   const [availableYears, setavailableYears] = useState<number[]>([]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    
     e.preventDefault();
     try {
       const validatedData = userRegisterSchema.parse(formData);
       if (!validatedData) {
         throw new Error("Invalid data");
       }
-      const response: RegisterActionResult = await registerAction(
-        validatedData
-      );
+      const response: RegisterActionResult = await registerAction(validatedData);
       if (response?.success) {
         console.log("redirecting to login");
         router.push("/login");
@@ -61,10 +52,9 @@ export default function Register() {
         console.log(response.error);
         throw new Error("Invalid data");
       }
-      
     } catch (error) {
       console.log(error);
-      CustomToast({title: "Error",description: "Invalid data"});
+      CustomToast({ title: "Error", description: "Invalid data" });
     }
   };
 
@@ -80,11 +70,9 @@ export default function Register() {
     <div className="flex flex-col items-center min-h-screen bg-background">
       <Navbar />
 
-      <div className="flex flex-auto items-center justify-center w-full p-3">
+      <div className="flex flex-auto items-center justify-center w-full m-3 p-3">
         <div className="bg-textBoxBackground  relative shadow-xl rounded-3xl p-8 max-w-2xl w-full">
-          <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
-            Registration
-          </h2>
+          <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">Registration</h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <FloatingLabelInput
@@ -191,13 +179,11 @@ export default function Register() {
                 autoComplete="off"
                 type={"number"}
                 onChange={handleChange}
-                
               />
             </div>
             <h1 className="text-center">
-              <span className="text-muthootRed">* </span>Please be advised that
-              the fields mentioned above are not editable in any subsequent
-              stages
+              <span className="text-muthootRed">* </span>Please be advised that the fields mentioned above are not
+              editable in any subsequent stages
             </h1>
             <Button
               type="submit"
@@ -208,6 +194,8 @@ export default function Register() {
           </form>
         </div>
       </div>
+
+      <Contact />
     </div>
   );
 }
