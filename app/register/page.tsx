@@ -16,7 +16,6 @@ import { getAllAvailableYears } from "../actions/seat-Management-Actions";
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import CustomToast from "../components/CustomToast";
-import Footer from "../components/Footer";
 
 export default function Register() {
   const router = useRouter();
@@ -78,7 +77,6 @@ export default function Register() {
   }, []);
 
   return (
-    <>
     <div className="flex flex-col items-center min-h-screen bg-background">
       <Navbar />
 
@@ -211,6 +209,5 @@ export default function Register() {
         </div>
       </div>
     </div>
-            <Footer></Footer> </>
   );
 }

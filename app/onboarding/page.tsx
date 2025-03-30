@@ -13,7 +13,6 @@ import Payment from "../components/steps/Payment";
 import useUserStore from "../store/userStore";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Footer from "../components/Footer";
 
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -103,8 +102,6 @@ export default function OnBoarding() {
           </div>
         )}
       </div>
-            {/* <Footer></Footer> */}
-
     </div>
     
   );

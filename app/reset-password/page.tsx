@@ -7,7 +7,6 @@ import { resetPassword, validateResetToken } from "../actions/auth-actions";
 import Navbar from "../components/navbar";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
-import Footer from "../components/Footer";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -120,7 +119,6 @@ export default function ResetPassword() {
   }
 
   return (
-    <>
       <div className="flex flex-col items-center justify-center min-h-screen bg-background">
         <Navbar />
         <div className="flex flex-auto justify-center items-center w-full">
@@ -160,7 +158,5 @@ export default function ResetPassword() {
           </div>
         </div>
       </div>
-      <Footer></Footer>
-    </>
   );
 }
