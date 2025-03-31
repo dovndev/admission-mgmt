@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { requestPasswordReset } from "../actions/auth-actions";
 import CustomToast from "../components/CustomToast";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
 import Link from "next/link";
