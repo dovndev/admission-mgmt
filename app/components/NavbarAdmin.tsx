@@ -17,8 +17,8 @@ import useUserStore from "../store/userStore";
 
 // Add navigation options
 const NAV_ITEMS = [
-  { key: "adminHome", label: "Admin Home", href: "/admin/adminHome" },
-  { key: "adminNRI", label: "NRI Admissions", href: "/admin/registrations" },
+  { key: "adminHome", label: "Home", href: "/admin/adminHome" },
+  { key: "adminNRI", label: "Admissions", href: "/admin/registrations" },
   { key: "settings", label: "Settings", href: "/admin/status" },
   // { key: "logout", label: "Logout", href: "/logout" },
 ];
@@ -79,22 +79,26 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
             ))}
           </DropdownMenu>
         </Dropdown>
-        <div className="w-[100px] hidden sm:block">
-          <Link href="/" passHref>
-            <Image
-              src="/MITS.png"
-              alt="Muthoot Logo"
-              width={120}
-              height={40}
-              className="cursor-pointer object-contain h-auto w-full"
-            />
-          </Link>
+        <div className="w-[120px] hidden sm:block">
+          <Image
+            src="/MITS.png"
+            alt="Muthoot Logo"
+            width={120}
+            height={40}
+            className="cursor-pointer object-contain h-auto w-full"
+          />
         </div>
       </div>
-
+      <div className="ml-10 justify-end items-center gap-4 hidden lg:flex ">
+        {NAV_ITEMS.map((item) => (
+          <Link key={item.key} href={item.href} className="text-lg headerButton">
+            {item.label}
+          </Link>
+        ))}
+      </div>
       {/* Navigation Links */}
       <div className="flex-1 flex justify-end ">
-        <div className="flex gap-1 md:gap-2  items-center w-full md:w-[50%] lg:w-[30%] xl:w-[30%] ">
+        <div className="flex gap-1 md:gap-2  items-center w-full lg:w-[18rem] ">
           <DropDownInput
             options={PROGRAM_OPTIONS}
             id="program"
