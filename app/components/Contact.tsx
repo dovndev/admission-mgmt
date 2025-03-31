@@ -6,7 +6,7 @@ export const CONTACTS = [
 ];
 export default function Contact({ className = "" }: { className?: string }) {
   return (
-    <div className={`md:fixed bottom-1 left-1 p-4 text-[13px] slide_up ${className}`}>
+    <div className={`lg:fixed bottom-1 left-1 p-4 text-[13px] slide_up ${className}`}>
       {/* <div className="flex flex-col gap-1">
                   Muthoot Institute of Technology and Science <br />
                   Varikoli P.O, Puthencruz- 682308 <br />

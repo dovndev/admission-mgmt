@@ -7,13 +7,7 @@ import React, { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 import DropDownInput from "./DropDownInput";
 import { PROGRAM_OPTIONS } from "../constants/dropdownOptions";
-import {
-  Button,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@heroui/react";
+import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
 import { FaPowerOff } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { getAllAvailableYears } from "../actions/seat-Management-Actions";
@@ -79,24 +73,23 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
               <FiMenu className="h-6 w-6" />
             </Button>
           </DropdownTrigger>
-          <DropdownMenu
-            aria-label="Navigation Menu"
-            onAction={(key) => handleNavigation(key.toString())}
-          >
+          <DropdownMenu aria-label="Navigation Menu" onAction={(key) => handleNavigation(key.toString())}>
             {NAV_ITEMS.map((item) => (
               <DropdownItem key={item.key}>{item.label}</DropdownItem>
             ))}
           </DropdownMenu>
         </Dropdown>
-        <Link href="/" passHref>
-          <Image
-            src="/muthoot_logo.png"
-            alt="Muthoot Logo"
-            width={40}
-            height={40}
-            className="rounded-xl cursor-pointer hidden md:inline"
-          />
-        </Link>
+        <div className="w-[100px] hidden sm:block">
+          <Link href="/" passHref>
+            <Image
+              src="/MITS.png"
+              alt="Muthoot Logo"
+              width={120}
+              height={40}
+              className="cursor-pointer object-contain h-auto w-full"
+            />
+          </Link>
+        </div>
       </div>
 
       {/* Navigation Links */}
@@ -126,13 +119,7 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
       <div className={`${mode === "dark" ? "hidden" : ""}`}>
         <ThemeToggle />
       </div>
-      <Button
-        isIconOnly
-        color={"danger"}
-        variant="shadow"
-        aria-label="Year enable"
-        onPress={handleLogout}
-      >
+      <Button isIconOnly color={"danger"} variant="shadow" aria-label="Year enable" onPress={handleLogout}>
         <FaPowerOff className={`h-4 w-4 "text-white"}`} />
       </Button>
     </div>
