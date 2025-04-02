@@ -2,12 +2,12 @@
 import { useState, Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import FloatingLabelInput from "../components/FloatingLabelInput";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 import Link from "next/link";
 import { Button } from "@heroui/react";
 import { isSessonActive, loginAction, loginAdmin } from "../actions/auth-actions";
 import CustomToast from "../components/CustomToast";
-import Footer from "../components/Footer";
+import Contact from "../components/Contact";
 
 export default function LoginPage() {
   function CheckUserType() {
@@ -86,7 +86,7 @@ export default function LoginPage() {
       <Suspense>
         <div className="flex flex-col items-center justify-center min-h-screen bg-background">
           <Navbar />
-          <div className="flex flex-auto justify-center items-center w-full">
+          <div className="flex flex-auto justify-center items-center w-full m-3 p-3">
             <div className="bg-textBoxBackground relative shadow rounded-3xl p-8 max-w-2xl w-full">
               <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
                 {isAdmin ? "Admin Login" : "Login"}
@@ -133,8 +133,8 @@ export default function LoginPage() {
           <Link href={isAdmin ? "/login" : "/login?admin=true"} className="absolute bottom-1 right-0 m-4 ">
             {isAdmin ? "Login" : "Admin Login"}
           </Link>
+          <Contact></Contact>
         </div>
-        <Footer></Footer>
       </Suspense>
     );
   }

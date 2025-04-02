@@ -15,13 +15,13 @@ interface ProgressBarProps {
 const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, handleLogout }) => {
   return (
     <div className="fixed z-50 bg-textBoxBackground shadow max-w-[90%] w-full h-[60px] mt-5 mx-4 rounded-3xl flex items-center justify-between px-6">
-      <div className="flex items-center">
+      <div className="w-[100px] hidden sm:block">
         <Image
-          src="/muthoot_logo.png"
+          src="/MITS.png"
           alt="Muthoot Logo"
-          width={40}
+          width={120}
           height={40}
-          className="mr-4 rounded-xl cursor-pointer"
+          className="cursor-pointer object-contain h-auto w-full"
         />
       </div>
 
@@ -43,7 +43,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, handleLogout }) 
               <BreadcrumbItem
                 key={index}
                 isCurrent={index === currentStep}
-                className={`${index !== currentStep ? "hidden sm:flex" : ""}`}
+                className={`${index !== currentStep ? "hidden lg:flex" : ""}`}
               >
                 {step}
               </BreadcrumbItem>
@@ -53,7 +53,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, handleLogout }) 
       </div>
 
       <div className={`flex gap-6 md:gap-2 items-center`}>
-
         <ThemeToggle />
         <Button isIconOnly color={"danger"} variant="shadow" aria-label="Logout" onPress={handleLogout}>
           <FaPowerOff className="h-4 w-4 text-white" />

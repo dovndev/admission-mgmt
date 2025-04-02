@@ -153,7 +153,7 @@ export default function EducationalDetails() {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <h1 className="m-4 font-bold">12th Exam Details(optional)</h1>
+              <h1 className="m-4 font-bold">12th Exam Details(If results are published)</h1>
 
               <div className="flex flex-col gap-4 md:flex-row ">
                 <FloatingLabelInput
@@ -191,7 +191,7 @@ export default function EducationalDetails() {
           </div>
           <div className="flex flex-1 flex-col gap-6">
             <h1 className="m-4 font-bold">
-              Details of Common Entrance Test (KEAM)(optional)
+              Details of Common Entrance Test (KEAM)(If results are published)
             </h1>
             <div className="flex flex-col gap-4 md:flex-row  justify-between">
               <span>Year</span>

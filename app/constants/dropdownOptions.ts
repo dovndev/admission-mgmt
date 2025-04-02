@@ -20,6 +20,10 @@ export const REGISTER_STEPS: NonEmptyArray<string> = [
     "Payment"
 ];
 
+export const RELIGIONS : NonEmptyArray<string> = [
+    ""
+]
+
 export const BRANCH_OPTIONS: NonEmptyArray<string> = ["CSE", "ECE", "EEE", "MECH", "CIVIL"];
 
 
@@ -86,3 +90,4 @@ export const SEAT_ALLOCATION = {
         MGMT: 9,
     },
 };
+

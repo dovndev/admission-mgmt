@@ -7,13 +7,7 @@ import React, { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 import DropDownInput from "./DropDownInput";
 import { PROGRAM_OPTIONS } from "../constants/dropdownOptions";
-import {
-  Button,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@heroui/react";
+import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
 import { FaPowerOff } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { getAllAvailableYears } from "../actions/seat-Management-Actions";
@@ -23,8 +17,8 @@ import useUserStore from "../store/userStore";
 
 // Add navigation options
 const NAV_ITEMS = [
-  { key: "adminHome", label: "Admin Home", href: "/admin/adminHome" },
-  { key: "adminNRI", label: "NRI Admissions", href: "/admin/registrations" },
+  { key: "adminHome", label: "Home", href: "/admin/adminHome" },
+  { key: "adminNRI", label: "Admissions", href: "/admin/registrations" },
   { key: "settings", label: "Settings", href: "/admin/status" },
   // { key: "logout", label: "Logout", href: "/logout" },
 ];
@@ -79,29 +73,32 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
               <FiMenu className="h-6 w-6" />
             </Button>
           </DropdownTrigger>
-          <DropdownMenu
-            aria-label="Navigation Menu"
-            onAction={(key) => handleNavigation(key.toString())}
-          >
+          <DropdownMenu aria-label="Navigation Menu" onAction={(key) => handleNavigation(key.toString())}>
             {NAV_ITEMS.map((item) => (
               <DropdownItem key={item.key}>{item.label}</DropdownItem>
             ))}
           </DropdownMenu>
         </Dropdown>
-        <Link href="/" passHref>
+        <div className="w-[120px] hidden sm:block">
           <Image
-            src="/muthoot_logo.png"
+            src="/MITS.png"
             alt="Muthoot Logo"
-            width={40}
+            width={120}
             height={40}
-            className="rounded-xl cursor-pointer hidden md:inline"
+            className="cursor-pointer object-contain h-auto w-full"
           />
-        </Link>
+        </div>
       </div>
-
+      <div className="ml-10 justify-end items-center gap-4 hidden lg:flex ">
+        {NAV_ITEMS.map((item) => (
+          <Link key={item.key} href={item.href} className="text-lg headerButton">
+            {item.label}
+          </Link>
+        ))}
+      </div>
       {/* Navigation Links */}
       <div className="flex-1 flex justify-end ">
-        <div className="flex gap-1 md:gap-2  items-center w-full md:w-[50%] lg:w-[30%] xl:w-[30%] ">
+        <div className="flex gap-1 md:gap-2  items-center w-full lg:w-[18rem] ">
           <DropDownInput
             options={PROGRAM_OPTIONS}
             id="program"
@@ -126,13 +123,7 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
       <div className={`${mode === "dark" ? "hidden" : ""}`}>
         <ThemeToggle />
       </div>
-      <Button
-        isIconOnly
-        color={"danger"}
-        variant="shadow"
-        aria-label="Year enable"
-        onPress={handleLogout}
-      >
+      <Button isIconOnly color={"danger"} variant="shadow" aria-label="Year enable" onPress={handleLogout}>
         <FaPowerOff className={`h-4 w-4 "text-white"}`} />
       </Button>
     </div>

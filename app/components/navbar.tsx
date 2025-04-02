@@ -5,37 +5,44 @@ import Link from "next/link";
 import React from "react";
 import ThemeToggle from "./ThemeToggle";
 
-
-//this prop is used for forcing the navbar to use white text for the main page and remove the toggle
 interface NavbarProps {
-  mode?: "dark" | "light";
+  mode?: "dark" | "light" | "";
 }
 
 const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
   return (
-    <div className="relative z-10 bg-white bg-opacity-[7%] shadow max-w-[90%] w-full h-[60px] mt-5 mx-4 rounded-3xl flex items-center justify-between px-6">
-      <div className="flex items-center">
+    <div className="relative z-10 bg-white bg-opacity-[7%] shadow max-w-[95%] w-full h-auto min-h-[60px] mt-5 mx-auto rounded-3xl flex items-center px-3 sm:px-6 py-2">
+      {/* Logo */}
+      <div className="flex-shrink-0 w-[100px] sm:w-[120px]">
         <Link href="/" passHref>
-          <Image src="/muthoot_logo.png" alt="Muthoot Logo" width={40} height={40} className="mr-4 rounded-xl cursor-pointer" />
+          <Image 
+            src="/MITS.png" 
+            alt="Muthoot Logo" 
+            width={120} 
+            height={40} 
+            className="cursor-pointer object-contain h-auto w-full" 
+          />
         </Link>
       </div>
 
-      {/* Navigation Links */}
-      <div className="flex-1 flex justify-center">
-        <div className="flex space-x-4 sm:space-x-6 md:space-x-8 lg:space-x-10 items-center md:gap-10">
-          <Link href="/register" className="headerButton !text-muthootRed">
+      {/* Navigation Links - Always visible, centered */}
+      <div className="flex-1 flex justify-center items-center">
+        <div className="flex flex-row space-x-3 sm:space-x-4 md:space-x-6 lg:space-x-8 items-center">
+          <Link href="/register" className="headerButton !text-muthootRed text-center">
             Register
           </Link>
-          <Link href="/login" className={`headerButton ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""}`}>
+          <Link href="/login" className={`headerButton ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} text-center`}>
             Login
           </Link>
-          <Link href="/about" className={`headerButton ${mode == "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} hidden sm:block`}>
+          {/* About link hidden on small screens */}
+          <Link href="/about" className={`headerButton ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} hidden md:block text-center`}>
             About
           </Link>
         </div>
       </div>
 
-      <div className={`flex items-center `}>
+      {/* Theme toggle */}
+      <div className="flex-shrink-0 sm:w-[120px] flex justify-end items-center">
         <ThemeToggle />
       </div>
     </div>
