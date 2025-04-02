@@ -6,6 +6,7 @@ type AdminStore = {
     program: string[]
     setYears: (years: number[]) => void
     setSelectedYear: (year: number) => void
+    setProgram: (program: string[]) => void
 }
 
 const useAdminStore = create<AdminStore>()((set) => ({
