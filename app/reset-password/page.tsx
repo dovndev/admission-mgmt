@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import CustomToast from "../components/CustomToast";
 import { resetPassword, validateResetToken } from "../actions/auth-actions";
-import Navbar from "../components/navbar";
 import FloatingLabelInput from "../components/FloatingLabelInput";
-import Footer from "../components/Footer";
 import { Button } from "@heroui/react";
+import Navbar from "../components/Navbar";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -157,7 +156,6 @@ export default function ResetPassword() {
           </form>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
