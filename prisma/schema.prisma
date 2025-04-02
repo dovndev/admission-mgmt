@@ -115,7 +115,8 @@ model User {
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
   seatConfirmed      Boolean        @default(false) // Indicates if the seat is confirmed
-  applicationNo      String         @unique  // <<== NEW CUSTOM ID FIELD
+  applicationNo      String         @unique // <<== NEW CUSTOM ID FIELD
+  canOnboard         Boolean        @default(false) // Requires admin approval to onboard
 }
 
 model Branches {

@@ -5,15 +5,19 @@ import FloatingLabelInput from "../components/FloatingLabelInput";
 import Navbar from "../components/Navbar";
 import Link from "next/link";
 import { Button } from "@heroui/react";
-import { isSessonActive, loginAction, loginAdmin } from "../actions/auth-actions";
+import {
+  isSessonActive,
+  loginAction,
+  loginAdmin,
+} from "../actions/auth-actions";
 import CustomToast from "../components/CustomToast";
 import Contact from "../components/Contact";
 
 export default function LoginPage() {
   function CheckUserType() {
-    const [feedback, setFeedback] = useState(
-      {text : "Please check your registered email for password"}
-    )
+    const [feedback, setFeedback] = useState({
+      text: "Please check your registered email for password",
+    });
 
     const searchParams = useSearchParams();
     const isAdmin = searchParams.get("admin") === "true";
@@ -53,21 +57,10 @@ export default function LoginPage() {
       } else {
         // User login logic
         // console.log("User Login:", formData);
-        const response = await loginAction({
+        loginAction({
           email: formData.emailOrReg,
           password: formData.password,
         });
-        console.log(response);
-        if (response?.error) {
-          CustomToast({
-            title: "Error",
-            description: response?.error,
-          });
-        } else {
-          CustomToast({
-            title: "Logging in",
-          });
-        }
       }
     };
 
@@ -115,7 +108,10 @@ export default function LoginPage() {
                     onChange={handleChange}
                   />
                 </div>
-                <div id="feedback" className=" p-2 rounded-md"><span className="text-muthootRed text-xl">*</span>{feedback.text}</div>
+                <div id="feedback" className=" p-2 rounded-md">
+                  <span className="text-muthootRed text-xl">*</span>
+                  {feedback.text}
+                </div>
                 <Button
                   type="submit"
                   className="w-full bg-muthootRed text-white py-2 rounded-lg hover:bg-red-600 transition-colors"
@@ -130,7 +126,10 @@ export default function LoginPage() {
               </div>
             </div>
           </div>
-          <Link href={isAdmin ? "/login" : "/login?admin=true"} className="absolute bottom-1 right-0 m-4 ">
+          <Link
+            href={isAdmin ? "/login" : "/login?admin=true"}
+            className="absolute bottom-1 right-0 m-4 "
+          >
             {isAdmin ? "Login" : "Admin Login"}
           </Link>
           <Contact></Contact>

@@ -11,6 +11,7 @@ export async function getStructuredUserData(userId: string) {
     }
     const structuredUser = {
         applicationNo: user.applicationNo,
+        canOnboard: user.canOnboard,
         "Student Details": {
             "Name": `${user.firstName} ${user.middleName} ${user.lastName}`,
             "Religion": user.religion,
@@ -174,6 +175,7 @@ export async function getStructuredUsersByYear(year: string, page: number = 1, l
         const structuredUsers = users.map(user => ({
             id: user.id,
             applicationNo: user.applicationNo,
+            canOnboard: user.canOnboard,
             "Student Details": {
                 "Name": `${user.firstName} ${user.middleName || ''} ${user.lastName}`,
                 "Religion": user.religion,
@@ -256,5 +258,18 @@ export async function getStructuredUsersByYear(year: string, page: number = 1, l
             totalUsers: 0,
             totalPages: 0
         };
+    }
+}
+
+export async function updateOnboardingStatus(userId: string, canOnboard: boolean) {
+    try {
+        const user = await prisma.user.update({
+            where: { id: userId },
+            data: { canOnboard }
+        });
+        return { success: true, message: "User onboarding status updated successfully", user };
+    } catch (error) {
+        console.error("Error updating onboarding status:", error);
+        return { success: false, message: "Failed to update onboarding status" };
     }
 }

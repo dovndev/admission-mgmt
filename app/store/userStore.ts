@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import { getStructuredUserData } from '../actions/user-Actions';
 import { StructuredUserData } from '@/types/userTypes';
 
-
 type UserStore = {
     // Existing state
     years: string[];

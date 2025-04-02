@@ -127,6 +127,7 @@ export async function loginAction(data: z.infer<typeof userLoginSchema>): Promis
         await signIn("credentials", {
             email: userExists.email,
             password: password,
+            redirect: true,
             redirectTo: "/onboarding",
         })
     }
@@ -196,7 +197,7 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
         const salt = await genSalt(10)
         const hashedPassword = await hash(password, salt)
 
-        
+
         const applicationNo = await generateApplicationNo(validatedData.quota as Quota, validatedData.program as Program, validatedData.applyingYear);
 
         const createdUser = await prisma.user.create({
@@ -211,7 +212,7 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
                 dob: new Date(validatedData.dob),
                 applyingYear: validatedData.applyingYear,
                 quota: validatedData.quota as Quota,
-                program: validatedData.program  as Program,
+                program: validatedData.program as Program,
                 aadharNo: parseInt(validatedData.aadharNo),
                 religion: validatedData.religion,
                 cast: validatedData.cast,
