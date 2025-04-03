@@ -1,7 +1,6 @@
 "use client";
 import { Button, Checkbox, Image } from "@heroui/react";
 import TableDisplayContent from "../TableDisplayContent";
-import { STUDENTDATA as defaultStudentData } from "@/app/mock/mockData";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import useUserStore from "@/app/store/userStore";
