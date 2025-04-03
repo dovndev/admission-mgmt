@@ -5,14 +5,7 @@ import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Card, CardHeader, CardBody } from "@heroui/card";
 import NavbarAdmin from "../../components/NavbarAdmin";
-import {
-  ModalHeader,
-  ModalBody,
-  Modal,
-  ModalContent,
-  ModalFooter,
-  useDisclosure,
-} from "@heroui/react";
+import { ModalHeader, ModalBody, Modal, ModalContent, ModalFooter, useDisclosure, Switch } from "@heroui/react";
 import { addYear, getAllBreanchesByYear } from "../../actions/branch-Actions";
 import useAdminStore from "@/app/store/adminStore";
 import { updateBranchAllocation } from "@/app/actions/seat-Management-Actions";
@@ -32,17 +25,11 @@ type SeatAllocation = {
 interface BranchAllocationProps {
   title: BranchCode;
   allocations: Record<BranchCode, SeatAllocation>;
-  handleChange: (
-    branch: BranchCode,
-    type: keyof SeatAllocation,
-    value: number
-  ) => void;
+  handleChange: (branch: BranchCode, type: keyof SeatAllocation, value: number) => void;
   handleSave: (branch: BranchCode) => void;
   isSaving: boolean;
   savedBranches: BranchCode[];
 }
-
-
 
 function BranchAllocation({
   title,
@@ -56,20 +43,14 @@ function BranchAllocation({
 
   return (
     <Card
-      className={`shadow-md hover:shadow-sm ${
-        isRecentlySaved ? "border-green-500 border-2" : ""
-      } bg-textBoxBackground`}
+      className={`shadow-md hover:shadow-sm ${isRecentlySaved ? "border-green-500 border-2" : ""} bg-textBoxBackground`}
     >
       <CardHeader className="p-4">
-        <h1 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          {title}
-        </h1>
+        <h1 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">{title}</h1>
         <Button
           size="sm"
           variant="solid"
-          className={`ml-auto ${
-            isRecentlySaved ? "bg-green-600" : "bg-muthootRed"
-          } text-white hover:opacity-90`}
+          className={`ml-auto ${isRecentlySaved ? "bg-green-600" : "bg-muthootRed"} text-white hover:opacity-90`}
           onClick={() => handleSave(title)}
           isDisabled={isSaving}
         >
@@ -85,9 +66,7 @@ function BranchAllocation({
               type="number"
               className="h-8"
               value={allocations[title]?.nriSeats?.toString() || "0"}
-              onChange={(e) =>
-                handleChange(title, "nriSeats", Number(e.target.value))
-              }
+              onChange={(e) => handleChange(title, "nriSeats", Number(e.target.value))}
             />
           </div>
           <div className="space-y-2">
@@ -97,9 +76,7 @@ function BranchAllocation({
               type="number"
               className="h-8"
               value={allocations[title]?.superSeats?.toString() || "0"}
-              onChange={(e) =>
-                handleChange(title, "superSeats", Number(e.target.value))
-              }
+              onChange={(e) => handleChange(title, "superSeats", Number(e.target.value))}
             />
           </div>
           <div className="space-y-2">
@@ -109,9 +86,7 @@ function BranchAllocation({
               type="number"
               className="h-8"
               value={allocations[title]?.mngtSeats?.toString() || "0"}
-              onChange={(e) =>
-                handleChange(title, "mngtSeats", Number(e.target.value))
-              }
+              onChange={(e) => handleChange(title, "mngtSeats", Number(e.target.value))}
             />
           </div>
         </div>
@@ -122,26 +97,27 @@ function BranchAllocation({
 
 export default function SeatAllocation() {
   // Initialize dynamically with all branch codes from BRANCH_OPTIONS
-  const initialAllocationsState = useMemo<Record<BranchCode, SeatAllocation>>(
-    () => {
-      const allocations: Record<BranchCode, SeatAllocation> = BRANCH_OPTIONS.reduce((acc, branch) => {
-        acc[branch as BranchCode] = {
-          mngtSeats: 0,
-          nriSeats: 0,
-          superSeats: 0,
-          waitingList: 0,
-        };
-        return acc;
-      }, {} as Record<BranchCode, SeatAllocation>);
-      return allocations;
-    },
-    []
-  );
+  const initialAllocationsState = useMemo<Record<BranchCode, SeatAllocation>>(() => {
+    const allocations: Record<BranchCode, SeatAllocation> = BRANCH_OPTIONS.reduce((acc, branch) => {
+      acc[branch as BranchCode] = {
+        mngtSeats: 0,
+        nriSeats: 0,
+        superSeats: 0,
+        waitingList: 0,
+      };
+      return acc;
+    }, {} as Record<BranchCode, SeatAllocation>);
+    return allocations;
+  }, []);
 
-  const [allocations, setAllocations] = useState<
-    Record<BranchCode, SeatAllocation>
-  >(initialAllocationsState);
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [allocations, setAllocations] = useState<Record<BranchCode, SeatAllocation>>(initialAllocationsState);
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure(); // For add year modal
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+    onOpenChange: onDeleteOpenChange,
+  } = useDisclosure(); // For delete year modal
   const { years, selectedYear, setYears } = useAdminStore();
   const [year, setYear] = useState<number | undefined>(undefined);
   const [loading, setLoading] = useState(false);
@@ -150,11 +126,7 @@ export default function SeatAllocation() {
   const [savedBranches, setSavedBranches] = useState<BranchCode[]>([]);
 
   // Handle input change for each field
-  const handleChange = (
-    branch: BranchCode,
-    type: keyof SeatAllocation,
-    value: number
-  ) => {
+  const handleChange = (branch: BranchCode, type: keyof SeatAllocation, value: number) => {
     setAllocations((prev) => ({
       ...prev,
       [branch]: {
@@ -192,13 +164,8 @@ export default function SeatAllocation() {
 
       if (result.success) {
         // Add to saved branches list for visual feedback
-        setSavedBranches((prev) => [
-          ...prev.filter((b) => b !== branch),
-          branch,
-        ]);
-        console.log(
-          `Branch ${branch} allocation saved successfully for year ${selectedYear}`
-        );
+        setSavedBranches((prev) => [...prev.filter((b) => b !== branch), branch]);
+        console.log(`Branch ${branch} allocation saved successfully for year ${selectedYear}`);
       } else {
         console.error(`Failed to save ${branch}: ${result.message}`);
       }
@@ -269,9 +236,7 @@ export default function SeatAllocation() {
         setYear(undefined);
 
         // Update years list in the store
-        const updatedYears = years
-          ? [...years, year].sort((a, b) => b - a)
-          : [year];
+        const updatedYears = years ? [...years, year].sort((a, b) => b - a) : [year];
         setYears(updatedYears);
 
         onClose();
@@ -280,6 +245,30 @@ export default function SeatAllocation() {
       }
     } catch (err) {
       console.error("Error adding year:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Delete a year
+  const handleDeleteYear = async () => {
+    if (!selectedYear) return;
+
+    try {
+      setLoading(true);
+      // Call API to delete the year
+      // Example: const result = await deleteYear(selectedYear);
+
+      // Update the years in the store
+      setYears(years.filter((y) => y !== selectedYear));
+
+      // Close the modal
+      onDeleteClose();
+
+      // Show success message or toast
+      console.log(`Year ${selectedYear} deleted successfully`);
+    } catch (error) {
+      console.error(`Error deleting year ${selectedYear}:`, error);
     } finally {
       setLoading(false);
     }
@@ -295,12 +284,7 @@ export default function SeatAllocation() {
         setSavedBranches([]);
 
         const branches = await getAllBreanchesByYear();
-        console.log(
-          "Branches data for year",
-          selectedYear,
-          ":",
-          branches?.[selectedYear]
-        );
+        console.log("Branches data for year", selectedYear, ":", branches?.[selectedYear]);
 
         if (branches && branches[selectedYear]) {
           // Map from API format to component format
@@ -338,24 +322,20 @@ export default function SeatAllocation() {
   }, [selectedYear, setLoading, setAllocations, initialAllocationsState]);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavbarAdmin />
+    <div className="flex flex-col bg-background">
+      <div className="h-20 flex items-center justify-center m-2">
+        <NavbarAdmin />
+      </div>
       <div className="container mx-auto max-w-7xl px-4 py-8">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex flex-col md:flex-row md:items-center gap-4">
             <h1 className="text-2xl font-bold">Seat Allocation</h1>
             {selectedYear && (
-              <span className="px-3 py-1 bg-warning-500 rounded-full text-sm">
-                Year: {selectedYear}
-              </span>
+              <span className="px-3 py-1 bg-warning-500 rounded-full text-sm">Year: {selectedYear}</span>
             )}
           </div>
 
-          <Button
-            className="bg-muthootRed text-white"
-            onPress={handleSaveAll}
-            isDisabled={isSaving || !selectedYear}
-          >
+          <Button className="bg-muthootRed text-white" onPress={handleSaveAll} isDisabled={isSaving || !selectedYear}>
             Save All Allocations
           </Button>
         </div>
@@ -365,9 +345,7 @@ export default function SeatAllocation() {
             <div className="animate-spin h-10 w-10 border-4 border-muthootRed border-t-transparent rounded-full"></div>
           </div>
         ) : errorMsg ? (
-          <div className="bg-red-100 text-red-700 p-4 rounded-md mb-6">
-            {errorMsg}
-          </div>
+          <div className="bg-red-100 text-red-700 p-4 rounded-md mb-6">{errorMsg}</div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
             {Object.keys(allocations).map((branch) => (
@@ -383,30 +361,35 @@ export default function SeatAllocation() {
             ))}
           </div>
         )}
-
-        <div className="mt-8 w-full md:w-[25%]">
-          <Card>
-            <CardHeader>Form Activation</CardHeader>
-            <CardBody>
-              <Button
-                variant="bordered"
-                className="w-full"
-                isDisabled={!selectedYear}
-              >
-                Activate NRI
-              </Button>
-            </CardBody>
-          </Card>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="mt-8 w-[80%] md:w-[15%] flex flex-row items-center gap-2 bg-textBoxBackground p-4 rounded-lg shadow-md justify-between">
+            <div className="text-center">Form Activation</div>
+            <div className="flex flex-row gap-4">
+              <div className="flex items-center justify-between w-full">
+                <Switch disabled={!selectedYear} className="ml-4" color={"success"} />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-row gap-4 ">
+            <Button
+              className="bg-muthootRed text-white"
+              variant="flat"
+              onPress={onDeleteOpen}
+              isDisabled={!selectedYear}
+            >
+              Delete Year
+            </Button>
+            <Button
+              className="text-white bg-green-600"
+              onPress={onOpen}
+              color="success"
+              isDisabled={loading || isSaving}
+            >
+              Add Year
+            </Button>
+          </div>
         </div>
       </div>
-
-      <Button
-        className="fixed bottom-4 right-4 bg-muthootRed text-white"
-        onPress={onOpen}
-        isDisabled={loading || isSaving}
-      >
-        Add Year
-      </Button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
@@ -425,14 +408,29 @@ export default function SeatAllocation() {
             />
           </ModalBody>
           <ModalFooter>
-            <Button
-              className="bg-muthootRed text-white"
-              onPress={handleSubmit}
-              isDisabled={!year || loading}
-            >
+            <Button className="bg-muthootRed text-white" onPress={handleSubmit} isDisabled={!year || loading}>
               {loading ? "Adding..." : "Add Year"}
             </Button>
             <Button variant="bordered" onPress={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isDeleteOpen} onOpenChange={onDeleteOpenChange}>
+        <ModalContent>
+          <ModalHeader>
+            <h2>Confirm Deletion</h2>
+          </ModalHeader>
+          <ModalBody>
+            <p>Are you sure you want to delete this year {selectedYear}?</p>
+            <p className="text-red-500 mt-2">This action cannot be undone.</p>
+          </ModalBody>
+          <ModalFooter>
+            <Button className="bg-red-600 text-white" onPress={handleDeleteYear} isDisabled={loading}>
+              {loading ? "Deleting..." : "Delete Year"}
+            </Button>
+            <Button variant="bordered" onPress={onDeleteClose}>
               Cancel
             </Button>
           </ModalFooter>
