@@ -296,7 +296,7 @@ export default function ApprovalDashboard() {
                 isHeaderSticky
                 aria-label="Student onboarding approval table"
                 bottomContent={
-                  totalPages > 1 ? (
+                  totalPages > 0 ? (
                     <div className="flex w-full bg-textBoxBackground justify-center">
                       <Pagination
                         isCompact
