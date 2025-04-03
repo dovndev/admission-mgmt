@@ -57,10 +57,23 @@ export default function LoginPage() {
       } else {
         // User login logic
         // console.log("User Login:", formData);
-        loginAction({
+        
+        const response = await loginAction({
           email: formData.emailOrReg,
           password: formData.password,
         });
+        console.log(response);
+
+        if (response?.error) {
+          CustomToast({
+            title: "Error",
+            description: response?.error,
+          });
+        } else {
+          CustomToast({
+            title: "Logging in",
+          });
+        }
       }
     };
 

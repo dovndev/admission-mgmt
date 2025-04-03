@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { requestPasswordReset } from "../actions/auth-actions";
 import CustomToast from "../components/CustomToast";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
 import Link from "next/link";
+import Contact from "../components/Contact";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -79,6 +80,7 @@ export default function ForgotPassword() {
             </div>
           </div>
         </div>
+        <Contact />
       </div>
   );
 }

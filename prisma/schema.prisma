@@ -14,18 +14,21 @@ datasource db {
 }
 
 enum Branch {
-  CSE
-  ECE
-  EEE
-  ME
-  CE
-  IT
+CSE
+ECE
+ME
+CE
+AIDS
+EEE
+CSAI
+CY
 }
 
 enum Quota {
   NRI
   CIWG
   OCI
+  PIO
 }
 
 enum Program {

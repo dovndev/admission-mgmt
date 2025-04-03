@@ -228,7 +228,7 @@ export default function RegistrationDashboard() {
                 isHeaderSticky
                 aria-label="Student registrations table"
                 bottomContent={
-                  totalPages > 1 ? (
+                  totalPages > 0 ? (
                     <div className="flex w-full bg-textBoxBackground justify-center">
                       <Pagination
                         isCompact
