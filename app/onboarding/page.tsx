@@ -25,9 +25,7 @@ export default function OnBoarding() {
   const router = useRouter();
 
   const handleNext = () => {
-    setCurrentStep((prev) =>
-      prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev
-    );
+    setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
   };
 
   const handlePrevious = () => {
@@ -49,10 +47,11 @@ export default function OnBoarding() {
   useEffect(() => {
     // Initial session check
     if (session.status === "loading") {
-      // Still waiting for session to load, nothing to do yet
       return;
     }
-
+    if (session.status === "unauthenticated") {
+      location.reload();
+    }
     const handleSessionData = async () => {
       try {
         // If not authenticated, redirect to login
@@ -87,10 +86,7 @@ export default function OnBoarding() {
         setCanOnboard(userData.canOnboard || false);
 
         // Check if seat is confirmed and redirect if needed
-        if (
-          userData["Student Details"] &&
-          userData["Student Details"]["Seat Confirmed"]
-        ) {
+        if (userData["Student Details"] && userData["Student Details"]["Seat Confirmed"]) {
           setSeatConfirmed(true);
           router.push("/user");
         }
@@ -146,11 +142,7 @@ export default function OnBoarding() {
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 w-full max-w-md">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg
-                className="h-5 w-5 text-yellow-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
+              <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                 <path
                   fillRule="evenodd"
                   d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
@@ -159,21 +151,12 @@ export default function OnBoarding() {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-yellow-800">
-                Access Restricted
-              </h3>
+              <h3 className="text-sm font-medium text-yellow-800">Access Restricted</h3>
               <div className="mt-2 text-sm text-yellow-700">
-                <p>
-                  Please contact the admin for approval to access the onboarding
-                  process.
-                </p>
+                <p>Please contact the admin for approval to access the onboarding process.</p>
               </div>
               <div className="mt-4">
-                <Button
-                  className="bg-red-600 border-red-900 text-white"
-                  variant="bordered"
-                  onPress={handleLogout}
-                >
+                <Button className="bg-red-600 border-red-900 text-white" variant="bordered" onPress={handleLogout}>
                   Logout
                 </Button>
               </div>
@@ -188,10 +171,7 @@ export default function OnBoarding() {
   return (
     <div className="flex flex-col">
       <div className="flex justify-center h-20 w-full">
-        <ProgressBar
-          currentStep={seatConfirmed ? 4 : currentStep}
-          handleLogout={handleLogout}
-        />
+        <ProgressBar currentStep={seatConfirmed ? 4 : currentStep} handleLogout={handleLogout} />
       </div>
       <div>
         <div className="flex flex-col items-center min-h-screen bg-background pb-4 pt-4">
