@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import {
   Document,
@@ -180,29 +181,20 @@ const StudentPDF = ({ student }: StudentPDFProps) => {
         occupation:
           student["Student Details"]["Parent Occupation"] || "Not provided",
         address: {
-          line1: `${student["Contact Address"]["House Name"] || ""}, ${
-            student["Contact Address"]["District, City"] || ""
-          }`,
-          city: student["Contact Address"]["District, City"] || "Not provided",
-          country: student["Contact Address"]["State"] || "Not provided",
+          line1: `${student["Contact Address"]?.["House Name"] || ""}, ${student["Contact Address"]?.["District, City"] || ""}`,
+          city: student["Contact Address"]?.["District, City"] || "Not provided",
+          country: student["Contact Address"]?.["State"] || "Not provided",
         },
-        state: student["Contact Address"]["State"] || "Not provided",
-        pin: student["Contact Address"].Pin
-          ? student["Contact Address"].Pin.toString()
-          : "Not provided",
-        email: student["Student Details"].Email || "Not provided",
-        phoneKerala:
-          student["Student Details"]["Kerala Phone"] || "Not provided",
-        phoneAlternate: student["Student Details"].Phone || "Not provided",
-        sponsor: student["Student Details"]["NRI Sponsor"] || "Not provided",
-        relation:
-          student["Student Details"]["Relationship with Applicant"] ||
-          "Not provided",
-        branch: student["Branch Details"].Branch || "CSE",
-        transactionId:
-          student["Student Details"]["Transaction Number"] || "Not provided",
-        applyingYear:
-          student["Student Details"]["Academic Year"] || "Not provided",
+        state: student["Contact Address"]?.["State"] || "Not provided",
+        pin: student["Contact Address"]?.Pin ? student["Contact Address"]?.Pin.toString() : "Not provided",
+        email: student["Student Details"]?.Email || "Not provided",
+        phoneKerala: student["Student Details"]?.["Kerala Phone"] || "Not provided",
+        phoneAlternate: student["Student Details"]?.Phone || "Not provided",
+        sponsor: student["Student Details"]?.["NRI Sponsor"] || "Not provided",
+        relation: student["Student Details"]?.["Relationship with Applicant"] || "Not provided",
+        branch: student["Branch Details"]?.Branch || "CSE",
+        transactionId: (student["Student Details"] as any)?.["Transaction Number"] || "Not provided",
+        applyingYear: student["Student Details"]?.["Academic Year"] || "Not provided",
       }
     : {
         // Your default mock data

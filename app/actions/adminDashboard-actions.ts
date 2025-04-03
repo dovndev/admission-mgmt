@@ -5,10 +5,13 @@ import { BRANCH_OPTIONS, QUOTA_OPTIONS } from "@/app/constants/dropdownOptions";
 
 export async function getDashboardStats(year: number) {
     try {
+        
+        /*
         // Get all branches for the specified year
         const branches = await prisma.branches.findMany({
             where: { year },
         });
+        */
 
         // Get user applications stats for the specified year
         const users = await prisma.user.findMany({

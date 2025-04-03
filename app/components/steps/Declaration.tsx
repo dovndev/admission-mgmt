@@ -17,7 +17,7 @@ import { BRANCH_OPTIONS } from "@/app/constants/dropdownOptions";
 
 // Define the validation schema with Zod
 const declarationSchema = z.object({
-  branch: z.enum(["CSE", "ECE", "EEE", "ME", "CE", "IT"] as const, {
+  branch: z.enum(BRANCH_OPTIONS, {
     required_error: "Branch selection is required",
     invalid_type_error: "Branch must be one of the available options",
   }),
@@ -129,7 +129,7 @@ export default function Declaration() {
     // Handle form submission
     const { branch, signature, parentSignature } = data;
     const response = await updateDeclerationDetails({
-      branch,
+      branch: branch as Branch,
       signature,
       signatureGuardian: parentSignature,
     });

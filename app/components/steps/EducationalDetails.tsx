@@ -38,17 +38,26 @@ export default function EducationalDetails() {
 
       setFormData({
         _10thSchool: tenthData["Name of Institution"] || "",
-        _10thBoard: tenthData["Board"],
+        _10thBoard: tenthData["Board"] || "",
         _10thMarklist: uploads["tenthCertificate"] || "",
         _12thSchool: twelfthData["Name of Institution"] || "",
-        _12thBoard: twelfthData["Board"],
+        _12thBoard: twelfthData["Board"] || "",
         _12thMarklist: uploads["twelfthCertificate"] || "",
-        KeamYear: keamData["Year"] || "",
-        KeamRollNo: keamData["Roll No"] || "",
-        KeamRank: keamData["Rank"] || "",
-        PaperOneScore: keamData["Paper 1 score(Physics and Chemistry)"] || "",
-        PaperTwoScore: keamData["Paper 2 score(Mathematics)"] || "",
-        KeamScore: keamData["Total Keam Score"] || "",
+        KeamYear: keamData["Year"] !== undefined ? keamData["Year"].toString() : "",
+        KeamRollNo: keamData["Roll No"] !== undefined ? keamData["Roll No"].toString() : "",
+        KeamRank: keamData["Rank"] !== undefined ? keamData["Rank"].toString() : "",
+        PaperOneScore:
+          keamData["Paper 1 score(Physics and Chemistry)"] !== undefined
+        ? keamData["Paper 1 score(Physics and Chemistry)"].toString()
+        : "",
+        PaperTwoScore:
+          keamData["Paper 2 score(Mathematics)"] !== undefined
+        ? keamData["Paper 2 score(Mathematics)"].toString()
+        : "",
+        KeamScore:
+          keamData["Total Keam Score"] !== undefined
+        ? keamData["Total Keam Score"].toString()
+        : "",
         KeamMarklist: uploads["keamCertificate"] || "",
       });
     }

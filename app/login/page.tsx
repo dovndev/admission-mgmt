@@ -15,7 +15,7 @@ import Contact from "../components/Contact";
 
 export default function LoginPage() {
   function CheckUserType() {
-    const [feedback, setFeedback] = useState({
+    const [feedback] = useState({
       text: "Please check your registered email for password",
     });
 

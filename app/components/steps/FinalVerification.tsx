@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import useUserStore from "@/app/store/userStore";
 import CustomToast from "../CustomToast";
-
+import { STUDENTDATA as defaultStudentData } from "@/app/mock/mockData";
 export default function Register() {
   const session = useSession();
   const { data: sessionData } = session;

@@ -1,8 +1,11 @@
+import { BranchCodeType,QuotaCodeType,ProgramCodeType } from '@/app/constants/dropdownOptions';
 import { Document } from 'mongoose';
 
-export type Branch = "CSE" | "ECE" | "EEE" | "ME" | "CE" | "IT";
-export type Quota = "NRI" | "CWIG";
-export type Program = "BTech" | "MCA" | "MTech";
+export type Branch = BranchCodeType;
+export type Quota = QuotaCodeType;
+export type Program = ProgramCodeType;
+
+
 
 export interface IEducation {
     tenth: {
