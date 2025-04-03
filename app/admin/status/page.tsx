@@ -345,7 +345,7 @@ export default function SeatAllocation() {
           <div className="flex flex-col md:flex-row md:items-center gap-4">
             <h1 className="text-2xl font-bold">Seat Allocation</h1>
             {selectedYear && (
-              <span className="px-3 py-1 bg-gray-100 rounded-full text-sm">
+              <span className="px-3 py-1 bg-warning-500 rounded-full text-sm">
                 Year: {selectedYear}
               </span>
             )}
@@ -353,7 +353,7 @@ export default function SeatAllocation() {
 
           <Button
             className="bg-muthootRed text-white"
-            onClick={handleSaveAll}
+            onPress={handleSaveAll}
             isDisabled={isSaving || !selectedYear}
           >
             Save All Allocations
@@ -427,12 +427,12 @@ export default function SeatAllocation() {
           <ModalFooter>
             <Button
               className="bg-muthootRed text-white"
-              onClick={handleSubmit}
+              onPress={handleSubmit}
               isDisabled={!year || loading}
             >
               {loading ? "Adding..." : "Add Year"}
             </Button>
-            <Button variant="bordered" onClick={onClose}>
+            <Button variant="bordered" onPress={onClose}>
               Cancel
             </Button>
           </ModalFooter>
