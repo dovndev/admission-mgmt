@@ -1,8 +1,9 @@
 "use server";
 
 import { prisma } from "@/prisma/prisma";
+import { BRANCH_OPTIONS } from "../constants/dropdownOptions";
 
-const branchesList = ["CSE", "EEE", "CSAI", "ECE", "CE", "ME", "AIDS", "CY"];
+const branchesList = BRANCH_OPTIONS
 interface BranchData {
     mngtSeats: number;
     nriSeats: number;

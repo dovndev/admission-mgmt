@@ -24,15 +24,14 @@ export const RELIGIONS : NonEmptyArray<string> = [
     ""
 ]
 
-export const BRANCH_OPTIONS: NonEmptyArray<string> = ["CSE", "ECE", "EEE", "MECH", "CIVIL"];
+export const BRANCH_OPTIONS: NonEmptyArray<string> = ["CSE", "EEE", "CSAI", "ECE", "CE", "ME", "AIDS", "CY"];
 
-
+export type BranchCodeType = "CSE" | "ECE" | "ME" | "CE" | "AIDS" | "EEE" | "CSAI" | "CY";
 
 export const BANK_ACCOUNT = {name:"Muthoot M George Institute of Technology" ,address:"Varikoli, Puthencruz - 682308" ,phone:"0484-2732100",bank:"FEDERAL BANK", "bank address":"PUTHENCRUZ", branch:"Puthencruz", "branch phone":"0484-2731259",IFSC:"FDRL0001223" , MICR:"682049055","account number":"12230200217387"}
 
 export const BRANCHES = {
     "CSE": "Computer Science and Engineering",
-    "CSE(A)": "Computer Science and Engineering(A)",
     "ECE": "Electronics and Communication Engineering",
     "MECH": "Mechanical Engineering",
     "CIVIL": "Civil Engineering",

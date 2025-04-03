@@ -6,6 +6,7 @@ import { resetPassword, validateResetToken } from "../actions/auth-actions";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
 import Navbar from "../components/Navbar";
+import Contact from "../components/Contact";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -156,6 +157,7 @@ export default function ResetPassword() {
           </form>
         </div>
       </div>
+      <Contact />
     </div>
   );
 }

@@ -16,9 +16,9 @@ import {
 import { addYear, getAllBreanchesByYear } from "../../actions/branch-Actions";
 import useAdminStore from "@/app/store/adminStore";
 import { updateBranchAllocation } from "@/app/actions/seat-Management-Actions";
-
+import { BranchCodeType } from "@/app/constants/dropdownOptions";
 // Use string union type to match both your API and component needs
-type BranchCode = "CSE" | "ECE" | "ME" | "CE" | "AIDS" | "EEE" | "CSAI" | "CY";
+type BranchCode = BranchCodeType;
 
 // Define a type for seat allocation data structure
 type SeatAllocation = {
