@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from "@/prisma/prisma";
-import { Branch } from "@prisma/client";
+import { BRANCH_OPTIONS, QUOTA_OPTIONS } from "@/app/constants/dropdownOptions";
 
 export async function getDashboardStats(year: number) {
     try {
@@ -17,15 +17,11 @@ export async function getDashboardStats(year: number) {
             },
         });
 
-        // Initialize all branches from the Branch enum with zero values
-        const allBranches: Record<string, { applications: number; approved: number }> = {
-            CSE: { applications: 0, approved: 0 },
-            ECE: { applications: 0, approved: 0 },
-            EEE: { applications: 0, approved: 0 },
-            ME: { applications: 0, approved: 0 },
-            CE: { applications: 0, approved: 0 },
-            IT: { applications: 0, approved: 0 },
-        };
+        // Initialize all branches dynamically from BRANCH_OPTIONS
+        const allBranches: Record<string, { applications: number; approved: number }> = {};
+        BRANCH_OPTIONS.forEach(branch => {
+            allBranches[branch] = { applications: 0, approved: 0 };
+        });
 
         // Count applications by branch
         users.forEach(user => {
@@ -38,7 +34,7 @@ export async function getDashboardStats(year: number) {
             }
         });
 
-        // Format branch data for chart - include all branches
+        // Format branch data for chart
         const programData = Object.entries(allBranches).map(
             ([program, stats]) => ({
                 program,
@@ -47,21 +43,11 @@ export async function getDashboardStats(year: number) {
             })
         );
 
-        // Count applications by quota
-        const quotaData = [
-            {
-                quota: "NRI",
-                applications: users.filter(user => user.quota === "NRI").length
-            },
-            {
-                quota: "OCI",
-                applications: users.filter(user => user.quota === "OCI").length
-            },
-            {
-                quota: "CIWG",
-                applications: users.filter(user => user.quota === "CIWG").length
-            },
-        ];
+        // Count applications by quota - dynamically using QUOTA_OPTIONS
+        const quotaData = QUOTA_OPTIONS.map(quota => ({
+            quota,
+            applications: users.filter(user => user.quota === quota).length
+        }));
 
         // Calculate totals
         const totalApplications = users.length;

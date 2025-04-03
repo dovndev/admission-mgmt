@@ -16,7 +16,7 @@ import {
 import { addYear, getAllBreanchesByYear } from "../../actions/branch-Actions";
 import useAdminStore from "@/app/store/adminStore";
 import { updateBranchAllocation } from "@/app/actions/seat-Management-Actions";
-import { BranchCodeType } from "@/app/constants/dropdownOptions";
+import { BRANCH_OPTIONS, BranchCodeType } from "@/app/constants/dropdownOptions";
 // Use string union type to match both your API and component needs
 type BranchCode = BranchCodeType;
 
@@ -42,16 +42,7 @@ interface BranchAllocationProps {
   savedBranches: BranchCode[];
 }
 
-const branchNameMap: Record<BranchCode, string> = {
-  CSE: "Computer Science and Engineering",
-  ECE: "Electronics and Communication Engineering",
-  ME: "Mechanical Engineering",
-  CE: "Civil Engineering",
-  EEE: "Electrical and Electronics Engineering",
-  CSAI: "Computer Science and Engineering (AI)",
-  AIDS: "Artificial Intelligence and Data Science",
-  CY: "Computer Science and Cyber Security",
-};
+
 
 function BranchAllocation({
   title,
@@ -71,7 +62,7 @@ function BranchAllocation({
     >
       <CardHeader className="p-4">
         <h1 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          {branchNameMap[title]}
+          {title}
         </h1>
         <Button
           size="sm"
@@ -130,18 +121,20 @@ function BranchAllocation({
 }
 
 export default function SeatAllocation() {
-  // Initialize with all branch codes
+  // Initialize dynamically with all branch codes from BRANCH_OPTIONS
   const initialAllocationsState = useMemo<Record<BranchCode, SeatAllocation>>(
-    () => ({
-      CSE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-      ECE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-      ME: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-      CE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-      AIDS: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-      EEE: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-      CSAI: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-      CY: { mngtSeats: 0, nriSeats: 0, superSeats: 0, waitingList: 0 },
-    }),
+    () => {
+      const allocations: Record<BranchCode, SeatAllocation> = BRANCH_OPTIONS.reduce((acc, branch) => {
+        acc[branch as BranchCode] = {
+          mngtSeats: 0,
+          nriSeats: 0,
+          superSeats: 0,
+          waitingList: 0,
+        };
+        return acc;
+      }, {} as Record<BranchCode, SeatAllocation>);
+      return allocations;
+    },
     []
   );
 
