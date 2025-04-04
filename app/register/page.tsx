@@ -1,6 +1,6 @@
 "use client";
 import FloatingLabelInput from "../components/FloatingLabelInput";
-import Navbar from "../components/Navbar";
+import Navbar from "@/app/components/Navbar";
 import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
 import { GENDER_OPTIONS, PROGRAM_OPTIONS, QUOTA_OPTIONS } from "../constants/dropdownOptions";

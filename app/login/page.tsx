@@ -2,7 +2,7 @@
 import { useState, Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import FloatingLabelInput from "../components/FloatingLabelInput";
-import Navbar from "../components/Navbar";
+import Navbar from "@/app/components/Navbar";
 import Link from "next/link";
 import { Button } from "@heroui/react";
 import {

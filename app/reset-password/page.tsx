@@ -5,7 +5,7 @@ import CustomToast from "../components/CustomToast";
 import { resetPassword, validateResetToken } from "../actions/auth-actions";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
-import Navbar from "../components/Navbar";
+import Navbar from "@/app/components/Navbar";
 import Contact from "../components/Contact";
 
 function ResetPasswordContent() {
