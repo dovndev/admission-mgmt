@@ -19,55 +19,55 @@ export const {
     adapter: PrismaAdapter(prisma),
     session: { strategy: "jwt" },
     //callback for jwt
-    callbacks: {
-        async jwt({ token, user: sessionUser }) {
-            if (sessionUser) {
-                token.role = (sessionUser as any).role || 'user';
-                token.userId = sessionUser.id;
-            }
-            console.log("jwt", token)
-            if (!token.sub) {
-                return token
-            }
-            if (token.role == 'admin') {
-                console.log("admin login detected");
-                const admin = await prisma.admin.findUnique({
-                    where: {
-                        id: token.sub,
-                    },
-                });
-                if (!admin) {
-                    console.log("admin not found in db")
-                    return token
-                }
-                token.user = { ...admin, role: "admin" };
-            }
-            else {
-                console.log("executing user login")
-                const user = await getUserByID(token.sub)
-                if (!user) {
-                    console.log("user not found in db")
-                    return token
-                }
-                token.user = { ...user, role: "user" };
-            }
-            return token;
-        },
-        async session({ session, token }) {
-            // console.log("session object", session)
-            // console.log("session token ", token)
-            session.user = token.user as any;
-            // console.log("Session updated", session);
-            return session;
-        },
-        async signIn({ user, account, credentials }) {
-            if (credentials && 'role' in credentials) {
-                //@ts-ignore
-                user.role = credentials.role;
-            }
-            return true;
-        }
-    },
+    // callbacks: {
+    //     async jwt({ token, user: sessionUser }) {
+    //         if (sessionUser) {
+    //             token.role = (sessionUser as any).role || 'user';
+    //             token.userId = sessionUser.id;
+    //         }
+    //         console.log("jwt", token)
+    //         if (!token.sub) {
+    //             return token
+    //         }
+    //         if (token.role == 'admin') {
+    //             console.log("admin login detected");
+    //             const admin = await prisma.admin.findUnique({
+    //                 where: {
+    //                     id: token.sub,
+    //                 },
+    //             });
+    //             if (!admin) {
+    //                 console.log("admin not found in db")
+    //                 return token
+    //             }
+    //             token.user = { ...admin, role: "admin" };
+    //         }
+    //         else {
+    //             console.log("executing user login")
+    //             const user = await getUserByID(token.sub)
+    //             if (!user) {
+    //                 console.log("user not found in db")
+    //                 return token
+    //             }
+    //             token.user = { ...user, role: "user" };
+    //         }
+    //         return token;
+    //     },
+    //     async session({ session, token }) {
+    //         // console.log("session object", session)
+    //         // console.log("session token ", token)
+    //         session.user = token.user as any;
+    //         // console.log("Session updated", session);
+    //         return session;
+    //     },
+    //     async signIn({ user, account, credentials }) {
+    //         if (credentials && 'role' in credentials) {
+    //             //@ts-ignore
+    //             user.role = credentials.role;
+    //         }
+    //         return true;
+    //     }
+    // },
     // callbacks: {
     //     async signIn({ account, user, credentials, email, profile }) {
     //         try {

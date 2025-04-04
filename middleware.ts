@@ -14,6 +14,7 @@ export default auth(async (req) => {
     const isAdminRoute = req.nextUrl.pathname.startsWith("/admin");
     const isProtectedRoute = protectedRoutes.includes(req.nextUrl.pathname);
     const isHomePage = req.nextUrl.pathname === "/";
+    const isOnboardingPage = req.nextUrl.pathname.startsWith("/onboarding") || req.nextUrl.pathname.startsWith("/onboarding/");
     //middleware logic
     if (isApiAuthRoute) {
         return
@@ -22,15 +23,16 @@ export default auth(async (req) => {
         console.log("redirecting to login")
         return Response.redirect(new URL("/login?admin=true", req.url))
     }
-    console.log("admin",req.auth)
+    console.log("admin", req.auth)
     if (isAdminRoute && isLoggedIn) {
         console.log("redirecting to admin dashboard")
         //@ts-ignore
-        
+
         const isAdmin = req.auth?.user?.role === "admin"//ignore the type check because we know it will be there
         if (isAdmin) {
             console.log("admin found")
-            return Response.redirect(new URL("/admin/adminHome", req.url))
+            // return Response.redirect(new URL("/admin/adminHome", req.url))
+            return
         }
         else {
             console.log("admin not found \nredirecting to landing")
@@ -43,6 +45,9 @@ export default auth(async (req) => {
     }
     if (isLoggedIn && isAuthRoute) {
         console.log("redirecting to onboarding")
+        if (req.auth?.user?.role === "admin") {
+            return Response.redirect(new URL("/admin/adminHome", req.url))
+        }
         return Response.redirect(new URL("/onboarding", req.url))
     }
     if (!isLoggedIn && !isAuthRoute) {
@@ -52,6 +57,14 @@ export default auth(async (req) => {
     if (isProtectedRoute && !isLoggedIn) {
         console.log("redirecting to login")
         return Response.redirect(new URL("/login", req.url))
+    }
+    if (isOnboardingPage) {
+        if (isLoggedIn && req.auth?.user?.role === "admin") {
+            return Response.redirect(new URL("/admin/adminHome", req.url))
+        }
+        if (!isLoggedIn) {
+            return Response.redirect(new URL("/login", req.url))
+        }
     }
 })
 
