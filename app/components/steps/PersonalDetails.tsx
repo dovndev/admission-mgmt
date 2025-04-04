@@ -117,50 +117,50 @@ export default function PersonalDetails() {
         keralaMobileNumber: userData["Student Details"]["Kerala Phone"] || "",
         dob: dobString,
         photo:
-          userData["Uploads"]["studentPhoto"] !== "/no_img.png"
-            ? userData["Uploads"]["studentPhoto"] || undefined
+          userData["Uploads"]?.["studentPhoto"] !== "/no_img.png"
+            ? userData["Uploads"]?.["studentPhoto"] || undefined
             : undefined,
         contactAddress: {
-          houseName: userData["Contact Address"]["House Name"] || "",
-          state: userData["Contact Address"]["State"] || "",
+          houseName: userData["Contact Address"]?.["House Name"] || "",
+          state: userData["Contact Address"]?.["State"] || "",
           district:
-            userData["Contact Address"]["District, City"]
+            userData["Contact Address"]?.["District, City"]
               ?.split(",")[0]
               ?.trim() === "undefined"
               ? ""
-              : userData["Contact Address"]["District, City"]
+              : userData["Contact Address"]?.["District, City"]
                   ?.split(",")[0]
                   ?.trim() || "",
           city:
-            userData["Contact Address"]["District, City"]
+            userData["Contact Address"]?.["District, City"]
               ?.split(",")[1]
               ?.trim() === "undefined"
               ? ""
-              : userData["Contact Address"]["District, City"]
+              : userData["Contact Address"]?.["District, City"]
                   ?.split(",")[1]
                   ?.trim() || "",
-          pincode: userData["Contact Address"]["Pin"]?.toString() || "",
+          pincode: userData["Contact Address"]?.["Pin"]?.toString() || "",
         },
         permanentAddress: {
-          houseName: userData["Permanent Address"]["House Name"] || "",
-          state: userData["Permanent Address"]["State"] || "",
+          houseName: userData["Permanent Address"]?.["House Name"] || "",
+          state: userData["Permanent Address"]?.["State"] || "",
           district:
-            userData["Contact Address"]["District, City"]
+            userData["Contact Address"]?.["District, City"]
               ?.split(",")[0]
               ?.trim() === "undefined"
               ? ""
-              : userData["Contact Address"]["District, City"]
+              : userData["Contact Address"]?.["District, City"]
                   ?.split(",")[0]
                   ?.trim() || "",
           city:
-            userData["Contact Address"]["District, City"]
+            userData["Contact Address"]?.["District, City"]
               ?.split(",")[1]
               ?.trim() === "undefined"
               ? ""
-              : userData["Contact Address"]["District, City"]
+              : userData["Contact Address"]?.["District, City"]
                   ?.split(",")[1]
                   ?.trim() || "",
-          pincode: userData["Permanent Address"]["Pin"]?.toString() || "",
+          pincode: userData["Permanent Address"]?.["Pin"]?.toString() || "",
         },
         parentDetails: {
           guardian: userData["Student Details"]["Parent Name"] || "",

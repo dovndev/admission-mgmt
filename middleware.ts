@@ -22,20 +22,22 @@ export default auth(async (req) => {
         console.log("redirecting to login")
         return Response.redirect(new URL("/login?admin=true", req.url))
     }
-    // if (isAdminRoute && isLoggedIn) {
-    //     console.log("redirecting to admin dashboard")
-    //     //@ts-ignore
-    //     const isAdmin = req.auth?.user?.role === "admin"//ignore the type check because we know it will be there
-    //     if (isAdmin) {
-    //         console.log("admin found")
-    //         return Response.redirect(new URL("/admin/adminHome", req.url))
-    //     }
-    //     else {
-    //         console.log("admin not found \nredirecting to landing")
-    //         console.log("Auth token structure:", JSON.stringify(req.auth, null, 2));
-    //         return Response.redirect(new URL("/", req.url))
-    //     }
-    // }
+    console.log("admin",req.auth)
+    if (isAdminRoute && isLoggedIn) {
+        console.log("redirecting to admin dashboard")
+        //@ts-ignore
+        
+        const isAdmin = req.auth?.user?.role === "admin"//ignore the type check because we know it will be there
+        if (isAdmin) {
+            console.log("admin found")
+            return Response.redirect(new URL("/admin/adminHome", req.url))
+        }
+        else {
+            console.log("admin not found \nredirecting to landing")
+            console.log("Auth token structure:", JSON.stringify(req.auth, null, 2));
+            return Response.redirect(new URL("/", req.url))
+        }
+    }
     if (isHomePage) {
         return; // Let the request continue without redirection
     }

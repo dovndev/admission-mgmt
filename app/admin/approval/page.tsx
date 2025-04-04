@@ -29,7 +29,7 @@ import {
   updateOnboardingStatus,
 } from "../../actions/user-Actions";
 import useAdminStore from "@/app/store/adminStore";
-import { StructuredUserData } from "@/types/userTypes";
+import { StructuredUserData } from "@/types/newUserTypes";
 import CustomToast from "../../components/CustomToast";
 
 export default function ApprovalDashboard() {
@@ -37,12 +37,10 @@ export default function ApprovalDashboard() {
   const [sortBy, setSortBy] = useState("newest");
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState<StructuredUserData[]>([]);
-  const [totalUsers, setTotalUsers] = useState(0);
+  const [, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [updatingPermission, setUpdatingPermission] = useState<string | null>(
-    null
-  );
+
 
   // Track pending changes
   const [pendingChanges, setPendingChanges] = useState<Record<string, boolean>>(
@@ -73,7 +71,7 @@ export default function ApprovalDashboard() {
         );
 
         if (response.success) {
-          //@ts-ignore
+          //@ts-expect-error type missmatch in response
           setUsers(response.users);
           setTotalUsers(response.totalUsers);
           setTotalPages(response.totalPages);
@@ -162,7 +160,7 @@ export default function ApprovalDashboard() {
     if (toastInfo.show) {
       setToastInfo({ ...toastInfo, show: false });
     }
-  }, [toastInfo.show]);
+  }, [toastInfo, toastInfo.show]);
 
   // Check if there are any pending changes
   const hasPendingChanges = Object.keys(pendingChanges).length > 0;

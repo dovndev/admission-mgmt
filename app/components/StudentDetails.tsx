@@ -3,7 +3,7 @@ import { Image } from "@heroui/react";
 import TableDisplayContent from "./TableDisplayContent";
 import { useState, useEffect } from "react";
 import { StructuredUserData } from "@/types/userTypes";
-
+import { STUDENTDATA as mockData } from "@/app/mock/mockData"; // Mock data import
 interface StudentDetailsProps {
   studentId?: string;
   student?: StructuredUserData;
