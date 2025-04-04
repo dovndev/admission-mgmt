@@ -5,7 +5,7 @@ import CustomToast from "../components/CustomToast";
 import { resetPassword, validateResetToken } from "../actions/auth-actions";
 import FloatingLabelInput from "../components/FloatingLabelInput";
 import { Button } from "@heroui/react";
-import Navbar from "@/app/components/Navbar";
+import NavbarMain from "@/app/components/NavbarMain";
 import Contact from "../components/Contact";
 
 function ResetPasswordContent() {
@@ -97,7 +97,7 @@ function ResetPasswordContent() {
   if (isChecking) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-        <Navbar />
+        <NavbarMain />
         <div className="flex flex-auto justify-center items-center">
           <div className="text-xl">Verifying reset link...</div>
         </div>
@@ -108,7 +108,7 @@ function ResetPasswordContent() {
   if (!isValidToken) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-        <Navbar />
+        <NavbarMain />
         <div className="flex flex-auto justify-center items-center">
           <div className="text-xl text-red-500">
             This password reset link is invalid or has expired.
@@ -120,7 +120,7 @@ function ResetPasswordContent() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-      <Navbar />
+      <NavbarMain />
       <div className="flex flex-auto justify-center items-center w-full">
         <div className="bg-textBoxBackground relative shadow rounded-3xl p-8 max-w-2xl w-full">
           <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">
@@ -167,7 +167,7 @@ export default function ResetPasswordPage() {
     <Suspense
       fallback={
         <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-          <Navbar />
+          <NavbarMain />
           <div className="flex flex-auto justify-center items-center">
             <div className="text-xl">Loading reset password...</div>
           </div>

@@ -1,5 +1,5 @@
 import Contact from "./components/Contact";
-import Navbar from "./components/Navbar";
+import NavbarMain from "./components/NavbarMain";
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
         >
           <source src="/landing.mov" type="video/mp4" />
         </video>
-        <Navbar mode="dark" />
+        <NavbarMain mode="dark" />
         <div className="relative z-10 flex flex-1 w-full md:max-w-[90%] mt-0 mx-4 items-center justify-center flex-col md:flex-row ">
           <div className="flex-1 p-4 lg:p-20 w-[50%] ">
             <h1 className="text-white font-sans text-[2rem] md:text-[3rem] text-center md:text-justify md:max-w-1">
