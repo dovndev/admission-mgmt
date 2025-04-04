@@ -3,7 +3,6 @@ import authConfig from "./auth.config";
 
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/prisma/prisma";
-import { getUserByID } from "@/lib/dbutils";
 
 export const runtime = "nodejs";
 
