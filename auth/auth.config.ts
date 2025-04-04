@@ -5,7 +5,7 @@ import { userLoginSchema } from "@/schemas";
 import { compare } from "bcryptjs";
 import { prisma } from "@/prisma/prisma";
 
-const { ADMIN_EMAIL, ADMIN_DASHBOARD_PASSWORD } = process.env;
+
 export default {
     // trustHost: true,
     // pages: {
@@ -27,7 +27,7 @@ export default {
             //     },
             // },
             // type: "credentials",
-            async authorize(credentials, _request) {
+            async authorize(credentials) {
                 const validCredentials = userLoginSchema.safeParse(credentials);
                 if (!validCredentials.success) {
                     return null;
@@ -96,9 +96,8 @@ export default {
         // Add token data to the session
         session: async ({ session, token }) => {
             if (session.user) {
-                session.user.role = token.role;
-                session.user.id = token.id;
-
+                session.user.role = token.role as string;
+                session.user.id = token.id as string;
             }
             return session;
         }
