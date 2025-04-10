@@ -22,14 +22,15 @@ import {
   useDisclosure,
   Spinner,
   Chip,
+  Switch,
 } from "@heroui/react";
 
-import { Download, Search } from "lucide-react";
+import { Save,Download, Search } from "lucide-react";
 import NavbarAdmin from "../../components/NavbarAdmin";
 import { useState, useMemo, useEffect } from "react";
 import StudentDetails from "../../components/StudentDetails";
 import { usePrintPDF } from "../../hooks/usePrintPDF";
-import { getStructuredUsersByYear } from "../../actions/user-Actions";
+import { getStructuredUsersByYear,updateOnboardingStatus } from "../../actions/user-Actions";
 import useAdminStore from "@/app/store/adminStore";
 import { StructuredUserData } from "@/types/userTypes";
 
@@ -48,25 +49,29 @@ export default function RegistrationDashboard() {
   const [, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [selectedStudent, setSelectedStudent] =
-    useState<StructuredUserData | null>(null);
+  const [selectedStudent, setSelectedStudent] = useState<StructuredUserData | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { generatePDF, isGenerating } = usePrintPDF();
 
   // Fetch available academic years on component mount
   const { selectedYear } = useAdminStore();
+  // Track pending changes
+  const [pendingChanges, setPendingChanges] = useState<Record<string, boolean>>({});
+  const [isSaving, setIsSaving] = useState(false);
 
-  // Fetch users when year or page changes
+  // Toast state
+  const [toastInfo, setToastInfo] = useState<{
+    show: boolean;
+    title: string;
+    description: string;
+  }>({ show: false, title: "", description: "" });
+
   useEffect(() => {
     async function fetchUsers() {
       setLoading(true);
 
       try {
-        const response = await getStructuredUsersByYear(
-          selectedYear.toString(),
-          currentPage,
-          8
-        );
+        const response = await getStructuredUsersByYear(selectedYear.toString(), currentPage, 8);
 
         if (response.success) {
           setUsers(response.users);
@@ -88,6 +93,76 @@ export default function RegistrationDashboard() {
     fetchUsers();
   }, [selectedYear, currentPage]);
 
+  // Function to handle toggling onboarding permission (now adds to pending changes)
+  const handleTogglePermission = async (student: StructuredUserData, newStatus: boolean) => {
+    // Add to pending changes
+    setPendingChanges((prev) => ({
+      ...prev,
+      [student.id]: newStatus,
+    }));
+  };
+
+  // Function to save all pending changes
+  const saveChanges = async () => {
+    if (Object.keys(pendingChanges).length === 0) {
+      setToastInfo({
+        show: true,
+        title: "No changes to save",
+        description: "No permission changes were made.",
+      });
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const results = await Promise.all(
+        Object.entries(pendingChanges).map(async ([userId, canOnboard]) => {
+          const result = await updateOnboardingStatus(userId, canOnboard);
+          return { userId, result };
+        })
+      );
+
+      // Update local state with applied changes
+      const successfulUpdates = results.filter((r) => r.result.success);
+      const updatedUsers = users.map((user) => {
+        if (pendingChanges[user.id] !== undefined) {
+          return {
+            ...user,
+            canOnboard: pendingChanges[user.id],
+          };
+        }
+        return user;
+      });
+
+      setUsers(updatedUsers);
+      setPendingChanges({});
+
+      setToastInfo({
+        show: true,
+        title: "Changes saved",
+        description: `Updated onboarding permissions for ${successfulUpdates.length} students.`,
+      });
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      setToastInfo({
+        show: true,
+        title: "Error saving changes",
+        description: "Some changes could not be applied. Please try again.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+    // Reset toast after displaying
+    useEffect(() => {
+      if (toastInfo.show) {
+        setToastInfo({ ...toastInfo, show: false });
+      }
+    }, [toastInfo, toastInfo.show]);
+  
+    // Check if there are any pending changes
+    const hasPendingChanges = Object.keys(pendingChanges).length > 0;
   // Function to handle opening the student view modal
   const handleViewStudent = (student: StructuredUserData) => {
     console.log("Viewing student:", student);
@@ -124,9 +199,7 @@ export default function RegistrationDashboard() {
       case "oldest":
         return sorted.sort((a, b) => a.applicationNo.localeCompare(b.applicationNo));
       case "name":
-        return sorted.sort((a, b) =>
-          a["Student Details"].Name.localeCompare(b["Student Details"].Name)
-        );
+        return sorted.sort((a, b) => a["Student Details"].Name.localeCompare(b["Student Details"].Name));
       default:
         return sorted;
     }
@@ -136,9 +209,7 @@ export default function RegistrationDashboard() {
   function getRegistrationStatus(user: StructuredUserData) {
     // Since we don't have the exact date in the structured data,
     // determine status based on seat confirmation
-    return user["Student Details"]["Seat Confirmed"] === "Yes"
-      ? "Completed"
-      : "Registered";
+    return user["Student Details"]["Seat Confirmed"] === "Yes" ? "Completed" : "Registered";
   }
 
   return (
@@ -153,9 +224,21 @@ export default function RegistrationDashboard() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-4">
               <div>
                 <h2 className="text-lg font-medium">Student Registrations</h2>
-                <p className="text-sm text-default-500">
-                  Manage all registered students
-                </p>
+                <p className="text-sm text-default-500">Manage all registered students</p>
+              </div>
+              <div className="flex flex-col md:flex-row gap-2">
+                {hasPendingChanges && (
+                  <Button
+                    variant="flat"
+                    className="bg-green-600 text-white"
+                    startContent={<Save size={18} />}
+                    isLoading={isSaving}
+                    isDisabled={isSaving}
+                    onPress={saveChanges}
+                  >
+                    Save Changes ({Object.keys(pendingChanges).length})
+                  </Button>
+                )}
               </div>
               <div className="flex flex-col md:flex-row gap-2">
                 <Button
@@ -167,6 +250,7 @@ export default function RegistrationDashboard() {
                   Export
                 </Button>
               </div>
+
             </div>
 
             <div className="flex flex-col md:flex-row justify-between w-full py-4 gap-4">
@@ -174,9 +258,7 @@ export default function RegistrationDashboard() {
                 <Input
                   className="max-w-md"
                   placeholder="Search by name, ID, or email..."
-                  startContent={
-                    <Search className="text-default-400" size={18} />
-                  }
+                  startContent={<Search className="text-default-400" size={18} />}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -194,15 +276,9 @@ export default function RegistrationDashboard() {
                   size="sm"
                   aria-label="Sort by"
                 >
-                  <SelectItem key="newest" >
-                    Newest first
-                  </SelectItem>
-                  <SelectItem key="oldest" >
-                    Oldest first
-                  </SelectItem>
-                  <SelectItem key="name">
-                    Name (A-Z)
-                  </SelectItem>
+                  <SelectItem key="newest">Newest first</SelectItem>
+                  <SelectItem key="oldest">Oldest first</SelectItem>
+                  <SelectItem key="name">Name (A-Z)</SelectItem>
                 </Select>
               </div>
             </div>
@@ -249,6 +325,7 @@ export default function RegistrationDashboard() {
                   <TableColumn>CONTACT</TableColumn>
                   <TableColumn>STATUS</TableColumn>
                   <TableColumn>ACTIONS</TableColumn>
+                  <TableColumn>CAN ONBOARD</TableColumn>
                 </TableHeader>
                 <TableBody className="bg-textBoxBackground">
                   {filteredAndSortedUsers.map((student) => (
@@ -256,28 +333,19 @@ export default function RegistrationDashboard() {
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <Avatar
-                            src={
-                              student.Uploads?.studentPhoto ||
-                              "/placeholder.svg?height=40&width=40"
-                            }
+                            src={student.Uploads?.studentPhoto || "/placeholder.svg?height=40&width=40"}
                             name={student["Student Details"].Name}
                             size="sm"
                           />
                           <div>
-                            <div className="font-medium">
-                              {student["Student Details"].Name}
-                            </div>
-                            <div className="text-xs text-default-500">
-                              {student.applicationNo}
-                            </div>
+                            <div className="font-medium">{student["Student Details"].Name}</div>
+                            <div className="text-xs text-default-500">{student.applicationNo}</div>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div>
-                          <div className="font-medium">
-                            {student["Student Details"].Course || "B.Tech"}
-                          </div>
+                          <div className="font-medium">{student["Student Details"].Course || "B.Tech"}</div>
                           <div className="text-xs text-default-500">
                             {student["Branch Details"]?.Branch || "Not selected"}
                           </div>
@@ -285,9 +353,7 @@ export default function RegistrationDashboard() {
                       </TableCell>
                       <TableCell>
                         <div>
-                          <div className="font-medium">
-                            {student["Student Details"].Phone}
-                          </div>
+                          <div className="font-medium">{student["Student Details"].Phone}</div>
                           <div className="text-xs text-default-500 truncate max-w-[200px]">
                             {student["Student Details"].Email}
                           </div>
@@ -297,23 +363,14 @@ export default function RegistrationDashboard() {
                         <div className="flex gap-2 flex-wrap">
                           <Chip
                             size="sm"
-                            color={
-                              student["Student Details"].Quota === "NRI"
-                                ? "primary"
-                                : "secondary"
-                            }
+                            color={student["Student Details"].Quota === "NRI" ? "primary" : "secondary"}
                             variant="flat"
                           >
                             {student["Student Details"].Quota || "N/A"}
                           </Chip>
                           <Chip
                             size="sm"
-                            color={
-                              student["Student Details"]["Seat Confirmed"] ===
-                              "Yes"
-                                ? "success"
-                                : "warning"
-                            }
+                            color={student["Student Details"]["Seat Confirmed"] === "Yes" ? "success" : "warning"}
                             variant="flat"
                           >
                             {getRegistrationStatus(student)}
@@ -330,13 +387,31 @@ export default function RegistrationDashboard() {
                           >
                             PRINT
                           </Button>
-                          <Button
-                            color="warning"
-                            size="sm"
-                            onPress={() => handleViewStudent(student)}
-                          >
+                          <Button color="warning" size="sm" onPress={() => handleViewStudent(student)}>
                             VIEW
                           </Button>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Switch
+                            isSelected={
+                              pendingChanges[student.id] !== undefined ? pendingChanges[student.id] : student.canOnboard
+                            }
+                            onValueChange={(isSelected) => handleTogglePermission(student, isSelected)}
+                            size="sm"
+                            color={pendingChanges[student.id] !== undefined ? "warning" : "success"}
+                            isDisabled={isSaving}
+                          />
+                          <span className="text-sm">
+                            {pendingChanges[student.id] !== undefined
+                              ? pendingChanges[student.id]
+                                ? "Enabled (pending)"
+                                : "Disabled (pending)"
+                              : student.canOnboard
+                              ? "Enabled"
+                              : "Disabled"}
+                          </span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -363,11 +438,7 @@ export default function RegistrationDashboard() {
         <ModalContent>
           {() => (
             <>
-              <ModalBody className="p-0">
-                {selectedStudent && (
-                  <StudentDetails student={selectedStudent} />
-                )}
-              </ModalBody>
+              <ModalBody className="p-0">{selectedStudent && <StudentDetails student={selectedStudent} />}</ModalBody>
             </>
           )}
         </ModalContent>
