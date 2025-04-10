@@ -14,14 +14,14 @@ export default function Home() {
           <source src="/landing.mov" type="video/mp4" />
         </video>
         <NavbarMain mode="dark" />
-        <div className="relative z-10 flex flex-1 w-full md:max-w-[90%] mt-0 mx-4 items-center justify-center flex-col md:flex-row ">
-          <div className="flex-1 p-4 lg:p-20 w-[50%] ">
+        <div className="relative z-10 flex flex-1 w-full lg:max-w-[90%] mt-0 mx-4 items-center justify-center flex-col md:flex-row ">
+          <div className="flex-1 flex justify-center items-center p-4 lg:p-20 w-[50%] ">
             <h1 className="text-white font-sans text-[2rem] md:text-[3rem] text-center md:text-justify md:max-w-1">
               <span className="text-muthootRed">Muthoot</span> Institute of
               Technology and Science
             </h1>
           </div>
-          <div className="flex-1 p-2 lg:p-20">
+          <div className="flex-1  p-2 lg:p-20">
             <div className="bg-white bg-opacity-[7%] shadow rounded-3xl p-6 md:max-w-[90%]">
               <h1 className="text-white hidden sm:block">
                 Welcome to Muthoot Institute of Technology and Science MITS,
@@ -45,7 +45,7 @@ export default function Home() {
               </h1>
             </div>
           </div>
-          <Contact className="!text-white" />
+          <Contact className="!text-white pb-[20%] md:pb-0 md:fixed" />
         </div>
       </div>
     </>
