@@ -2,7 +2,7 @@
 import { useState, Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import FloatingLabelInput from "../components/FloatingLabelInput";
-import Navbar from "../components/Navbar";
+import NavbarMain from "@/app/components/NavbarMain";
 import Link from "next/link";
 import { Button } from "@heroui/react";
 import {
@@ -91,7 +91,7 @@ export default function LoginPage() {
     return (
       <Suspense>
         <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-          <Navbar />
+          <NavbarMain />
           <div className="flex flex-auto justify-center items-center w-full m-3 p-3">
             <div className="bg-textBoxBackground relative shadow rounded-3xl p-8 max-w-2xl w-full">
               <h2 className="text-2xl font-semibold mb-6 text-center text-muthootRed">

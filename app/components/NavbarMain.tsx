@@ -9,7 +9,7 @@ interface NavbarProps {
   mode?: "dark" | "light" | "";
 }
 
-const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
+const NavbarMain: React.FC<NavbarProps> = ({ mode = "" }) => {
   return (
     <div className="relative z-10 bg-white bg-opacity-[7%] shadow max-w-[95%] w-full h-auto min-h-[60px] mt-5 mx-auto rounded-3xl flex items-center px-3 sm:px-6 py-2">
       {/* Logo */}
@@ -49,4 +49,4 @@ const Navbar: React.FC<NavbarProps> = ({ mode = "" }) => {
   );
 };
 
-export default Navbar;
+export default NavbarMain;

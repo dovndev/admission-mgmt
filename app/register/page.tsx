@@ -1,6 +1,6 @@
 "use client";
 import FloatingLabelInput from "../components/FloatingLabelInput";
-import Navbar from "../components/Navbar";
+import NavbarMain from "@/app/components/NavbarMain";
 import DropDownInput from "../components/DropDownInput";
 import InputDate from "../components/InputDate";
 import { GENDER_OPTIONS, PROGRAM_OPTIONS, QUOTA_OPTIONS } from "../constants/dropdownOptions";
@@ -68,7 +68,7 @@ export default function Register() {
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-background">
-      <Navbar />
+      <NavbarMain />
 
       <div className="flex flex-auto items-center justify-center w-full m-3 p-3">
         <div className="bg-textBoxBackground  relative shadow-xl rounded-3xl p-8 max-w-2xl w-full">

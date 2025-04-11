@@ -138,8 +138,8 @@ export default function OnBoarding() {
   // Show access restricted message if user can't onboard
   if (canOnboard === false) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 w-full max-w-md">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 ">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 w-full max-w-md rounded-md">
           <div className="flex">
             <div className="flex-shrink-0">
               <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
@@ -151,9 +151,9 @@ export default function OnBoarding() {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-yellow-800">Access Restricted</h3>
-              <div className="mt-2 text-sm text-yellow-700">
-                <p>Please contact the admin for approval to access the onboarding process.</p>
+              <h3 className="text-md font-bold text-yellow-800">Approval Required</h3>
+              <div className="mt-2 text-md text-yellow-700">
+                <p>Please contact <br/>ABC: +91234567890<br/> for approving your application</p>
               </div>
               <div className="mt-4">
                 <Button className="bg-red-600 border-red-900 text-white" variant="bordered" onPress={handleLogout}>
