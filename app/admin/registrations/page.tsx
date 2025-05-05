@@ -218,16 +218,16 @@ export default function RegistrationDashboard() {
         <NavbarAdmin />
       </div>
 
-      <main className="flex-1 overflow-y-auto p-2 xl:px-10 bg-background">
-        <Card className="shadow-sm bg-textBoxBackground p-0 lg:p-5">
+      <main className="flex-1 overflow-y-auto p-2 pb-10 xl:px-10 bg-background">
+        <Card className="shadow-sm bg-textBoxBackground h-[100%] p-0  lg:p-5">
           <CardHeader className="flex flex-col bg-textBoxBackground">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full gap-4">
               <div>
                 <h2 className="text-lg font-medium">Student Registrations</h2>
                 <p className="text-sm text-default-500">Manage all registered students</p>
               </div>
-              <div className="flex flex-col md:flex-row gap-2">
-                {hasPendingChanges && (
+              <div className="flex  md:flex-row gap-2">
+              {hasPendingChanges && (
                   <Button
                     variant="flat"
                     className="bg-green-600 text-white"
@@ -239,8 +239,6 @@ export default function RegistrationDashboard() {
                     Save Changes ({Object.keys(pendingChanges).length})
                   </Button>
                 )}
-              </div>
-              <div className="flex flex-col md:flex-row gap-2">
                 <Button
                   variant="flat"
                   className="bg-muthootRed text-white"
@@ -303,21 +301,7 @@ export default function RegistrationDashboard() {
                 removeWrapper
                 isHeaderSticky
                 aria-label="Student registrations table"
-                bottomContent={
-                  totalPages > 0 ? (
-                    <div className="flex w-full bg-textBoxBackground justify-center">
-                      <Pagination
-                        isCompact
-                        showControls
-                        showShadow
-                        color="warning"
-                        page={currentPage}
-                        total={totalPages}
-                        onChange={setCurrentPage}
-                      />
-                    </div>
-                  ) : null
-                }
+                
               >
                 <TableHeader className="bg-textBoxBackground">
                   <TableColumn>STUDENT</TableColumn>
@@ -420,6 +404,21 @@ export default function RegistrationDashboard() {
               </Table>
             )}
           </CardBody>
+          {
+                  totalPages > 0 ? (
+                    <div className="flex w-full bg-textBoxBackground justify-center">
+                      <Pagination
+                        isCompact
+                        showControls
+                        showShadow
+                        color="warning"
+                        page={currentPage}
+                        total={totalPages}
+                        onChange={setCurrentPage}
+                      />
+                    </div>
+                  ) : null
+                }
         </Card>
       </main>
 
