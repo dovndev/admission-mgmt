@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Input } from "@heroui/input";
-
+import { EyeClosedIcon,EyeIcon } from "lucide-react";
 interface FloatingLabelInputProps {
   id: string;
   label: string;
@@ -23,6 +23,10 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   autoComplete = "off",
   labelPlacement = "inside",
 }) => {
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
   return (
     // onWheel is used to stop incrimenting values while scrolling
     <Input
@@ -30,7 +34,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
       label={label}
       isRequired={required}
       id={id}
-      type={type}
+      type={isVisible ? "text" : type}
       value={value}
       autoComplete={autoComplete}
       required={required}
@@ -49,6 +53,21 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
           : undefined
       }
       placeholder={labelPlacement === 'outside' ? " ":""}
+      endContent={
+        type !== "password" ? null :
+        <button
+          aria-label="toggle password visibility"
+          className="focus:outline-none"
+          type="button"
+          onClick={toggleVisibility}
+        >
+          {isVisible ? (
+            <EyeClosedIcon className="text-2xl text-default-400 pointer-events-none" />
+          ) : (
+            <EyeIcon className="text-2xl text-default-400 pointer-events-none mb-1" />
+          )}
+        </button>
+      }
     />
   );
 };
