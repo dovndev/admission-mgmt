@@ -19,7 +19,7 @@ import useUserStore from "../store/userStore";
 const NAV_ITEMS = [
   { key: "adminHome", label: "Home", href: "/admin/adminHome" },
   { key: "adminNRI", label: "Admissions", href: "/admin/registrations" },
-  { key: "approval", label: "Approval", href: "/admin/approval" },
+  //{ key: "approval", label: "Approval", href: "/admin/approval" },
   { key: "settings", label: "Settings", href: "/admin/status" },
   // { key: "logout", label: "Logout", href: "/logout" },
 ];
