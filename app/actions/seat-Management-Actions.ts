@@ -16,6 +16,9 @@ export async function getAllAvailableYears() {
         select: {
             year: true
         },
+        orderBy: {
+            year: 'desc'
+        },
         distinct: ['year']
     });
 
@@ -26,6 +29,26 @@ export async function getAllAvailableYears() {
     availableYears.sort((a, b) => b - a); // Descending order (most recent first)
 
     return availableYears;
+}
+
+export async function getActiveYears() {
+
+        const activeYearStatuses = await prisma.yearStatus.findMany({
+            where: {
+                isActive: true
+            },
+            select: {
+                year: true
+            },
+            orderBy: {
+                year: 'desc'
+            }
+        });
+        // Extract just the year numbers
+        const activeYears = activeYearStatuses.map(status => status.year);
+        
+        return activeYears;
+    
 }
 
 export async function updateBranchAllocation(params: UpdateBranchParams) {

@@ -12,6 +12,7 @@ import { randomBytes } from 'crypto';
 import nodemailer from 'nodemailer';
 import { Quota, Program } from "@prisma/client"
 import { generateApplicationNo } from "@/lib/generateApplicationNo"
+import { getYearActivationStatus } from "./branch-Actions"
 
 export async function isSessonActive() {
     const session = await auth()
@@ -163,6 +164,16 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
         if (!validatedData) {
             return { error: "Invalid data", success: false }
         }
+
+        // Check if the applying year is active for registration
+        const yearStatusResult = await getYearActivationStatus(parseInt(validatedData.applyingYear));
+        if (!yearStatusResult.success || !yearStatusResult.isActive) {
+            return { 
+                error: `Registration is currently closed for the ${validatedData.applyingYear} academic year`, 
+                success: false 
+            };
+        }
+
         const user = await prisma.user.findUnique({
             where: {
                 email: validatedData.email

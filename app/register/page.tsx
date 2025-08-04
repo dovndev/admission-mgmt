@@ -7,7 +7,7 @@ import { GENDER_OPTIONS, PROGRAM_OPTIONS, QUOTA_OPTIONS } from "../constants/dro
 import { registerAction } from "../actions/auth-actions";
 import { userRegisterSchema } from "@/schemas";
 import { useRouter } from "next/navigation";
-import { getAllAvailableYears } from "../actions/seat-Management-Actions";
+import { getActiveYears } from "../actions/seat-Management-Actions";
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import CustomToast from "../components/CustomToast";
@@ -30,7 +30,7 @@ export default function Register() {
     religion: "",
     cast: "",
   });
-  const [availableYears, setavailableYears] = useState<number[]>([]);
+  const [availableYears, setAvailableYears] = useState<number[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
@@ -60,9 +60,9 @@ export default function Register() {
 
   useEffect(() => {
     (async () => {
-      const years = await getAllAvailableYears();
-      console.log("years", years);
-      setavailableYears(years);
+      const years = await getActiveYears();
+      console.log("active years", years);
+      setAvailableYears(years);
     })();
   }, []);
 
