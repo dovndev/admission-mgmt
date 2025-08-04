@@ -50,11 +50,12 @@ export default function Register() {
         router.push("/login");
       } else {
         console.log(response.error);
-        throw new Error("Invalid data");
+        throw new Error(response.error || "Registration failed");
       }
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error : any) {
       console.log(error);
-      CustomToast({ title: "Error", description: "Invalid data" });
+      CustomToast({ title: "Error", description: error.message || "An error occurred during registration" });
     }
   };
 

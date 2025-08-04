@@ -174,13 +174,27 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
             };
         }
 
-        const user = await prisma.user.findUnique({
+        // Check if email, mobile number, or Aadhar number already exists
+        const existingUser = await prisma.user.findFirst({
             where: {
-                email: validatedData.email
+            OR: [
+                { email: validatedData.email },
+                { mobileNumber: validatedData.mobileNumber },
+                { aadharNo: parseInt(validatedData.aadharNo) },
+            ],
+            },
+        });
+
+        if (existingUser) {
+            if (existingUser.email === validatedData.email) {
+            return { error: "Email already registered", success: false };
             }
-        })
-        if (user) {
-            return { error: "User already exists", success: false }
+            if (existingUser.mobileNumber === validatedData.mobileNumber) {
+            return { error: "Mobile number already registered", success: false };
+            }
+            if (existingUser.aadharNo === parseInt(validatedData.aadharNo)) {
+            return { error: "Aadhar number already registered", success: false };
+            }
         }
         const password = generatePassword({
             firstName: validatedData.firstName,
