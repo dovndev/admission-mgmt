@@ -149,7 +149,7 @@ export default function Register() {
               />
               <FloatingLabelInput
                 id={"cast"}
-                label={"Cast"}
+                label={"Caste"}
                 required={true}
                 autoComplete="off"
                 onChange={handleChange}
