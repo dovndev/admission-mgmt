@@ -80,7 +80,7 @@ const NavbarAdmin: React.FC<NavbarAdminProps> = ({ mode = "" }) => {
             ))}
           </DropdownMenu>
         </Dropdown>
-        <div className="w-[120px] hidden sm:block">
+        <div className="w-[170px] hidden sm:block">
           <Image
             src="/MITS.png"
             alt="Muthoot Logo"

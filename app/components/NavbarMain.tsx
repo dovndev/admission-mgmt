@@ -13,7 +13,7 @@ const NavbarMain: React.FC<NavbarProps> = ({ mode = "" }) => {
   return (
     <div className="relative z-10 bg-white bg-opacity-[7%] shadow max-w-[95%] w-full h-auto min-h-[60px] mt-5 mx-auto rounded-3xl flex items-center px-3 sm:px-6 py-2">
       {/* Logo */}
-      <div className="flex-shrink-0 w-[100px] sm:w-[120px]">
+      <div className="flex-shrink-0 w-[100px] sm:w-[150px]">
         <Link href="/" passHref>
           <Image 
             src="/MITS.png" 
