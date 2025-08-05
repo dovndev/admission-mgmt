@@ -22,6 +22,17 @@ export async function addYear(year: number) {
     if (existingBranch) {
         throw new Error(`A branch for the year ${year} already exists`);
     }
+
+    // Create year status record (default to active)
+    await prisma.yearStatus.upsert({
+        where: { year },
+        update: {}, // No update needed if exists
+        create: {
+            year,
+            isActive: true
+        }
+    });
+
     const newBranch = await Promise.all(branchesList.map(async (branchName) => {
         const superSeats = 9;
         const nriSeats = 9;
@@ -104,4 +115,68 @@ export async function isBranchAvailable(year: number | string, branch: string) {
         throw new Error(`Branch ${branch} not found for the year ${year}`);
     }
     return branchEntry;
+}
+
+// Year activation functions
+export async function toggleYearActivation(year: number, isActive: boolean) {
+    try {
+        // First check if year status exists
+        const existingStatus = await prisma.yearStatus.findUnique({
+            where: { year }
+        });
+
+        if (existingStatus) {
+            // Update existing status
+            const updatedStatus = await prisma.yearStatus.update({
+                where: { year },
+                data: { isActive }
+            });
+            return {
+                success: true,
+                message: `Year ${year} ${isActive ? 'activated' : 'deactivated'} successfully`,
+                status: updatedStatus
+            };
+        } else {
+            // Create new status entry
+            const newStatus = await prisma.yearStatus.create({
+                data: {
+                    year,
+                    isActive
+                }
+            });
+            return {
+                success: true,
+                message: `Year ${year} ${isActive ? 'activated' : 'deactivated'} successfully`,
+                status: newStatus
+            };
+        }
+    } catch (error) {
+        console.error("Error toggling year activation:", error);
+        return {
+            success: false,
+            message: `Failed to ${isActive ? 'activate' : 'deactivate'} year ${year}`
+        };
+    }
+}
+
+export async function getYearActivationStatus(year: number) {
+    try {
+        const yearStatus = await prisma.yearStatus.findUnique({
+            where: { year }
+        });
+        
+        // If no record exists, default to active (true)
+        return {
+            success: true,
+            isActive: yearStatus?.isActive ?? true,
+            year
+        };
+    } catch (error) {
+        console.error("Error getting year activation status:", error);
+        return {
+            success: false,
+            isActive: false,
+            year
+        };
+    }
 }

@@ -28,9 +28,16 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
-    // onWheel is used to stop incrimenting values while scrolling
     <Input
       onWheel={(e) => (e.target as HTMLInputElement).blur()}
+      onKeyDown={(e) => {
+        if (
+          type === "number" &&
+          (e.key === "ArrowUp" || e.key === "ArrowDown")
+        ) {
+          e.preventDefault();
+        }
+      }}
       label={label}
       isRequired={required}
       id={id}

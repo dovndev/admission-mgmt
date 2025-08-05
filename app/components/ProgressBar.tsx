@@ -15,7 +15,7 @@ interface ProgressBarProps {
 const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, handleLogout }) => {
   return (
     <div className="fixed z-50 bg-textBoxBackground shadow max-w-[90%] w-full h-[60px] mt-5 mx-4 rounded-3xl flex items-center justify-between px-6">
-      <div className="w-[100px] hidden sm:block">
+      <div className="w-[150px] hidden sm:block">
         <Image
           src="/MITS.png"
           alt="Muthoot Logo"

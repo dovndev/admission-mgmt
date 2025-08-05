@@ -7,7 +7,7 @@ import { GENDER_OPTIONS, PROGRAM_OPTIONS, QUOTA_OPTIONS } from "../constants/dro
 import { registerAction } from "../actions/auth-actions";
 import { userRegisterSchema } from "@/schemas";
 import { useRouter } from "next/navigation";
-import { getAllAvailableYears } from "../actions/seat-Management-Actions";
+import { getActiveYears } from "../actions/seat-Management-Actions";
 import { useEffect, useState } from "react";
 import { Button } from "@heroui/react";
 import CustomToast from "../components/CustomToast";
@@ -30,7 +30,7 @@ export default function Register() {
     religion: "",
     cast: "",
   });
-  const [availableYears, setavailableYears] = useState<number[]>([]);
+  const [availableYears, setAvailableYears] = useState<number[]>([]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
@@ -50,19 +50,20 @@ export default function Register() {
         router.push("/login");
       } else {
         console.log(response.error);
-        throw new Error("Invalid data");
+        throw new Error(response.error || "Registration failed");
       }
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error : any) {
       console.log(error);
-      CustomToast({ title: "Error", description: "Invalid data" });
+      CustomToast({ title: "Error", description: error.message || "An error occurred during registration" });
     }
   };
 
   useEffect(() => {
     (async () => {
-      const years = await getAllAvailableYears();
-      console.log("years", years);
-      setavailableYears(years);
+      const years = await getActiveYears();
+      console.log("active years", years);
+      setAvailableYears(years);
     })();
   }, []);
 
@@ -148,7 +149,7 @@ export default function Register() {
               />
               <FloatingLabelInput
                 id={"cast"}
-                label={"Cast"}
+                label={"Caste"}
                 required={true}
                 autoComplete="off"
                 onChange={handleChange}

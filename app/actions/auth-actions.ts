@@ -12,6 +12,7 @@ import { randomBytes } from 'crypto';
 import nodemailer from 'nodemailer';
 import { Quota, Program } from "@prisma/client"
 import { generateApplicationNo } from "@/lib/generateApplicationNo"
+import { getYearActivationStatus } from "./branch-Actions"
 
 export async function isSessonActive() {
     const session = await auth()
@@ -163,13 +164,37 @@ export async function registerAction(data: z.infer<typeof userRegisterSchema>): 
         if (!validatedData) {
             return { error: "Invalid data", success: false }
         }
-        const user = await prisma.user.findUnique({
+
+        // Check if the applying year is active for registration
+        const yearStatusResult = await getYearActivationStatus(parseInt(validatedData.applyingYear));
+        if (!yearStatusResult.success || !yearStatusResult.isActive) {
+            return { 
+                error: `Registration is currently closed for the ${validatedData.applyingYear} academic year`, 
+                success: false 
+            };
+        }
+
+        // Check if email, mobile number, or Aadhar number already exists
+        const existingUser = await prisma.user.findFirst({
             where: {
-                email: validatedData.email
+            OR: [
+                { email: validatedData.email },
+                { mobileNumber: validatedData.mobileNumber },
+                { aadharNo: parseInt(validatedData.aadharNo) },
+            ],
+            },
+        });
+
+        if (existingUser) {
+            if (existingUser.email === validatedData.email) {
+            return { error: "Email already registered", success: false };
             }
-        })
-        if (user) {
-            return { error: "User already exists", success: false }
+            if (existingUser.mobileNumber === validatedData.mobileNumber) {
+            return { error: "Mobile number already registered", success: false };
+            }
+            if (existingUser.aadharNo === parseInt(validatedData.aadharNo)) {
+            return { error: "Aadhar number already registered", success: false };
+            }
         }
         const password = generatePassword({
             firstName: validatedData.firstName,

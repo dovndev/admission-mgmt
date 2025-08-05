@@ -6,7 +6,7 @@ import { Input } from "@heroui/input";
 import { Card, CardHeader, CardBody } from "@heroui/card";
 import NavbarAdmin from "../../components/NavbarAdmin";
 import { ModalHeader, ModalBody, Modal, ModalContent, ModalFooter, useDisclosure, Switch } from "@heroui/react";
-import { addYear, getAllBreanchesByYear } from "../../actions/branch-Actions";
+import { addYear, getAllBreanchesByYear, toggleYearActivation, getYearActivationStatus } from "../../actions/branch-Actions";
 import useAdminStore from "@/app/store/adminStore";
 import { updateBranchAllocation } from "@/app/actions/seat-Management-Actions";
 import { BRANCH_OPTIONS, BranchCodeType } from "@/app/constants/dropdownOptions";
@@ -124,6 +124,10 @@ export default function SeatAllocation() {
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [savedBranches, setSavedBranches] = useState<BranchCode[]>([]);
+  
+  // Form activation state
+  const [formIsActive, setFormIsActive] = useState<boolean>(true);
+  const [isTogglingForm, setIsTogglingForm] = useState(false);
 
   // Handle input change for each field
   const handleChange = (branch: BranchCode, type: keyof SeatAllocation, value: number) => {
@@ -250,6 +254,34 @@ export default function SeatAllocation() {
     }
   };
 
+  // Handle form activation toggle
+  const handleFormActivationToggle = async (isActive: boolean) => {
+    if (!selectedYear) {
+      console.error("No year selected for form activation toggle");
+      return;
+    }
+
+    setIsTogglingForm(true);
+    try {
+      const result = await toggleYearActivation(selectedYear, isActive);
+      
+      if (result.success) {
+        setFormIsActive(isActive);
+        console.log(`Form ${isActive ? 'activated' : 'deactivated'} for year ${selectedYear}`);
+      } else {
+        console.error(`Failed to toggle form activation: ${result.message}`);
+        // Reset switch to previous state on failure
+        setFormIsActive(!isActive);
+      }
+    } catch (error) {
+      console.error("Error toggling form activation:", error);
+      // Reset switch to previous state on failure
+      setFormIsActive(!isActive);
+    } finally {
+      setIsTogglingForm(false);
+    }
+  };
+
   // Delete a year
   const handleDeleteYear = async () => {
     if (!selectedYear) return;
@@ -283,8 +315,15 @@ export default function SeatAllocation() {
         setLoading(true);
         setSavedBranches([]);
 
+        // Load branch data
         const branches = await getAllBreanchesByYear();
         console.log("Branches data for year", selectedYear, ":", branches?.[selectedYear]);
+
+        // Load form activation status
+        const activationStatus = await getYearActivationStatus(selectedYear);
+        if (activationStatus.success) {
+          setFormIsActive(activationStatus.isActive);
+        }
 
         if (branches && branches[selectedYear]) {
           // Map from API format to component format
@@ -331,7 +370,12 @@ export default function SeatAllocation() {
           <div className="flex flex-col md:flex-row md:items-center gap-4">
             <h1 className="text-2xl font-bold">Seat Allocation</h1>
             {selectedYear && (
-              <span className="px-3 py-1 bg-warning-500 rounded-full text-sm">Year: {selectedYear}</span>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 bg-warning-500 rounded-full text-sm">Year: {selectedYear}</span>
+                <span className={`px-3 py-1 rounded-full text-sm ${formIsActive ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                  {formIsActive ? 'Registration Open' : 'Registration Closed'}
+                </span>
+              </div>
             )}
           </div>
 
@@ -363,11 +407,21 @@ export default function SeatAllocation() {
         )}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="mt-8 w-[80%] md:w-[15%] flex flex-row items-center gap-2 bg-textBoxBackground p-4 rounded-lg shadow-md justify-between">
-            <div className="text-center">Form Activation</div>
+                        <span className="ml-2 text-sm text-center">
+                  {!formIsActive ? "Activate Form" : "Deactivate Form"}
+                </span>
             <div className="flex flex-row gap-4">
               <div className="flex items-center justify-between w-full">
-                <Switch disabled={!selectedYear} className="ml-4" color={"success"} />
+                <Switch 
+                  isSelected={formIsActive}
+                  onValueChange={handleFormActivationToggle}
+                  isDisabled={!selectedYear || isTogglingForm}
+                  className="ml-4" 
+                  color={formIsActive ? "success" : "danger"}
+                />
+                
               </div>
+              
             </div>
           </div>
           <div className="flex flex-row gap-4 ">

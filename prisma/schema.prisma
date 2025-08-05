@@ -152,6 +152,14 @@ model Admin {
   password  String
 }
 
+model YearStatus {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  year      Int     @unique
+  isActive  Boolean @default(true) // Controls if registration is open for this year
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // Add to prisma/schema.prisma
 model PasswordReset {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId

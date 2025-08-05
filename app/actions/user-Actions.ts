@@ -273,3 +273,88 @@ export async function updateOnboardingStatus(userId: string, canOnboard: boolean
         return { success: false, message: "Failed to update onboarding status" };
     }
 }
+
+export async function deleteStudentById(userId: string) {
+    try {
+        // First, check if the user exists
+        const existingUser = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (!existingUser) {
+            return { 
+                success: false, 
+                message: "Student not found" 
+            };
+        }
+
+        // If the user has a confirmed seat, we need to free up the seat in the branch
+        if (existingUser.seatConfirmed && existingUser.declaration?.branch) {
+            const branchName = existingUser.declaration.branch;
+            const year = parseInt(existingUser.applyingYear);
+            const quota = existingUser.quota.toLowerCase();
+
+            // Find the branch
+            const branch = await prisma.branches.findUnique({
+                where: {
+                    name_year: {
+                        name: branchName,
+                        year: year
+                    }
+                }
+            });
+
+            if (branch) {
+                // Determine which fields to update based on quota
+                const occupiedField = quota === 'nri' ? 'occupiedNri' : 
+                                   quota === 'oci' ? 'occupiedNri' : // OCI uses NRI seats
+                                   'occupiedSuper'; // CWIG uses super seats
+
+                const studentsField = `${quota}Students` as 'nriStudents' | 'ociStudents' | 'cwigStudents';
+
+                // Get current occupied count
+                const currentOccupied = occupiedField === 'occupiedNri' ? branch.occupiedNri : branch.occupiedSuper;
+                
+                // Get current students array
+                const currentStudents = studentsField === 'nriStudents' ? branch.nriStudents :
+                                      studentsField === 'ociStudents' ? branch.ociStudents :
+                                      branch.cwigStudents;
+
+                // Update branch seat allocation
+                await prisma.branches.update({
+                    where: {
+                        name_year: {
+                            name: branchName,
+                            year: year
+                        }
+                    },
+                    data: {
+                        occupiedSets: branch.occupiedSets - 1,
+                        [occupiedField]: Math.max(0, currentOccupied - 1),
+                        // Remove student ID from the appropriate array
+                        [studentsField]: {
+                            set: currentStudents.filter(id => id !== userId)
+                        }
+                    }
+                });
+            }
+        }
+
+        // Delete the user
+        await prisma.user.delete({
+            where: { id: userId }
+        });
+
+        return { 
+            success: true, 
+            message: "Student deleted successfully" 
+        };
+
+    } catch (error) {
+        console.error("Error deleting student:", error);
+        return { 
+            success: false, 
+            message: `Failed to delete student: ${error instanceof Error ? error.message : "Unknown error"}` 
+        };
+    }
+}

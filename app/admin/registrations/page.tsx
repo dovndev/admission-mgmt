@@ -18,19 +18,21 @@ import {
   Pagination,
   Modal,
   ModalContent,
+  ModalHeader,
   ModalBody,
+  ModalFooter,
   useDisclosure,
   Spinner,
   Chip,
   Switch,
 } from "@heroui/react";
 
-import { Save,Download, Search } from "lucide-react";
+import { Save,Download, Search, Trash2, Printer, Eye } from "lucide-react";
 import NavbarAdmin from "../../components/NavbarAdmin";
 import { useState, useMemo, useEffect } from "react";
 import StudentDetails from "../../components/StudentDetails";
 import { usePrintPDF } from "../../hooks/usePrintPDF";
-import { getStructuredUsersByYear,updateOnboardingStatus } from "../../actions/user-Actions";
+import { getStructuredUsersByYear,updateOnboardingStatus, deleteStudentById } from "../../actions/user-Actions";
 import useAdminStore from "@/app/store/adminStore";
 import { StructuredUserData } from "@/types/userTypes";
 
@@ -41,7 +43,8 @@ import { StructuredUserData } from "@/types/userTypes";
 //   student: StructuredUserData | null | undefined;
 // };
 
-export default function RegistrationDashboard() {
+export default function RegistrationDashboard() 
+{
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("newest");
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,6 +55,15 @@ export default function RegistrationDashboard() {
   const [selectedStudent, setSelectedStudent] = useState<StructuredUserData | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { generatePDF, isGenerating } = usePrintPDF();
+
+  // Deletion confirmation modal
+  const [studentToDelete, setStudentToDelete] = useState<StructuredUserData | null>(null);
+  const { 
+    isOpen: isDeleteModalOpen, 
+    onOpen: onDeleteModalOpen, 
+    onClose: onDeleteModalClose 
+  } = useDisclosure();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch available academic years on component mount
   const { selectedYear } = useAdminStore();
@@ -170,11 +182,56 @@ export default function RegistrationDashboard() {
     onOpen();
   };
 
+  const handleStudentDeletion = (student: StructuredUserData) => {
+    setStudentToDelete(student);
+    onDeleteModalOpen();
+  };
+
+  // Function to confirm and perform deletion
+  const confirmStudentDeletion = async () => {
+    if (!studentToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      // Call the actual deletion API
+      const result = await deleteStudentById(studentToDelete.id);
+      
+      if (result.success) {
+        // Remove from local state only if deletion was successful
+        setUsers(prev => prev.filter(user => user.id !== studentToDelete.id));
+        
+        setToastInfo({
+          show: true,
+          title: "Student deleted",
+          description: `${studentToDelete["Student Details"].Name} has been removed from the system.`,
+        });
+      } else {
+        // Show error message from the server
+        setToastInfo({
+          show: true,
+          title: "Error deleting student",
+          description: result.message || "Failed to delete the student. Please try again.",
+        });
+      }
+      
+      onDeleteModalClose();
+      setStudentToDelete(null);
+    } catch (error) {
+      console.error("Error deleting student:", error);
+      setToastInfo({
+        show: true,
+        title: "Error deleting student",
+        description: "Failed to delete the student. Please try again.",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
   // Function to handle printing a student application
   const handlePrintStudent = async (student: StructuredUserData) => {
     await generatePDF(student);
   };
-
+  
   // Filter and sort users based on search term and sort option
   const filteredAndSortedUsers = useMemo(() => {
     if (!users) return [];
@@ -368,11 +425,25 @@ export default function RegistrationDashboard() {
                             size="sm"
                             onPress={() => handlePrintStudent(student)}
                             isLoading={isGenerating}
+                            startContent={<Printer size={16} />}
                           >
                             PRINT
                           </Button>
-                          <Button color="warning" size="sm" onPress={() => handleViewStudent(student)}>
+                          <Button 
+                            color="warning" 
+                            size="sm" 
+                            onPress={() => handleViewStudent(student)}
+                            startContent={<Eye size={16} />}
+                          >
                             VIEW
+                          </Button>
+                          <Button 
+                            color="danger" 
+                            size="sm" 
+                            onPress={() => handleStudentDeletion(student)}
+                            startContent={<Trash2 size={16} />}
+                          >
+                            DELETE
                           </Button>
                         </div>
                       </TableCell>
@@ -442,6 +513,81 @@ export default function RegistrationDashboard() {
           )}
         </ModalContent>
       </Modal>
+
+      {/* Modal for Student Deletion Confirmation */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={onDeleteModalClose}
+        size="md"
+        classNames={{
+          base: "bg-textBoxBackground",
+          header: "border-b-1 border-default",
+          footer: "border-t-1 border-default",
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                <h3 className="text-lg font-semibold text-danger">Confirm Student Deletion</h3>
+              </ModalHeader>
+              <ModalBody>
+                {studentToDelete && (
+                  <div className="space-y-4">
+                    <p className="text-default-700">
+                      Are you sure you want to delete the following student? This action cannot be undone.
+                    </p>
+                    <div className="bg-danger-50 border border-danger-200 rounded-lg p-4">
+                      <div className="flex items-center gap-3">
+                        <Avatar
+                          src={studentToDelete.Uploads?.studentPhoto || "/placeholder.svg?height=40&width=40"}
+                          name={studentToDelete["Student Details"].Name}
+                          size="sm"
+                        />
+                        <div>
+                          <div className="font-medium text-danger-800">
+                            {studentToDelete["Student Details"].Name}
+                          </div>
+                          <div className="text-sm text-danger-600">
+                            {studentToDelete.applicationNo}
+                          </div>
+                          <div className="text-sm text-danger-600">
+                            {studentToDelete["Student Details"].Email}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-sm text-default-500">
+                      This will permanently remove all student data, including personal information, 
+                      educational details, and uploaded documents.
+                    </p>
+                  </div>
+                )}
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="default"
+                  variant="light"
+                  onPress={onClose}
+                  isDisabled={isDeleting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  color="danger"
+                  onPress={confirmStudentDeletion}
+                  isLoading={isDeleting}
+                  isDisabled={isDeleting}
+                >
+                  {isDeleting ? "Deleting..." : "Delete Student"}
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      
     </div>
   );
 }
