@@ -5,6 +5,7 @@ import { BRANCH_OPTIONS, QUOTA_OPTIONS } from "@/app/constants/dropdownOptions";
 
 export async function getDashboardStats(year: number) {
     try {
+        console.log('Getting dashboard stats for year:', year);
         
         /*
         // Get all branches for the specified year
@@ -20,6 +21,8 @@ export async function getDashboardStats(year: number) {
             },
         });
 
+        console.log('Found users:', users.length);
+
         // Initialize all branches dynamically from BRANCH_OPTIONS
         const allBranches: Record<string, { applications: number; approved: number }> = {};
         BRANCH_OPTIONS.forEach(branch => {
@@ -29,6 +32,7 @@ export async function getDashboardStats(year: number) {
         // Count applications by branch
         users.forEach(user => {
             const branchName = user.declaration?.branch;
+            console.log('User branch:', branchName, 'canOnboard:', user.canOnboard);
             if (branchName && branchName in allBranches) {
                 allBranches[branchName].applications += 1;
                 if (user.canOnboard) {
@@ -36,6 +40,8 @@ export async function getDashboardStats(year: number) {
                 }
             }
         });
+
+        console.log('Processed branch data:', allBranches);
 
         // Format branch data for chart
         const programData = Object.entries(allBranches).map(
@@ -55,6 +61,13 @@ export async function getDashboardStats(year: number) {
         // Calculate totals
         const totalApplications = users.length;
         const totalApproved = users.filter((user) => user.canOnboard).length;
+
+        console.log('Dashboard stats result:', {
+            programData,
+            quotaData,
+            totalApplications,
+            totalApproved
+        });
 
         return {
             programData,

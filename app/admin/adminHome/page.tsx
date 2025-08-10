@@ -36,34 +36,57 @@ export default function AdminHome() {
   const { selectedYear } = useAdminStore();
 
   const loadData = useCallback(async () => {
+    // Generate sample data for demonstration when no real data exists
+    const generateSampleData = (): ProgramData[] => [
+      { program: "CSE", applications: 0, approved: 0 },
+      { program: "ECE", applications: 0, approved: 0 },
+      { program: "ME", applications: 0, approved: 0 },
+      { program: "CE", applications: 0, approved: 0 },
+      { program: "AIDS", applications: 0, approved: 0 },
+      { program: "EEE", applications: 0, approved: 0 },
+      { program: "CSAI", applications: 0, approved: 0 },
+      { program: "CY", applications: 0, approved: 0 },
+    ];
+
+    const generateSampleQuotaData = (): QotaData[] => [
+      { quota: "NRI", applications: 0 },
+      { quota: "OCI", applications: 0 },
+      { quota: "CIWG", applications: 0 },
+      { quota: "PIO", applications: 0 },
+    ];
+
     setIsLoading(true);
     try {
+      console.log('Loading data for year:', selectedYear);
       const result = await getDashboardStats(selectedYear);
 
-      if (result.success) {
+      if (result.success && result.totalApplications > 0) {
+        console.log('Data loaded successfully:', result);
         setData(result.programData);
         setQuotaData(result.quotaData);
         setTotalApplications(result.totalApplications);
         setTotalApproved(result.totalApproved);
       } else {
-        console.error("Error loading dashboard data:", result.error);
-        // Fallback to empty data
-        setData([
-          { program: "CSE", applications: 0, approved: 0 },
-          { program: "ECE", applications: 0, approved: 0 },
-          { program: "EEE", applications: 0, approved: 0 },
-          { program: "ME", applications: 0, approved: 0 },
-          { program: "CE", applications: 0, approved: 0 },
-          { program: "IT", applications: 0, approved: 0 },
-        ]);
-        setQuotaData([
-          { quota: "NRI", applications: 0 },
-          { quota: "OCI", applications: 0 },
-          { quota: "CIWG", applications: 0 },
-        ]);
+        console.log('No real data found for year:', selectedYear);
+        // Clear all data when no real data is found
+        const sampleData = generateSampleData();
+        const sampleQuotaData = generateSampleQuotaData();
+        
+        setData(sampleData);
+        setQuotaData(sampleQuotaData);
+        setTotalApplications(0);
+        setTotalApproved(0);
       }
     } catch (error) {
       console.error("Error loading data:", error);
+      // Set fallback data on error as well
+      const sampleData = generateSampleData();
+      const sampleQuotaData = generateSampleQuotaData();
+      
+      setData(sampleData);
+      setQuotaData(sampleQuotaData);
+      setTotalApplications(0);
+      setTotalApproved(0);
     } finally {
       setIsLoading(false);
     }
@@ -80,80 +103,103 @@ export default function AdminHome() {
       </div>
 
       <div className="flex-1 flex flex-col lg:flex-row gap-4 p-4 overflow-hidden lg:items-center justify-center">
-        <div className="flex-1 bg-textBoxBackground rounded-3xl shadow-xl p-4 h-[400px] lg:h-full lg:p-6 lg:max-w-[50%]">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">
-              Registration Statistics for {selectedYear}
-            </h2>
-            <Button
-              isIconOnly
-              color="warning"
-              variant="ghost"
-              onPress={loadData}
-              isLoading={isLoading}
-            >
-              <FiRefreshCw
-                className={`h-5 w-5 ${isLoading ? "animate-spin" : ""}`}
-              />
-            </Button>
+        {!selectedYear ? (
+          <div className="flex-1 bg-textBoxBackground rounded-3xl shadow-xl p-6 h-[400px] lg:h-full flex items-center justify-center">
+            <div className="text-center">
+              <h2 className="text-xl font-semibold mb-4">No Year Selected</h2>
+              <p className="text-gray-600">Please select a year from the navigation to view statistics.</p>
+            </div>
           </div>
-          <div className="h-[calc(100%-3rem)]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={data}
-                margin={{
-                  top: 20,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
+        ) : (
+          <div className="flex-1 bg-textBoxBackground rounded-3xl shadow-xl p-4 h-[400px] lg:h-full lg:p-6 lg:max-w-[50%]">
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h2 className="text-xl font-semibold">
+                  Registration Statistics for {selectedYear}
+                </h2>
+
+              </div>
+              <Button
+                isIconOnly
+                color="warning"
+                variant="ghost"
+                onPress={loadData}
+                isLoading={isLoading}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="program"
-                  label="Branches"
-                  angle={-45}
-                  textAnchor="end"
-                  height={80}
+                <FiRefreshCw
+                  className={`h-5 w-5 ${isLoading ? "animate-spin" : ""}`}
                 />
-                <YAxis
-                  label={{ value: "Count", angle: -90, position: "insideLeft" }}
-                />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="applications" fill="orange" name="Applications" />
-                <Bar dataKey="approved" fill="green" name="Approved" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Right side - Stats */}
-        <div className="lg:w-80 flex flex-col gap-4 ">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-textBoxBackground p-4 text-center shadow-xl rounded-3xl">
-              <div className="text-xl">Applications</div>
-              <div className="text-4xl font-bold">{totalApplications}</div>
+              </Button>
             </div>
-            <div className="bg-textBoxBackground p-4 text-center shadow-xl rounded-3xl">
-              <div className="text-xl">Approved</div>
-              <div className="text-4xl font-bold">{totalApproved}</div>
-            </div>
-          </div>
-
-          <div className="flex-1 bg-textBoxBackground p-4 shadow-xl rounded-3xl">
-            <div className="flex gap-4 items-center justify-center">
-              {quotaData.map((option) => (
-                <div key={option.quota} className="text-center">
-                  <div className="text-xl">{option.quota}</div>
-                  <div className="text-4xl font-bold">
-                    {option.applications}
+            <div className="h-[calc(100%-3rem)]">
+              {totalApplications === 0 ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <h3 className="text-2xl font-semibold text-gray-600 mb-2">No Applications</h3>
+                    <p className="text-gray-500">No application data available for {selectedYear}</p>
                   </div>
                 </div>
-              ))}
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={data}
+                    margin={{
+                      top: 20,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="program"
+                      label="Branches"
+                      angle={-45}
+                      textAnchor="end"
+                      height={80}
+                    />
+                    <YAxis
+                      label={{ value: "Count", angle: -90, position: "insideLeft" }}
+                    />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="applications" fill="orange" name="Applications" />
+                    <Bar dataKey="approved" fill="green" name="Approved" />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Right side - Stats */}
+        {selectedYear && (
+          <div className="lg:w-80 flex flex-col gap-4 ">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-textBoxBackground p-4 text-center shadow-xl rounded-3xl">
+                <div className="text-xl">Applications</div>
+                <div className="text-4xl font-bold">{totalApplications}</div>
+              </div>
+              <div className="bg-textBoxBackground p-4 text-center shadow-xl rounded-3xl">
+                <div className="text-xl">Approved</div>
+                <div className="text-4xl font-bold">{totalApproved}</div>
+              </div>
+            </div>
+
+            <div className="flex-1 bg-textBoxBackground p-4 shadow-xl rounded-3xl">
+              <div className="flex gap-4 items-center justify-center">
+                {quotaData.map((option) => (
+                  <div key={option.quota} className="text-center">
+                    <div className="text-xl">{option.quota}</div>
+                    <div className="text-4xl font-bold">
+                      {option.applications}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
