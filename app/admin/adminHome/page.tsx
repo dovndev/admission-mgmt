@@ -33,14 +33,13 @@ export default function AdminHome() {
   const [quotaData, setQuotaData] = useState<QotaData[]>([]);
   const [totalApplications, setTotalApplications] = useState(0);
   const [totalApproved, setTotalApproved] = useState(0);
-  const [usingSampleData, setUsingSampleData] = useState(false);
   const { selectedYear } = useAdminStore();
 
   const loadData = useCallback(async () => {
     // Generate sample data for demonstration when no real data exists
     const generateSampleData = (): ProgramData[] => [
       { program: "CSE", applications: 0, approved: 0 },
-      { program: "ECE", applications: 0, approved: 35 },
+      { program: "ECE", applications: 0, approved: 0 },
       { program: "ME", applications: 0, approved: 0 },
       { program: "CE", applications: 0, approved: 0 },
       { program: "AIDS", applications: 0, approved: 0 },
@@ -67,18 +66,16 @@ export default function AdminHome() {
         setQuotaData(result.quotaData);
         setTotalApplications(result.totalApplications);
         setTotalApproved(result.totalApproved);
-        setUsingSampleData(false);
       } else {
-        console.log('No real data found, using sample data for demonstration');
-        // Use sample data for demonstration
+        console.log('No real data found for year:', selectedYear);
+        // Clear all data when no real data is found
         const sampleData = generateSampleData();
         const sampleQuotaData = generateSampleQuotaData();
         
         setData(sampleData);
         setQuotaData(sampleQuotaData);
-        setTotalApplications(sampleData.reduce((sum, item) => sum + item.applications, 0));
-        setTotalApproved(sampleData.reduce((sum, item) => sum + item.approved, 0));
-        setUsingSampleData(true);
+        setTotalApplications(0);
+        setTotalApproved(0);
       }
     } catch (error) {
       console.error("Error loading data:", error);
@@ -88,9 +85,8 @@ export default function AdminHome() {
       
       setData(sampleData);
       setQuotaData(sampleQuotaData);
-      setTotalApplications(sampleData.reduce((sum, item) => sum + item.applications, 0));
-      setTotalApproved(sampleData.reduce((sum, item) => sum + item.approved, 0));
-      setUsingSampleData(true);
+      setTotalApplications(0);
+      setTotalApproved(0);
     } finally {
       setIsLoading(false);
     }
@@ -121,11 +117,7 @@ export default function AdminHome() {
                 <h2 className="text-xl font-semibold">
                   Registration Statistics for {selectedYear}
                 </h2>
-                {usingSampleData && (
-                  <p className="text-sm text-orange-500 mt-1">
-                    ⚠️ Showing sample data (no real data available for {selectedYear})
-                  </p>
-                )}
+
               </div>
               <Button
                 isIconOnly
@@ -140,33 +132,42 @@ export default function AdminHome() {
               </Button>
             </div>
             <div className="h-[calc(100%-3rem)]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={data}
-                  margin={{
-                    top: 20,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="program"
-                    label="Branches"
-                    angle={-45}
-                    textAnchor="end"
-                    height={80}
-                  />
-                  <YAxis
-                    label={{ value: "Count", angle: -90, position: "insideLeft" }}
-                  />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="applications" fill="orange" name="Applications" />
-                  <Bar dataKey="approved" fill="green" name="Approved" />
-                </BarChart>
-              </ResponsiveContainer>
+              {totalApplications === 0 ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <h3 className="text-2xl font-semibold text-gray-600 mb-2">No Applications</h3>
+                    <p className="text-gray-500">No application data available for {selectedYear}</p>
+                  </div>
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={data}
+                    margin={{
+                      top: 20,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="program"
+                      label="Branches"
+                      angle={-45}
+                      textAnchor="end"
+                      height={80}
+                    />
+                    <YAxis
+                      label={{ value: "Count", angle: -90, position: "insideLeft" }}
+                    />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="applications" fill="orange" name="Applications" />
+                    <Bar dataKey="approved" fill="green" name="Approved" />
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
         )}
