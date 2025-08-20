@@ -49,7 +49,7 @@ export default function Declaration() {
   const [academic, setacademic] = useState(0);
   const session = useSession();
 
-  const { userData } = useUserStore();
+  const { userData, fetchUserData } = useUserStore();
 
   const {
     handleSubmit,
@@ -146,18 +146,17 @@ export default function Declaration() {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = session.data?.user as UserData | undefined;
-        if (data?.applyingYear) {
-          setacademic(data.applyingYear);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
+
+   useEffect(() => {
+    const fetchData = async () => {
+      if (session?.data?.user?.id) {
+        const userDetails = await fetchUserData(session.data.user.id);
+        const academicYear = userDetails?.['Student Details']?.['Academic Year'];
+        setacademic(academicYear);
       }
-    })();
-  }, [session]);
+    };
+    fetchData();
+  }, [session, fetchUserData]);
 
   const year = "2024";
   return (

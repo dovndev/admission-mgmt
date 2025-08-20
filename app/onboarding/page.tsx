@@ -170,6 +170,10 @@ export default function OnBoarding() {
   // Main content
   return (
     <div className="flex flex-col">
+
+
+
+    
       <div className="flex justify-center h-20 w-full">
         <ProgressBar currentStep={seatConfirmed ? 4 : currentStep} handleLogout={handleLogout} />
       </div>

@@ -105,13 +105,15 @@ export async function isBranchAvailable(year: number | string, branch: string) {
     if (typeof year === "string") {
         year = parseInt(year)
     }
+    console.log("year", year, "branch", branch)
     const branchEntry = await prisma.branches.findFirst({
         where: {
             year: year,
             name: branch
         }
     });
-    if (!branch) {
+    console.log("branchEntry", branchEntry)
+    if (!branchEntry) {
         throw new Error(`Branch ${branch} not found for the year ${year}`);
     }
     return branchEntry;

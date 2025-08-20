@@ -278,8 +278,8 @@ export default function PersonalDetails() {
     });
   };
 
-  const handleSubmit = async () => {
-    // e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     try {
       CustomToast({ title: "Saving" });
