@@ -39,11 +39,6 @@ interface BranchAvailabilityResponse {
   occupiedSets: number;
 }
 
-// Define user data type
-interface UserData {
-  applyingYear?: number;
-}
-
 export default function Declaration() {
   const [branchAlert, setbranchAlert] = useState<string | null>(null);
   const [academic, setacademic] = useState(0);
@@ -147,7 +142,7 @@ export default function Declaration() {
   };
 
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       if (session?.data?.user?.id) {
         const userDetails = await fetchUserData(session.data.user.id);
