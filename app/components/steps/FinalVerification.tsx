@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import useUserStore from "@/app/store/userStore";
 import CustomToast from "../CustomToast";
 import { STUDENTDATA as defaultStudentData } from "@/app/mock/mockData";
+import { conformSeat } from "@/app/actions/user-Actions";
 export default function Register() {
   const session = useSession();
   const { data: sessionData } = session;
@@ -50,18 +51,24 @@ export default function Register() {
         throw new Error("Missing required student data.");
       }
 
-      // const result = await conformSeat(userId, quota, branch, year);
+      // Call the conformSeat function to update seatConfirmed status
+      const result = await conformSeat(userId, quota, branch, year);
 
-      // setSubmitStatus(result);
-
-      CustomToast({
-        title: "Seat Confirmed",
-        description: "Please move to the next step",
-      });
-      // if (result.success) {
-      //   // Redirect to success page or dashboard after a brief delay
-      //   console.log("Seat confirmed successfully");
-      // }
+      if (result.success) {
+        CustomToast({
+          title: "Seat Confirmed",
+          description: "Your seat has been successfully confirmed. Please move to the next step.",
+        });
+        
+        setSubmitStatus(result);
+        
+        // Refresh user data to reflect the updated seatConfirmed status
+        fetchUserData(userId);
+        
+        console.log("Seat confirmed successfully");
+      } else {
+        throw new Error(result.message || "Failed to confirm seat");
+      }
     } catch (error) {
       // Type the error as any
       console.error("Form submission error:", error);
