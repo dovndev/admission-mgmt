@@ -1,6 +1,6 @@
 "use client";
 //import Navbar from "../components/navbar";
-import { Image, Button, Spinner } from "@heroui/react";
+import { Image, Button, Spinner, Card, CardBody, CardHeader, Divider } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -11,8 +11,12 @@ import {
   MdPhone,
   MdPeopleAlt,
   MdHomeFilled,
+  MdLogout,
+  MdPrint,
+  MdAccountCircle,
+  MdLocationOn,
 } from "react-icons/md";
-import { FaGraduationCap } from "react-icons/fa";
+import { FaGraduationCap, FaIdCard } from "react-icons/fa";
 import useUserStore from "../store/userStore";
 import { useSession, signOut } from "next-auth/react";
 import ThemeToggle from "../components/ThemeToggle";
@@ -76,150 +80,226 @@ export default function Register() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background relative">
-      {/* Background Image Container */}
-      <div
-        className="absolute top-0 left-0 w-full h-[25vh] bg-cover bg-center z-0"
-        style={{
-          backgroundImage: "url('background_image.png')",
-          backgroundBlendMode: "overlay",
-          backgroundColor: "rgba(0, 0, 0, 0.1)",
-        }}
-      />
-
-      <div className="flex w-full lg:absolute justify-center top-0 z-10">
-        {/*<Navbar mode="dark" />*/}
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      {/* Header Section */}
+      <div className="relative">
+        <div
+          className="h-[25dvh] md:h-[35dvh]  bg-cover bg-center"
+          style={{
+            backgroundImage: "url('background_image.png')",
+            backgroundBlendMode: "overlay",
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
+          }}
+        />
+        
+        {/* Top Navigation Bar */}
+        <div className="absolute top-4 right-4 z-20">
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Button
+              color="danger"
+              variant="bordered"
+              size="sm"
+              onPress={handleLogout}
+              startContent={<MdLogout className="w-4 h-4" />}
+            >
+              Logout
+            </Button>
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row items-center lg:items-stretch justify-center w-full gap-4 p-4 z-10 mt-20">
-        {/*Parent and Course details*/}
-        <div className="bg-textBoxBackground shadow-xl rounded-3xl p-8 max-w-md w-full flex flex-col items-start justify-start">
-          <div className="flex items-center mb-2">
-            <MdPeopleAlt className="mr-1" />
-            <h2 className="text-xl font-semibold">Parental Details</h2>
-          </div>
-          <div>
-            <h2 className="mb-1 font-bold">
-              <span className="font-light">Parent/Guardian: </span>
-              {userData["Student Details"]["Parent Name"]}
-            </h2>
-            <h2 className="mb-1 font-bold">
-              <span className="font-light">Occupation: </span>
-              {userData["Student Details"]["Parent Occupation"]}
-            </h2>
-            <h2 className="mb-1 font-bold">
-              <span className="font-light">Relationship with Applicant: </span>
-              {userData["Student Details"]["Relationship with Applicant"]}
-            </h2>
-            <h2 className="mb-1 font-bold">
-              <span className="font-light">NRI Sponsor: </span>
-              {userData["Student Details"]["NRI Sponsor"]}
-            </h2>
-          </div>
-          <div className="flex items-center mb-2 mt-4">
-            <FaGraduationCap className="mr-1" />
-            <h2 className="text-xl font-semibold">Course Details</h2>
-          </div>
-          <div>
-            <h2 className="mb-1 font-bold">
-              <span className="font-light">Course: </span>
-              {userData["Student Details"]["Course"]}
-            </h2>
-            <h2 className="mb-1 font-bold">
-              <span className="font-light">Quota: </span>
-              {userData["Student Details"]["Quota"]}
-            </h2>
-            <h2 className="mb-1 font-bold">
-              <span className="font-light">Branch Opted: </span>
-              {userData["Branch Details"]["Branch"]}
-            </h2>
-            <h2 className="mb-1 font-bold">
-              <span className="font-light">Academic Year: </span>
-              {userData["Student Details"]["Academic Year"]}
-            </h2>
-          </div>
-        </div>
-
-        {/*Address details*/}
-        <div className="bg-textBoxBackground shadow-xl rounded-3xl p-8 max-w-md w-full flex flex-col items-start justify-start ">
-          <div className="flex items-center mb-2">
-            <MdPhone className="mr-1" />
-            <h2 className="text-xl font-semibold">Contact Address</h2>
-          </div>
-          <div>
-            <h2 className="mb-1 font-light">
-              {userData["Contact Address"]["House Name"]}
-            </h2>
-            <h2 className="mb-1 font-light">
-              {userData["Contact Address"]["District, City"]}
-            </h2>
-            <h2 className="mb-1 font-light">
-              {userData["Contact Address"]["State"]},{" "}
-              {userData["Contact Address"]["Pin"]}
-            </h2>
-          </div>
-          <div className="flex items-center mt-4 mb-2">
-            <MdHomeFilled className="mr-1" />
-            <h2 className="text-xl font-semibold">Permanent Address</h2>
-          </div>
-          <div>
-            <h2 className="mb-1 font-light">
-              {userData["Permanent Address"]["House Name"]}
-            </h2>
-            <h2 className="mb-1 font-light">
-              {userData["Permanent Address"]["District, City"]}
-            </h2>
-            <h2 className="mb-1 font-light">
-              {userData["Permanent Address"]["State"]},{" "}
-              {userData["Permanent Address"]["Pin"]}
-            </h2>
-          </div>
-        </div>
-
-        {/* Student Details */}
-        <div className="bg-textBoxBackground shadow-xl rounded-3xl p-8 max-w-[16rem] w-full flex flex-col items-center justify-center z-10">
-          <Image
-            alt="Student Picture"
-            className="object-contain max-h-[10rem] min-h[10rem] rounded-3xl border-large border-foreground"
-            src={userData["Uploads"]["studentPhoto"] || "no_img.png"}
-          />
-          <h2 className="text-xl font-semibold text-center pt-2">
-            {userData["Student Details"]["Name"]}
-          </h2>
-          <div className="flex items-center">
-            <MdOutlineDateRange className="mr-1" />
-            {userData["Student Details"]["Date of Birth"]}
-          </div>
-          <div className="flex items-center">
-            <MdOutlineEmail className="mr-1" />
-            {userData["Student Details"]["Email"]}
-          </div>
-          <div className="flex items-center">
-            <MdPhone className="mr-1" />
-            {userData["Student Details"]["Phone"]}
-          </div>
-          {userData["Student Details"]["Kerala Phone"] && (
-            <div className="flex items-center">
-              <MdPhone className="mr-1" />
-              {userData["Student Details"]["Kerala Phone"]}
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        {/* Profile Header Section */}
+        <div className="mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            {/* Profile Info */}
+            <div className="flex items-center gap-6">
+              <Image
+                alt="Student Picture"
+                className="w-24 h-24 lg:w-32 lg:h-32 object-cover rounded-full border-4 border-primary/20 shadow-lg"
+                src={userData["Uploads"]["studentPhoto"] || "no_img.png"}
+              />
+              <div>
+                <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+                  {userData["Student Details"]["Name"]}
+                </h1>
+                <p className="text-muted-foreground flex items-center gap-2 text-lg">
+                  <FaIdCard className="w-5 h-5" />
+                  Application ID: {userData.applicationNo}
+                </p>
+              </div>
             </div>
-          )}
-          <div className="flex items-center">
-            <MdPeopleAlt className="mr-1" />
-            {userData["userid"]}
+            
+            {/* Action Button */}
+            <div className="flex-shrink-0">
+              <Button
+                color="primary"
+                size="lg"
+                onPress={() => handlePrintStudent(userData)}
+                startContent={<MdPrint className="w-5 h-5" />}
+                className="font-semibold"
+              >
+                Download Application
+              </Button>
+            </div>
           </div>
-          <div className="pt-2 w-full">
-            <Button className="m-1" variant="bordered" onPress={handleLogout}>
-              Log out
-            </Button>
-            <Button
-              className="m-1"
-              onPress={() => handlePrintStudent(userData)}
-            >
-              Print
-            </Button>
-          </div>
-          <ThemeToggle></ThemeToggle>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          
+          {/* Personal Information Card */}
+          <Card className="shadow-lg border border-border/20 bg-textBoxBackground">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2 text-foreground">
+                <MdAccountCircle className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-semibold">Personal Information</h2>
+              </div>
+            </CardHeader>
+            <Divider />
+            <CardBody className="space-y-3">
+              <div className="flex items-start gap-3">
+                <MdOutlineDateRange className="w-4 h-4 text-muted-foreground mt-1 flex-shrink-0" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Date of Birth</p>
+                  <p className="text-sm font-medium">{userData["Student Details"]["Date of Birth"]}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <MdOutlineEmail className="w-4 h-4 text-muted-foreground mt-1 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs text-muted-foreground">Email</p>
+                  <p className="text-sm font-medium truncate">{userData["Student Details"]["Email"]}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <MdPhone className="w-4 h-4 text-muted-foreground mt-1 flex-shrink-0" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Phone</p>
+                  <p className="text-sm font-medium">{userData["Student Details"]["Phone"]}</p>
+                </div>
+              </div>
+              
+              {userData["Student Details"]["Kerala Phone"] && (
+                <div className="flex items-start gap-3">
+                  <MdPhone className="w-4 h-4 text-muted-foreground mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Kerala Phone</p>
+                    <p className="text-sm font-medium">{userData["Student Details"]["Kerala Phone"]}</p>
+                  </div>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+
+          {/* Academic Information Card */}
+          <Card className="shadow-lg border border-border/20 bg-textBoxBackground">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2 text-foreground">
+                <FaGraduationCap className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-semibold">Academic Details</h2>
+              </div>
+            </CardHeader>
+            <Divider />
+            <CardBody className="space-y-4">
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Course & Program</p>
+                  <p className="text-sm font-medium">{userData["Student Details"]["Course"]}</p>
+                </div>
+                
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Branch Opted</p>
+                  <p className="text-sm font-medium">{userData["Branch Details"]["Branch"]}</p>
+                </div>
+                
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Quota</p>
+                  <p className="text-sm font-medium">{userData["Student Details"]["Quota"]}</p>
+                </div>
+                
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Academic Year</p>
+                  <p className="text-sm font-medium">{userData["Student Details"]["Academic Year"]}</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+
+          {/* Parent/Guardian Information Card */}
+          <Card className="shadow-lg border border-border/20 bg-textBoxBackground">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2 text-foreground">
+                <MdPeopleAlt className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-semibold">Parent/Guardian Details</h2>
+              </div>
+            </CardHeader>
+            <Divider />
+            <CardBody className="space-y-3">
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Parent/Guardian Name</p>
+                <p className="text-sm font-medium">{userData["Student Details"]["Parent Name"]}</p>
+              </div>
+              
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Occupation</p>
+                <p className="text-sm font-medium">{userData["Student Details"]["Parent Occupation"]}</p>
+              </div>
+              
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Relationship</p>
+                <p className="text-sm font-medium">{userData["Student Details"]["Relationship with Applicant"]}</p>
+              </div>
+              
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">NRI Sponsor</p>
+                <p className="text-sm font-medium">{userData["Student Details"]["NRI Sponsor"]}</p>
+              </div>
+            </CardBody>
+          </Card>
+
+          {/* Contact Address Card */}
+          <Card className="shadow-lg border border-border/20 bg-textBoxBackground">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2 text-foreground">
+                <MdLocationOn className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-semibold">Contact Address</h2>
+              </div>
+            </CardHeader>
+            <Divider />
+            <CardBody>
+              <div className="space-y-1">
+                <p className="text-sm font-medium">{userData["Contact Address"]["House Name"]}</p>
+                <p className="text-sm text-muted-foreground">{userData["Contact Address"]["District, City"]}</p>
+                <p className="text-sm text-muted-foreground">
+                  {userData["Contact Address"]["State"]}, {userData["Contact Address"]["Pin"]}
+                </p>
+              </div>
+            </CardBody>
+          </Card>
+
+          {/* Permanent Address Card */}
+          <Card className="shadow-lg border border-border/20 bg-textBoxBackground">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-2 text-foreground">
+                <MdHomeFilled className="w-5 h-5 text-primary" />
+                <h2 className="text-lg font-semibold">Permanent Address</h2>
+              </div>
+            </CardHeader>
+            <Divider />
+            <CardBody>
+              <div className="space-y-1">
+                <p className="text-sm font-medium">{userData["Permanent Address"]["House Name"]}</p>
+                <p className="text-sm text-muted-foreground">{userData["Permanent Address"]["District, City"]}</p>
+                <p className="text-sm text-muted-foreground">
+                  {userData["Permanent Address"]["State"]}, {userData["Permanent Address"]["Pin"]}
+                </p>
+              </div>
+            </CardBody>
+          </Card>
+
         </div>
       </div>
     </div>

@@ -18,6 +18,7 @@ import { Button } from "@heroui/react";
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [seatConfirmed, setSeatConfirmed] = useState<boolean>(false);
+  const [paymentCompleted, setPaymentCompleted] = useState<boolean>(false);
   const [canOnboard, setCanOnboard] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { clearUserData, fetchUserData } = useUserStore();
@@ -85,10 +86,16 @@ export default function OnBoarding() {
         // Update state based on user data
         setCanOnboard(userData.canOnboard || false);
 
-        // Check if seat is confirmed and redirect if needed
         if (userData["Student Details"] && userData["Student Details"]["Seat Confirmed"]) {
           setSeatConfirmed(true);
+        }
+
+        // Check if payment is completed (transaction number is not empty)
+        if (userData["Payment"] && userData["Payment"]["Transaction Number"]) {
+          console.log("Payment completed, redirecting to user page");
+          setPaymentCompleted(true);
           router.push("/user");
+          return;
         }
       } catch (error) {
         console.error("Error loading user data:", error);
@@ -107,7 +114,7 @@ export default function OnBoarding() {
   // when session.status was "loading"
 
   const renderStepContent = () => {
-    if (seatConfirmed) {
+    if (seatConfirmed && !paymentCompleted) {
       return <Payment />;
     }
     switch (currentStep) {
@@ -131,6 +138,18 @@ export default function OnBoarding() {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // If payment is completed, redirect to user page (additional safety check)
+  if (paymentCompleted) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Loading your profile...</p>
+        </div>
       </div>
     );
   }
