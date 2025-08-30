@@ -6,7 +6,7 @@ import { Input } from "@heroui/input";
 import { Card, CardHeader, CardBody } from "@heroui/card";
 import NavbarAdmin from "../../components/NavbarAdmin";
 import { ModalHeader, ModalBody, Modal, ModalContent, ModalFooter, useDisclosure, Switch } from "@heroui/react";
-import { addYear, getAllBreanchesByYear, toggleYearActivation, getYearActivationStatus, deleteYear } from "../../actions/branch-Actions";
+import { getAllBreanchesByYear, toggleYearActivation, getYearActivationStatus, deleteYear } from "../../actions/branch-Actions";
 import useAdminStore from "@/app/store/adminStore";
 import { updateBranchAllocation } from "@/app/actions/seat-Management-Actions";
 import { BRANCH_OPTIONS, BranchCodeType } from "@/app/constants/dropdownOptions";
@@ -112,7 +112,6 @@ export default function SeatAllocation() {
   }, []);
 
   const [allocations, setAllocations] = useState<Record<BranchCode, SeatAllocation>>(initialAllocationsState);
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure(); // For add year modal
   const {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
@@ -120,10 +119,8 @@ export default function SeatAllocation() {
     onOpenChange: onDeleteOpenChange,
   } = useDisclosure(); // For delete year modal
   const { years, selectedYear, setYears } = useAdminStore();
-  const [year, setYear] = useState<number | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [savedBranches, setSavedBranches] = useState<BranchCode[]>([]);
   
   // Form activation state
@@ -222,36 +219,6 @@ export default function SeatAllocation() {
       console.error("Error in save all operation:", error);
     } finally {
       setIsSaving(false);
-    }
-  };
-
-  // Add a new year
-  const handleSubmit = async () => {
-    if (!year) {
-      setErrorMsg("Year is required");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const result = await addYear(year);
-
-      if (result.success) {
-        console.log("Year added successfully:");
-        setYear(undefined);
-
-        // Update years list in the store
-        const updatedYears = years ? [...years, year].sort((a, b) => b - a) : [year];
-        setYears(updatedYears);
-
-        onClose();
-      } else {
-        console.error("Failed to add year:", result.message);
-      }
-    } catch (err) {
-      console.error("Error adding year:", err);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -412,8 +379,6 @@ export default function SeatAllocation() {
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin h-10 w-10 border-4 border-muthootRed border-t-transparent rounded-full"></div>
           </div>
-        ) : errorMsg ? (
-          <div className="bg-red-100 text-red-700 p-4 rounded-md mb-6">{errorMsg}</div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
             {Object.keys(allocations).map((branch) => (
@@ -457,44 +422,10 @@ export default function SeatAllocation() {
             >
               Delete Year
             </Button>
-            <Button
-              className="text-white bg-green-600"
-              onPress={onOpen}
-              color="success"
-              isDisabled={loading || isSaving}
-            >
-              Add Year
-            </Button>
           </div>
         </div>
       </div>
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          <ModalHeader>
-            <h2>Add Year</h2>
-          </ModalHeader>
-          <ModalBody>
-            <Input
-              label="Year"
-              value={year?.toString() || ""}
-              onChange={(e) => setYear(Number(e.target.value))}
-              type="number"
-              min={2020}
-              max={2050}
-              required
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button className="bg-muthootRed text-white" onPress={handleSubmit} isDisabled={!year || loading}>
-              {loading ? "Adding..." : "Add Year"}
-            </Button>
-            <Button variant="bordered" onPress={onClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
       <Modal isOpen={isDeleteOpen} onOpenChange={onDeleteOpenChange}>
         <ModalContent>
           <ModalHeader>

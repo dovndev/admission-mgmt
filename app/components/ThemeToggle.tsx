@@ -1,4 +1,4 @@
-import { Switch } from "@heroui/switch";
+import { Button } from "@heroui/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -12,16 +12,20 @@ function ThemeToggle() {
 
   if (!mounted) return null;
 
+  const handleToggle = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
 return (
-    <Switch
-        defaultSelected={theme === "dark"}
-        size="md"
-        thumbIcon={({ isSelected }) => (
-            isSelected ? <MoonIcon  /> : <SunIcon />
-        )}
-        onValueChange={(isSelected) => setTheme(isSelected ? "dark" : "light")}
-        color = "default"
-    />
+    <Button
+        isIconOnly
+        variant="ghost"
+        onPress={handleToggle}
+        aria-label="Toggle theme"
+        className="!w-8 !h-8 !min-w-8 !min-h-8 flex items-center justify-center"
+    >
+        {theme === "dark" ? <MoonIcon /> : <SunIcon />}
+    </Button>
 );
 }
 
