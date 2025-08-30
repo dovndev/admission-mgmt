@@ -6,10 +6,11 @@ import { Input } from "@heroui/input";
 import { Card, CardHeader, CardBody } from "@heroui/card";
 import NavbarAdmin from "../../components/NavbarAdmin";
 import { ModalHeader, ModalBody, Modal, ModalContent, ModalFooter, useDisclosure, Switch } from "@heroui/react";
-import { addYear, getAllBreanchesByYear, toggleYearActivation, getYearActivationStatus } from "../../actions/branch-Actions";
+import { addYear, getAllBreanchesByYear, toggleYearActivation, getYearActivationStatus, deleteYear } from "../../actions/branch-Actions";
 import useAdminStore from "@/app/store/adminStore";
 import { updateBranchAllocation } from "@/app/actions/seat-Management-Actions";
 import { BRANCH_OPTIONS, BranchCodeType } from "@/app/constants/dropdownOptions";
+import CustomToast from "../../components/CustomToast";
 // Use string union type to match both your API and component needs
 type BranchCode = BranchCodeType;
 
@@ -288,19 +289,42 @@ export default function SeatAllocation() {
 
     try {
       setLoading(true);
+      
       // Call API to delete the year
-      // Example: const result = await deleteYear(selectedYear);
+      const result = await deleteYear(selectedYear);
 
-      // Update the years in the store
-      setYears(years.filter((y) => y !== selectedYear));
+      if (result.success) {
+        // Update the years in the store
+        const updatedYears = years.filter((y) => y !== selectedYear);
+        setYears(updatedYears);
 
-      // Close the modal
-      onDeleteClose();
+        // Close the modal
+        onDeleteClose();
 
-      // Show success message or toast
-      console.log(`Year ${selectedYear} deleted successfully`);
+        // Show success message
+        CustomToast({
+          title: "Year Deleted",
+          description: `Year ${selectedYear} and all associated data deleted successfully`
+        });
+        
+        // If we deleted the currently selected year, clear the selection
+        if (selectedYear === years[0]) {
+          // Reset to no year selected or first available year
+          // You might want to add a setSelectedYear(null) or similar logic here
+        }
+      } else {
+        console.error("Failed to delete year:", result.message);
+        CustomToast({
+          title: "Delete Failed",
+          description: result.message
+        });
+      }
     } catch (error) {
       console.error(`Error deleting year ${selectedYear}:`, error);
+      CustomToast({
+        title: "Error",
+        description: "An unexpected error occurred while deleting the year."
+      });
     } finally {
       setLoading(false);
     }
@@ -477,8 +501,11 @@ export default function SeatAllocation() {
             <h2>Confirm Deletion</h2>
           </ModalHeader>
           <ModalBody>
-            <p>Are you sure you want to delete this year {selectedYear}?</p>
-            <p className="text-red-500 mt-2">This action cannot be undone.</p>
+            <p>Are you sure you want to delete year {selectedYear}?</p>
+            <p className="text-orange-500 mt-2 font-medium">
+              ⚠️ This will also delete ALL students registered for this year.
+            </p>
+            <p className="text-red-500 mt-2 font-bold">This action cannot be undone.</p>
           </ModalBody>
           <ModalFooter>
             <Button className="bg-red-600 text-white" onPress={handleDeleteYear} isDisabled={loading}>
