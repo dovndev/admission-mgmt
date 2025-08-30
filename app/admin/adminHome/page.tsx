@@ -57,6 +57,19 @@ export default function AdminHome() {
 
     setIsLoading(true);
     try {
+      if (!selectedYear) {
+        // If no year is selected, set sample/empty data
+        const sampleData = generateSampleData();
+        const sampleQuotaData = generateSampleQuotaData();
+        
+        setData(sampleData);
+        setQuotaData(sampleQuotaData);
+        setTotalApplications(0);
+        setTotalApproved(0);
+        setIsLoading(false);
+        return;
+      }
+
       console.log('Loading data for year:', selectedYear);
       const result = await getDashboardStats(selectedYear);
 

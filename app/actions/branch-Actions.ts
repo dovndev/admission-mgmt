@@ -182,3 +182,44 @@ export async function getYearActivationStatus(year: number) {
         };
     }
 }
+
+export async function deleteYear(year: number) {
+    try {
+        // Check if there are any users registered for this year
+        const usersCount = await prisma.user.count({
+            where: {
+                applyingYear: year.toString()
+            }
+        });
+
+        // Delete all users for this year first (if any exist)
+        if (usersCount > 0) {
+            await prisma.user.deleteMany({
+                where: {
+                    applyingYear: year.toString()
+                }
+            });
+        }
+
+        // Delete all branch entries for this year
+        await prisma.branches.deleteMany({
+            where: { year }
+        });
+
+        // Delete year status entry
+        await prisma.yearStatus.deleteMany({
+            where: { year }
+        });
+
+        return {
+            success: true,
+            message: `Year ${year} deleted successfully. ${usersCount > 0 ? `${usersCount} student(s) and ` : ''}All associated branch data removed.`
+        };
+    } catch (error) {
+        console.error("Error deleting year:", error);
+        return {
+            success: false,
+            message: `Failed to delete year ${year}: ${error instanceof Error ? error.message : "Unknown error"}`
+        };
+    }
+}

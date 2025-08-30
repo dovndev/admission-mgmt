@@ -14,6 +14,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Contact from "../components/Contact";
 import { Button } from "@heroui/react";
+import CustomToast from "../components/CustomToast";
 
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -21,11 +22,23 @@ export default function OnBoarding() {
   const [paymentCompleted, setPaymentCompleted] = useState<boolean>(false);
   const [canOnboard, setCanOnboard] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { clearUserData, fetchUserData } = useUserStore();
+  const { clearUserData, fetchUserData, userData } = useUserStore();
   const session = useSession();
   const router = useRouter();
 
   const handleNext = () => {
+    // Validate photo upload on PersonalDetails step (step 0)
+    if (currentStep === 0) {
+      const studentPhoto = userData?.["Uploads"]?.["studentPhoto"];
+      if (!studentPhoto || studentPhoto === "/no_img.png" || studentPhoto.trim() === "") {
+        CustomToast({ 
+          title: "Photo Required", 
+          description: "Please upload a photo before proceeding to the next step."
+        });
+        return;
+      }
+    }
+    
     setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
   };
 

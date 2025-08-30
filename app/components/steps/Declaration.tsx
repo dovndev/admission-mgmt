@@ -121,6 +121,25 @@ export default function Declaration() {
 
   const onSubmit = async (data: DeclarationFormData) => {
     console.log(data);
+    
+    // Validate applicant signature
+    if (!data.signature || data.signature.trim() === "") {
+      CustomToast({ 
+        title: "Applicant Signature Required", 
+        description: "Please upload the applicant's signature before saving."
+      });
+      return;
+    }
+
+    // Validate parent signature
+    if (!data.parentSignature || data.parentSignature.trim() === "") {
+      CustomToast({ 
+        title: "Parent Signature Required", 
+        description: "Please upload the parent's signature before saving."
+      });
+      return;
+    }
+
     // Handle form submission
     const { branch, signature, parentSignature } = data;
     const response = await updateDeclerationDetails({

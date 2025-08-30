@@ -64,6 +64,14 @@ export default function ApprovalDashboard() {
       setLoading(true);
 
       try {
+        if (!selectedYear) {
+          setUsers([]);
+          setTotalUsers(0);
+          setTotalPages(0);
+          setLoading(false);
+          return;
+        }
+
         const response = await getStructuredUsersByYear(
           selectedYear.toString(),
           currentPage,
@@ -285,7 +293,9 @@ export default function ApprovalDashboard() {
                 <p className="text-default-500">
                   {searchTerm
                     ? "No students found matching your search"
-                    : `No students registered for the ${selectedYear} academic year`}
+                    : selectedYear 
+                      ? `No students registered for the ${selectedYear} academic year`
+                      : "Please select an academic year"}
                 </p>
               </div>
             ) : (
