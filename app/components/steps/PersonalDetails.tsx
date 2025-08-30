@@ -281,6 +281,15 @@ export default function PersonalDetails() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Check if photo is uploaded
+    if (!formData.photo || formData.photo.trim() === "") {
+      CustomToast({ 
+        title: "Photo Required", 
+        description: "Please upload a photo before saving your personal details."
+      });
+      return;
+    }
+
     try {
       CustomToast({ title: "Saving" });
       console.log("Submitting personal details", formData);
