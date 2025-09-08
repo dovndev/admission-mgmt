@@ -16,6 +16,8 @@ import Contact from "../components/Contact";
 import { Button } from "@heroui/react";
 import CustomToast from "../components/CustomToast";
 
+const CONTACT = { name: "Binoy P. K", number: "9446717178" };
+
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [seatConfirmed, setSeatConfirmed] = useState<boolean>(false);
@@ -185,7 +187,7 @@ export default function OnBoarding() {
             <div className="ml-3">
               <h3 className="text-md font-bold text-yellow-800">Approval Required</h3>
               <div className="mt-2 text-md text-yellow-700">
-                <p>Please contact <br/>ABC: +91234567890<br/> for approving your application</p>
+                <p>Please contact <br/>{CONTACT.name}: {CONTACT.number}<br/> for approving your application</p>
               </div>
               <div className="mt-4">
                 <Button className="bg-red-600 border-red-900 text-white" variant="bordered" onPress={handleLogout}>
