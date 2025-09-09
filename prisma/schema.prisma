@@ -120,6 +120,7 @@ model User {
   seatConfirmed      Boolean        @default(false) // Indicates if the seat is confirmed
   applicationNo      String         @unique // <<== NEW CUSTOM ID FIELD
   canOnboard         Boolean        @default(false) // Requires admin approval to onboard
+  onboardingStep     Int            @default(0) // Tracks the current completed onboarding step (0-4)
 }
 
 model Branches {

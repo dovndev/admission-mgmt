@@ -29,7 +29,7 @@ export const BRANCH_OPTIONS: NonEmptyArray<string> = Object.values(Branch) as No
 
 // Use the Branch type from Prisma
 export type BranchCodeType = Branch;
-export type QuotaCodeType = "NRI" | "CWIG";
+export type QuotaCodeType = "NRI" | "CIWG" | "OCI" | "PIO";
 export type ProgramCodeType = "BTech" | "MCA" | "MTech";
 
 export const BANK_ACCOUNT = {

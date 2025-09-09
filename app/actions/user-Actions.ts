@@ -12,6 +12,7 @@ export async function getStructuredUserData(userId: string) {
     const structuredUser = {
         applicationNo: user.applicationNo,
         canOnboard: user.canOnboard,
+        onboardingStep: user.onboardingStep,
         "Student Details": {
             "Name": `${user.firstName} ${user.middleName} ${user.lastName}`,
             "Religion": user.religion,
@@ -96,7 +97,18 @@ export async function conformSeat(userId: string, quota: string, branchName: str
             return { success: false, message: "Invalid quota" };
         }
 
-        const quotaField = quota.toLowerCase();
+        // Map quota names to schema field names
+        const quotaFieldMap: Record<string, string> = {
+            'NRI': 'nri',
+            'CIWG': 'cwig',
+            'OCI': 'oci',
+            'PIO': 'pio'
+        };
+
+        const quotaField = quotaFieldMap[quota];
+        if (!quotaField) {
+            return { success: false, message: `Unknown quota field mapping for: ${quota}` };
+        }
 
         const studentsField = `${quotaField}Students`;
 
@@ -121,6 +133,7 @@ export async function conformSeat(userId: string, quota: string, branchName: str
             where: { id: userId },
             data: {
                 seatConfirmed: true,
+                onboardingStep: 4, // Set to step 4 (FinalVerification completed)
             }
         });
         if (!user) {
@@ -292,7 +305,17 @@ export async function deleteStudentById(userId: string) {
         if (existingUser.seatConfirmed && existingUser.declaration?.branch) {
             const branchName = existingUser.declaration.branch;
             const year = parseInt(existingUser.applyingYear);
-            const quota = existingUser.quota.toLowerCase();
+            const originalQuota = existingUser.quota;
+            
+            // Map quota names to schema field names
+            const quotaFieldMap: Record<string, string> = {
+                "CIWG": "cwig",
+                "NRI": "nri", 
+                "OCI": "oci",
+                "PIO": "pio"
+            };
+            
+            const quota = quotaFieldMap[originalQuota] || originalQuota.toLowerCase();
 
             // Find the branch
             const branch = await prisma.branches.findUnique({
@@ -355,6 +378,36 @@ export async function deleteStudentById(userId: string) {
         return { 
             success: false, 
             message: `Failed to delete student: ${error instanceof Error ? error.message : "Unknown error"}` 
+        };
+    }
+}
+
+export async function updateOnboardingStep(userId: string, step: number) {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+
+        // Only allow updating to a higher step number or same step
+        if (step < user.onboardingStep) {
+            return { success: false, message: "Cannot go backwards in onboarding steps" };
+        }
+
+        await prisma.user.update({
+            where: { id: userId },
+            data: { onboardingStep: step }
+        });
+
+        return { success: true, message: "Onboarding step updated successfully" };
+    } catch (error) {
+        console.error("Error updating onboarding step:", error);
+        return { 
+            success: false, 
+            message: `Failed to update onboarding step: ${error instanceof Error ? error.message : "Unknown error"}` 
         };
     }
 }

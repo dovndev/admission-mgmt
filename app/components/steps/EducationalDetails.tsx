@@ -8,9 +8,11 @@ import { updateEducationDetails } from "../../actions/onboarding-actions";
 import { EducationalDetailsFormData } from "@/schemas";
 import useUserStore from "@/app/store/userStore";
 import CustomToast from "../CustomToast";
+import { useSession } from "next-auth/react";
 
 export default function EducationalDetails() {
-  const { userData, refreshUserData } = useUserStore();
+  const { userData, fetchUserData } = useUserStore();
+  const session = useSession();
   const [formData, setFormData] = useState<EducationalDetailsFormData>({
     _10thSchool: "",
     _10thBoard: "",
@@ -79,7 +81,11 @@ export default function EducationalDetails() {
         console.log(response.message);
         // Refresh user data after successful update
         CustomToast({title:"Saved"})
-        await refreshUserData();
+        
+        // Refresh user data after successful submission
+        if (session?.data?.user?.id) {
+          await fetchUserData(session.data.user.id);
+        }
       } else {
         throw new Error(response.message);
       }

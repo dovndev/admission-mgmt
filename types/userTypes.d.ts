@@ -87,6 +87,9 @@ export interface IUser extends Document {
 }
 
 type StructuredUserData = {
+    applicationNo: string;
+    canOnboard: boolean;
+    onboardingStep: number;
     "Student Details": Record<string, any>;
     "Contact Address": Record<string, any>;
     "Permanent Address": Record<string, any>;
