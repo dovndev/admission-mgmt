@@ -15,7 +15,6 @@ import { useRouter } from "next/navigation";
 import Contact from "../components/Contact";
 import { Button } from "@heroui/react";
 import CustomToast from "../components/CustomToast";
-import { updateOnboardingStep } from "../actions/user-Actions";
 
 const CONTACT = { name: "Binoy P. K", number: "9446717178" };
 
