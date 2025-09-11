@@ -12,6 +12,7 @@ export async function getStructuredUserData(userId: string) {
     const structuredUser = {
         applicationNo: user.applicationNo,
         canOnboard: user.canOnboard,
+        onboardingStep: user.onboardingStep,
         "Student Details": {
             "Name": `${user.firstName} ${user.middleName} ${user.lastName}`,
             "Religion": user.religion,
@@ -97,7 +98,6 @@ export async function conformSeat(userId: string, quota: string, branchName: str
         }
 
         const quotaField = quota.toLowerCase();
-
         const studentsField = `${quotaField}Students`;
 
         await prisma.branches.update({
@@ -121,6 +121,7 @@ export async function conformSeat(userId: string, quota: string, branchName: str
             where: { id: userId },
             data: {
                 seatConfirmed: true,
+                onboardingStep: 4, // Set to step 4 (FinalVerification completed)
             }
         });
         if (!user) {
@@ -176,6 +177,7 @@ export async function getStructuredUsersByYear(year: string, page: number = 1, l
             id: user.id,
             applicationNo: user.applicationNo,
             canOnboard: user.canOnboard,
+            onboardingStep: user.onboardingStep,
             "Student Details": {
                 "Name": `${user.firstName} ${user.middleName || ''} ${user.lastName}`,
                 "Religion": user.religion,
@@ -308,9 +310,9 @@ export async function deleteStudentById(userId: string) {
                 // Determine which fields to update based on quota
                 const occupiedField = quota === 'nri' ? 'occupiedNri' : 
                                    quota === 'oci' ? 'occupiedNri' : // OCI uses NRI seats
-                                   'occupiedSuper'; // CWIG uses super seats
+                                   'occupiedSuper'; // CIWG uses super seats
 
-                const studentsField = `${quota}Students` as 'nriStudents' | 'ociStudents' | 'cwigStudents';
+                const studentsField = `${quota}Students` as 'nriStudents' | 'ociStudents' | 'ciwgStudents';
 
                 // Get current occupied count
                 const currentOccupied = occupiedField === 'occupiedNri' ? branch.occupiedNri : branch.occupiedSuper;
@@ -318,7 +320,7 @@ export async function deleteStudentById(userId: string) {
                 // Get current students array
                 const currentStudents = studentsField === 'nriStudents' ? branch.nriStudents :
                                       studentsField === 'ociStudents' ? branch.ociStudents :
-                                      branch.cwigStudents;
+                                      branch.ciwgStudents;
 
                 // Update branch seat allocation
                 await prisma.branches.update({
@@ -355,6 +357,36 @@ export async function deleteStudentById(userId: string) {
         return { 
             success: false, 
             message: `Failed to delete student: ${error instanceof Error ? error.message : "Unknown error"}` 
+        };
+    }
+}
+
+export async function updateOnboardingStep(userId: string, step: number) {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (!user) {
+            return { success: false, message: "User not found" };
+        }
+
+        // Only allow updating to a higher step number or same step
+        if (step < user.onboardingStep) {
+            return { success: false, message: "Cannot go backwards in onboarding steps" };
+        }
+
+        await prisma.user.update({
+            where: { id: userId },
+            data: { onboardingStep: step }
+        });
+
+        return { success: true, message: "Onboarding step updated successfully" };
+    } catch (error) {
+        console.error("Error updating onboarding step:", error);
+        return { 
+            success: false, 
+            message: `Failed to update onboarding step: ${error instanceof Error ? error.message : "Unknown error"}` 
         };
     }
 }

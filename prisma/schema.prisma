@@ -120,6 +120,7 @@ model User {
   seatConfirmed      Boolean        @default(false) // Indicates if the seat is confirmed
   applicationNo      String         @unique // <<== NEW CUSTOM ID FIELD
   canOnboard         Boolean        @default(false) // Requires admin approval to onboard
+  onboardingStep     Int            @default(0) // Tracks the current completed onboarding step (0-4)
 }
 
 model Branches {
@@ -135,10 +136,10 @@ model Branches {
   occupiedSuper Int      @default(0) // Initially no super seats are occupied
   nri           Int      @default(0) // Count of NRI seats
   oci           Int      @default(0) // Count of OCI seats
-  cwig          Int      @default(0) // Count of CWIG seats
+  ciwg          Int      @default(0) // Count of CIWG seats
   nriStudents   String[] // List of NRI students
   ociStudents   String[] // List of OCI students
-  cwigStudents  String[] // List of CWIG students
+  ciwgStudents  String[] // List of CIWG students
   year          Int // Year for which the data is applicable
   waitingList   Int      @default(0) // Count of students on the waiting list
 

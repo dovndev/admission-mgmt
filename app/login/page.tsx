@@ -141,7 +141,7 @@ export default function LoginPage() {
           </div>
           <Link
             href={isAdmin ? "/login" : "/login?admin=true"}
-            className="absolute bottom-1 right-0 m-4 "
+            className="absolute bottom-1 right-0 m-4 z-50 "
           >
             {isAdmin ? "Login" : "Admin Login"}
           </Link>

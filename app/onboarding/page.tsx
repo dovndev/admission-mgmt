@@ -28,7 +28,20 @@ export default function OnBoarding() {
   const session = useSession();
   const router = useRouter();
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    // Check if user can proceed to the next step based on their current onboarding progress
+    const userOnboardingStep = userData?.onboardingStep || 0;
+    const nextStep = currentStep + 1;
+    
+    // If trying to go to a step beyond what they've completed, block them
+    if (nextStep > userOnboardingStep) {
+      CustomToast({ 
+        title: "Step Not Completed", 
+        description: "Please complete the current step before proceeding to the next one."
+      });
+      return;
+    }
+
     // Validate photo upload on PersonalDetails step (step 0)
     if (currentStep === 0) {
       const studentPhoto = userData?.["Uploads"]?.["studentPhoto"];
@@ -41,7 +54,10 @@ export default function OnBoarding() {
       }
     }
     
-    setCurrentStep((prev) => (prev < REGISTER_STEPS.length - 1 ? prev + 1 : prev));
+    // Move to next step
+    if (nextStep <= REGISTER_STEPS.length - 1) {
+      setCurrentStep(nextStep);
+    }
   };
 
   const handlePrevious = () => {
@@ -100,6 +116,10 @@ export default function OnBoarding() {
 
         // Update state based on user data
         setCanOnboard(userData.canOnboard || false);
+
+        // Set current step based on user's onboarding progress
+        const userOnboardingStep = userData.onboardingStep || 0;
+        setCurrentStep(Math.min(userOnboardingStep, REGISTER_STEPS.length - 1));
 
         if (userData["Student Details"] && userData["Student Details"]["Seat Confirmed"]) {
           setSeatConfirmed(true);
@@ -227,15 +247,19 @@ export default function OnBoarding() {
                 >
                   Previous
                 </Button>
+                {
+                  currentStep !== 4 &&(
                 <Button
                   id="nextPage"
                   className="bg-green-600 border-green-900 text-white"
                   variant="bordered"
                   onPress={handleNext}
-                  disabled={currentStep === REGISTER_STEPS.length - 1}
+                  disabled={currentStep === REGISTER_STEPS.length - 1 || (currentStep + 1) > (userData?.onboardingStep || 0)}
                 >
-                  Next
+                  {(currentStep + 1) > (userData?.onboardingStep || 0) ? "Complete Current Step" : "Next"}
                 </Button>
+                  )
+                }
               </div>
             )}
           </div>

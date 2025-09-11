@@ -9,6 +9,7 @@ type UserStore = {
 
     // New state for user data
     userData: StructuredUserData | null;
+    currentUserId: string | null; // Store current user ID for refresh
     isLoading: boolean;
     error: string | null;
 
@@ -27,6 +28,7 @@ const useUserStore = create<UserStore>()((set, get) => ({
     years: [],
     program: [],
     userData: null,
+    currentUserId: null,
     isLoading: false,
     error: null,
 
@@ -43,6 +45,7 @@ const useUserStore = create<UserStore>()((set, get) => ({
 
             set({
                 userData,
+                currentUserId: userId, // Store the user ID for refresh
                 isLoading: false
             });
 
@@ -56,11 +59,11 @@ const useUserStore = create<UserStore>()((set, get) => ({
         }
     },
 
-    clearUserData: () => set({ userData: null }),
+    clearUserData: () => set({ userData: null, currentUserId: null }),
 
     setUserData: (data: StructuredUserData) => set({ userData: data }),
     refreshUserData: async () => {
-        const userId = get().userData?.["Student Details"]?.userId;
+        const userId = get().currentUserId;
         if (userId) {
             await get().fetchUserData(userId);
         } else {

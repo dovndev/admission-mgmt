@@ -63,7 +63,7 @@ export default function Register() {
         setSubmitStatus(result);
         
         // Refresh user data to reflect the updated seatConfirmed status
-        fetchUserData(userId);
+        await fetchUserData(userId);
         
         console.log("Seat confirmed successfully");
       } else {

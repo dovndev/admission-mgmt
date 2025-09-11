@@ -52,7 +52,7 @@ export async function addYear(year: number) {
                 occupiedSuper: 0,
                 nri: 0,
                 oci: 0,
-                cwig: 0,
+                ciwg: 0,
                 waitingList: 0
             }
         })

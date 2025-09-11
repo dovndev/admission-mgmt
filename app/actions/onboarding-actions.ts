@@ -16,6 +16,10 @@ export async function personalDetailsAction(data: PersonalDetailsFormData) {
         // Validate the input data
         const validatedData = validatePersonalDetails(data);
 
+        // Get current user to check onboarding step
+        const currentUser = await prisma.user.findUnique({
+            where: { id: session.user.id }
+        });
 
         // Update user with validated data
         console.log("updating the user data");
@@ -46,7 +50,8 @@ export async function personalDetailsAction(data: PersonalDetailsFormData) {
                 },
                 parentDetails: {
                     set: validatedData.parentDetails
-                }
+                },
+                onboardingStep: Math.max(1, currentUser?.onboardingStep || 0) // Set to step 1 if not already higher
             }
         });
 
@@ -72,6 +77,11 @@ export async function updateEducationDetails(data: EducationalDetailsFormData) {
     try {
         // Validate the input data
         const validatedData = EducationalDetailsSchema.parse(data);
+
+        // Get current user to check onboarding step
+        const currentUser = await prisma.user.findUnique({
+            where: { id: session.user.id }
+        });
 
         // Update user education details
         await prisma.user.update({
@@ -101,7 +111,8 @@ export async function updateEducationDetails(data: EducationalDetailsFormData) {
                             markList: validatedData.KeamMarklist,
                         }
                     }
-                }
+                },
+                onboardingStep: Math.max(2, currentUser?.onboardingStep || 0) // Set to step 2 if not already higher
             }
         });
 
@@ -132,6 +143,11 @@ export async function updateDeclerationDetails(data: {
         // Validate the input data
         const validatedData = data; // Assuming data is already validated
 
+        // Get current user to check onboarding step
+        const currentUser = await prisma.user.findUnique({
+            where: { id: session.user.id }
+        });
+
         // Update user declaration details
         await prisma.user.update({
             where: {
@@ -144,7 +160,8 @@ export async function updateDeclerationDetails(data: {
                         signature: validatedData.signature,
                         signatureGuardian: validatedData.signatureGuardian
                     }
-                }
+                },
+                onboardingStep: Math.max(3, currentUser?.onboardingStep || 0) // Set to step 3 if not already higher
             }
         });
 
@@ -174,6 +191,11 @@ export async function updatePaymentDetails(data: {
         // Validate the input data
         const validatedData = data; // Assuming data is already validated
 
+        // Get current user to check onboarding step
+        const currentUser = await prisma.user.findUnique({
+            where: { id: session.user.id }
+        });
+
         // Update user payment details
         await prisma.user.update({
             where: {
@@ -185,7 +207,8 @@ export async function updatePaymentDetails(data: {
                         transactionNumber: validatedData.transactionId,
                         transactionSlip: validatedData.transactionSlip
                     }
-                }
+                },
+                onboardingStep: Math.max(4, currentUser?.onboardingStep || 0) // Set to step 4 (completed) if not already higher
             }
         });
 

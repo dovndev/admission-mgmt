@@ -151,12 +151,17 @@ export default function Declaration() {
       CustomToast({
         title: "Declaration details saved successfully!",
       });
-      alert("Declaration details saved successfully!");
+      
+      // Refresh user data after successful submission
+      if (session?.data?.user?.id) {
+        await fetchUserData(session.data.user.id);
+      }
+      
     } else {
       CustomToast({
         title: "Failed to save declaration details.",
       });
-      alert("Failed to save declaration details.");
+
     }
   };
 
