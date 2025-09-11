@@ -157,12 +157,11 @@ export default function Declaration() {
         await fetchUserData(session.data.user.id);
       }
       
-      alert("Declaration details saved successfully!");
     } else {
       CustomToast({
         title: "Failed to save declaration details.",
       });
-      alert("Failed to save declaration details.");
+
     }
   };
 

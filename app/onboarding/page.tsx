@@ -247,6 +247,8 @@ export default function OnBoarding() {
                 >
                   Previous
                 </Button>
+                {
+                  currentStep !== 4 &&(
                 <Button
                   id="nextPage"
                   className="bg-green-600 border-green-900 text-white"
@@ -256,6 +258,8 @@ export default function OnBoarding() {
                 >
                   {(currentStep + 1) > (userData?.onboardingStep || 0) ? "Complete Current Step" : "Next"}
                 </Button>
+                  )
+                }
               </div>
             )}
           </div>

@@ -1,5 +1,6 @@
 "use server"
 import nodemailer from "nodemailer"
+import path from "path"
 
 const senderEmail = process.env.SENDER_EMAIL
 const senderPassword = process.env.SENDER_PASSWORD
@@ -15,17 +16,27 @@ const transporter = nodemailer.createTransport({
 export async function sendPasswordEmail(recipientEmail: string, password: string): Promise<{ success: boolean; message: string }> {
     try {
         // Create a new mailOptions object for each email
+        const logoPath = path.resolve(process.cwd(), 'public', 'muthoot_logo.png')
+
         const mailOptions = {
             from: senderEmail,
             to: recipientEmail,
             subject: 'Your Password for Admission Portal',
             text: `Your password is: ${password}\n\n`,
+            // Attach the logo and reference it with a CID so mail clients render it inline
+            attachments: [
+                {
+                    filename: 'muthoot_logo.png',
+                    path: logoPath,
+                    cid: 'muthoot_logo_cid'
+                }
+            ],
             html: `
                 <div style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
                     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
                         <!-- Header Section -->
-                        <div style="background-color: #D32F2F; padding: 30px; text-align: center;">
-                            <img src="/muthoot_logo.png" alt="MITS Logo" width="150" style="max-width: 100%; height: auto;">
+                        <div style="background-color: #D71920; padding: 30px; text-align: center;">
+                            <img src="cid:muthoot_logo_cid" alt="MITS Logo" width="100" style="max-width: 100%; height: auto;">
                         </div>
 
                         <!-- Main Content -->
@@ -40,8 +51,6 @@ export async function sendPasswordEmail(recipientEmail: string, password: string
 
                             <p style="line-height: 1.6; margin: 0 0 25px 0;">Please log in using this password and change it immediately after your first login.</p>
 
-                            <a href="[Login-URL]" style="display: inline-block; background-color: #D32F2F; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin-top: 20px; font-weight: 500;">Login to Your Account</a>
-
                             <p style="margin-top: 30px; line-height: 1.6; font-style: italic; color: #666666;">
                                 <em>For security reasons, do not share this password with anyone.</em>
                             </p>
@@ -51,12 +60,6 @@ export async function sendPasswordEmail(recipientEmail: string, password: string
                         <div style="padding: 20px; text-align: center; background-color: #fafafa; font-size: 12px; color: #666666;">
                             <p style="margin: 0; padding: 10px;">
                                 Need help? Contact our support team at <a href="mailto:support@mits.com" style="color: #D32F2F; text-decoration: none;">support@mits.com</a>
-                            </p>
-                            <p style="margin: 0; padding: 10px;">
-                                © 2023 MITS. All rights reserved.<br>
-                                [Company Address]<br>
-                                <a href="#" style="color: #D32F2F; text-decoration: none;">Privacy Policy</a> | 
-                                
                             </p>
                         </div>
                     </div>
