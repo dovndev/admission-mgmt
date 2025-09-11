@@ -97,19 +97,7 @@ export async function conformSeat(userId: string, quota: string, branchName: str
             return { success: false, message: "Invalid quota" };
         }
 
-        // Map quota names to schema field names
-        const quotaFieldMap: Record<string, string> = {
-            'NRI': 'nri',
-            'CIWG': 'cwig',
-            'OCI': 'oci',
-            'PIO': 'pio'
-        };
-
-        const quotaField = quotaFieldMap[quota];
-        if (!quotaField) {
-            return { success: false, message: `Unknown quota field mapping for: ${quota}` };
-        }
-
+        const quotaField = quota.toLowerCase();
         const studentsField = `${quotaField}Students`;
 
         await prisma.branches.update({
@@ -189,6 +177,7 @@ export async function getStructuredUsersByYear(year: string, page: number = 1, l
             id: user.id,
             applicationNo: user.applicationNo,
             canOnboard: user.canOnboard,
+            onboardingStep: user.onboardingStep,
             "Student Details": {
                 "Name": `${user.firstName} ${user.middleName || ''} ${user.lastName}`,
                 "Religion": user.religion,
@@ -305,17 +294,7 @@ export async function deleteStudentById(userId: string) {
         if (existingUser.seatConfirmed && existingUser.declaration?.branch) {
             const branchName = existingUser.declaration.branch;
             const year = parseInt(existingUser.applyingYear);
-            const originalQuota = existingUser.quota;
-            
-            // Map quota names to schema field names
-            const quotaFieldMap: Record<string, string> = {
-                "CIWG": "cwig",
-                "NRI": "nri", 
-                "OCI": "oci",
-                "PIO": "pio"
-            };
-            
-            const quota = quotaFieldMap[originalQuota] || originalQuota.toLowerCase();
+            const quota = existingUser.quota.toLowerCase();
 
             // Find the branch
             const branch = await prisma.branches.findUnique({
@@ -331,9 +310,9 @@ export async function deleteStudentById(userId: string) {
                 // Determine which fields to update based on quota
                 const occupiedField = quota === 'nri' ? 'occupiedNri' : 
                                    quota === 'oci' ? 'occupiedNri' : // OCI uses NRI seats
-                                   'occupiedSuper'; // CWIG uses super seats
+                                   'occupiedSuper'; // CIWG uses super seats
 
-                const studentsField = `${quota}Students` as 'nriStudents' | 'ociStudents' | 'cwigStudents';
+                const studentsField = `${quota}Students` as 'nriStudents' | 'ociStudents' | 'ciwgStudents';
 
                 // Get current occupied count
                 const currentOccupied = occupiedField === 'occupiedNri' ? branch.occupiedNri : branch.occupiedSuper;
@@ -341,7 +320,7 @@ export async function deleteStudentById(userId: string) {
                 // Get current students array
                 const currentStudents = studentsField === 'nriStudents' ? branch.nriStudents :
                                       studentsField === 'ociStudents' ? branch.ociStudents :
-                                      branch.cwigStudents;
+                                      branch.ciwgStudents;
 
                 // Update branch seat allocation
                 await prisma.branches.update({
