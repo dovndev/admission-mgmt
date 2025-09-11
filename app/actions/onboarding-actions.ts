@@ -179,7 +179,7 @@ export async function updateDeclerationDetails(data: {
 }
 
 export async function updatePaymentDetails(data: {
-    transactionId: number,
+    transactionId: string,
     transactionSlip: string,
 }) {
     const session = await auth();
