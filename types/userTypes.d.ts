@@ -36,7 +36,7 @@ export interface IDeclaration {
 }
 
 export interface IPayment {
-    transactionNumber: number;
+    transactionNumber: string;
     transactionSlip: string;
 }
 

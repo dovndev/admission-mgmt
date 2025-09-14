@@ -28,12 +28,15 @@ export default function Register() {
     useUserStore();
   const session = useSession();
   const [userId, setUserId] = useState<string | null>(null);
+  const [hasInitialized, setHasInitialized] = useState(false);
   const router = useRouter();
   const { data: sessionData, status: sessionStatus } = session;
   const { generatePDF } = usePrintPDF();
+  
   const handlePrintStudent = async (student: StructuredUserData) => {
     await generatePDF(student);
   };
+
   useEffect(() => {
     // In a real app, you would get the userId from authentication
     // This is just a placeholder - replace with your auth logic
@@ -47,6 +50,7 @@ export default function Register() {
       // router.push("/login");
       console.log("No user ID found, redirecting to login...");
     }
+    setHasInitialized(true);
   }, [fetchUserData, router, sessionData, sessionStatus]);
 
   const handleLogout = () => {
@@ -54,7 +58,8 @@ export default function Register() {
     signOut({ callbackUrl: "/login" });
   };
 
-  if (isLoading) {
+  // Show loading if we haven't initialized yet or if we're actively loading
+  if (!hasInitialized || isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <Spinner size="lg" />
@@ -63,7 +68,8 @@ export default function Register() {
     );
   }
 
-  if (error || !userData) {
+  // Only show error state if we have initialized and there's an actual error or no data
+  if (hasInitialized && (error || !userData)) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <p className="text-red-500">
@@ -75,6 +81,16 @@ export default function Register() {
         >
           Retry
         </Button>
+      </div>
+    );
+  }
+
+  // If we reach here, we should have userData, but let's add a safety check
+  if (!userData) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Spinner size="lg" />
+        <p className="mt-4">Loading user data...</p>
       </div>
     );
   }

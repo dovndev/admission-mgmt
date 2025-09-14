@@ -73,7 +73,7 @@ export async function sendPasswordEmail(recipientEmail: string, password: string
                         <!-- Footer Section -->
                         <div style="padding: 20px; text-align: center; background-color: #fafafa; font-size: 12px; color: #666666;">
                             <p style="margin: 0; padding: 10px;">
-                                Need help? Contact our support team at <a href="mailto:support@mits.com" style="color: #D32F2F; text-decoration: none;">Rija Jose: 6309387606</a>
+                                Need help? Contact our support team at <a href="mailto:support@mits.com" style="color: #D32F2F; text-decoration: none;">Ms. Rija Jose: 6309387606</a>
                             </p>
                         </div>
                     </div>

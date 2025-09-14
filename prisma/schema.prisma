@@ -72,7 +72,7 @@ type Declaration {
 }
 
 type Payment {
-  transactionNumber Int
+  transactionNumber String
   transactionSlip   String
 }
 

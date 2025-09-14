@@ -34,10 +34,6 @@ const NavbarMain: React.FC<NavbarProps> = ({ mode = "" }) => {
           <Link href="/login" className={`headerButton font-sans ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} text-center relative transition-all duration-300 hover:drop-shadow-md hover:after:w-full after:content-[''] after:absolute after:w-0 after:h-px after:bg-current after:left-0 after:-bottom-1 after:transition-all after:duration-300`}>
             Login
           </Link>
-          {/* About link hidden on small screens */}
-          <Link href="/about" className={`headerButton font-sans ${mode === "dark" ? "text-white" : ""} ${mode === "light" ? "text-black" : ""} hidden md:block text-center relative transition-all duration-300 hover:drop-shadow-md hover:after:w-full after:content-[''] after:absolute after:w-0 after:h-px after:bg-current after:left-0 after:-bottom-1 after:transition-all after:duration-300`}>
-            About
-          </Link>
         </div>
       </div>
 

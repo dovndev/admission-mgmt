@@ -63,7 +63,7 @@ export default function Payment() {
 
       // Step 1: Submit payment details
       const result = await updatePaymentDetails({
-        transactionId: Number(formData.transactionNo),
+        transactionId: formData.transactionNo,
         transactionSlip: formData.transactionSlip,
       });
 
