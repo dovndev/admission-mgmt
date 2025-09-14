@@ -16,7 +16,7 @@ import Contact from "../components/Contact";
 import { Button } from "@heroui/react";
 import CustomToast from "../components/CustomToast";
 
-const CONTACT = { name: "Binoy P. K", number: "9446717178" };
+const CONTACT = { name: "Mr. Binoy P. K", number: "9446717178" };
 
 export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState<number>(0);
