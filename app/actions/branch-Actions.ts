@@ -53,6 +53,7 @@ export async function addYear(year: number) {
                 nri: 0,
                 oci: 0,
                 ciwg: 0,
+                pio: 0,
                 waitingList: 0
             }
         })
