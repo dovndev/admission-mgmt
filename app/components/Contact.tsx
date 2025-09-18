@@ -1,8 +1,8 @@
 import React from "react";
 
 export const CONTACTS = [
-    { name: "Jeena Varghese", number: "9946652762" },
-    { name: "Rija Jose", number: "6309387606" },
+    { name: "Ms. Jeena Varghese", number: "9946652762" },
+    { name: "Ms. Rija Jose", number: "6309387606" },
 ];
 export default function Contact({ className = "" }: { className?: string }) {
     return (

@@ -219,6 +219,7 @@ export default function EducationalDetails() {
                   onChange={handleChange}
                   value={formData.KeamYear}
                   labelPlacement="outside"
+                  type="number"
                 />
               </div>
             </div>
