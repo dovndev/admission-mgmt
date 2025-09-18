@@ -8,7 +8,6 @@ import FileUploadInput from "../FileUploadInput";
 import { updatePaymentDetails } from "@/app/actions/onboarding-actions";
 import CustomToast from "../CustomToast";
 import { useRouter } from "next/navigation";
-import { conformSeat } from "@/app/actions/user-Actions";
 import { useSession } from "next-auth/react";
 import useUserStore from "@/app/store/userStore";
 
@@ -61,57 +60,23 @@ export default function Payment() {
     try {
       setIsLoading(true);
 
-      // Step 1: Submit payment details
+      // Submit payment details
       const result = await updatePaymentDetails({
         transactionId: formData.transactionNo,
         transactionSlip: formData.transactionSlip,
       });
 
       if (result.success) {
-        // Get user information needed for seat confirmation
-        const userId = session.data?.user?.id;
-        if (!userId) {
-          throw new Error("User not logged in");
-        }
-
-        // Extract required data from userData
-        const quota = userData?.["Student Details"]?.["Quota"];
-        const branch = userData?.["Branch Details"]?.["Branch"];
-        const year = parseInt(
-          userData?.["Student Details"]?.["Academic Year"] || ""
-        );
-
-        if (!quota || !branch || isNaN(year)) {
-          throw new Error(
-            "Missing required student data for seat confirmation"
-          );
-        }
-
-        // Step 2: Confirm seat
-        const seatResult = await conformSeat(userId, quota, branch, year);
-
-        if (seatResult.success) {
-          CustomToast({
-            title: "Success",
-            description:
-              "Payment details saved and seat confirmed successfully",
-          });
-          router.push("/user");
-        } else {
-          setError(
-            `Payment submitted but seat confirmation failed: ${seatResult.message}`
-          );
-          CustomToast({
-            title: "Warning",
-            description: "Payment submitted but seat confirmation failed",
-          });
-        }
+        CustomToast({
+          title: "Success",
+          description: "Payment details saved successfully",
+        });
+        router.push("/user");
       } else {
         setError(result.message || "Failed to submit payment details");
         CustomToast({ title: "Failed to submit payment details" });
       }
     } catch (error) {
-
       console.error(
         error instanceof Error
           ? error.message
@@ -126,7 +91,6 @@ export default function Payment() {
         title: "Process failed",
         description: error instanceof Error ? error.message : "Unknown error",
       });
-
     } finally {
       setIsLoading(false);
     }

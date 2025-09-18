@@ -37,6 +37,10 @@ type DeclarationFormData = z.infer<typeof declarationSchema>;
 interface BranchAvailabilityResponse {
   totalSets: number;
   occupiedSets: number;
+  nriSeats: number;
+  occupiedNri: number;
+  superSeats: number;
+  occupiedSuper: number;
 }
 
 export default function Declaration() {
@@ -69,12 +73,37 @@ export default function Declaration() {
     setValue("branch", value);
     const response = (await isBranchAvailable(academic, value)) as BranchAvailabilityResponse | null;
     console.log(response);
-    if (response && response.totalSets !== response.occupiedSets) {
-      setbranchAlert("Branch is available");
+    
+    if (response) {
+      // Get user's quota from userData
+      const userQuota = userData?.["Student Details"]?.["Quota"];
+      
+      let isAvailable = false;
+      let alertMessage = "";
+      
+      if (userQuota === "NRI") {
+        // Check NRI seat availability
+        isAvailable = response.occupiedNri < response.nriSeats;
+        alertMessage = isAvailable 
+          ? `Branch is available (NRI seats: ${response.occupiedNri}/${response.nriSeats})` 
+          : `Branch is not available (NRI seats full: ${response.occupiedNri}/${response.nriSeats})`;
+      } else if (userQuota === "OCI" || userQuota === "CIWG" || userQuota === "PIO") {
+        // Check Super seat availability for OCI, CIWG, PIO
+        isAvailable = response.occupiedSuper < response.superSeats;
+        alertMessage = isAvailable 
+          ? `Branch is available (Super seats: ${response.occupiedSuper}/${response.superSeats})` 
+          : `Branch is not available (Super seats full: ${response.occupiedSuper}/${response.superSeats})`;
+      } else {
+        // Fallback to total seat check if quota is not recognized
+        isAvailable = response.totalSets !== response.occupiedSets;
+        alertMessage = isAvailable ? "Branch is available" : "Branch is not available";
+      }
+      
+      setbranchAlert(alertMessage);
     } else {
       setbranchAlert("Branch is not available");
     }
-  }, [academic, setValue]);
+  }, [academic, setValue, userData]);
 
   // Use effect to pre-fill form data from userData when available.
   useEffect(() => {
@@ -136,6 +165,27 @@ export default function Declaration() {
       CustomToast({ 
         title: "Parent Signature Required", 
         description: "Please upload the parent's signature before saving."
+      });
+      return;
+    }
+
+    // Check branch availability before submission
+    const branchResponse = await isBranchAvailable(academic, data.branch) as BranchAvailabilityResponse;
+    const userQuota = userData?.["Student Details"]?.["Quota"];
+    
+    let canProceed = false;
+    if (userQuota === "NRI") {
+      canProceed = branchResponse.occupiedNri < branchResponse.nriSeats;
+    } else if (userQuota === "OCI" || userQuota === "CIWG" || userQuota === "PIO") {
+      canProceed = branchResponse.occupiedSuper < branchResponse.superSeats;
+    } else {
+      canProceed = branchResponse.totalSets !== branchResponse.occupiedSets;
+    }
+
+    if (!canProceed) {
+      CustomToast({ 
+        title: "Branch Not Available", 
+        description: `No seats available in ${data.branch} for your quota category. Please select a different branch.`
       });
       return;
     }
@@ -212,7 +262,7 @@ export default function Declaration() {
           </div>
           {branchAlert && (
             <div className="p-2">
-              {branchAlert === "Branch is available" ? (
+              {branchAlert.includes("Branch is available") ? (
                 <span className="text-green-600">{branchAlert}</span>
               ) : (
                 <span className="text-red-600">{branchAlert}</span>
