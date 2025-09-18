@@ -14,14 +14,14 @@ datasource db {
 }
 
 enum Branch {
-CSE
-ECE
-ME
-CE
-AIDS
-EEE
-CSAI
-CY
+  CSE
+  ECE
+  ME
+  CE
+  AIDS
+  EEE
+  CSAI
+  CY
 }
 
 enum Quota {
@@ -137,9 +137,11 @@ model Branches {
   nri           Int      @default(0) // Count of NRI seats
   oci           Int      @default(0) // Count of OCI seats
   ciwg          Int      @default(0) // Count of CIWG seats
+  pio           Int      @default(0) // Count of PIO seats
   nriStudents   String[] // List of NRI students
   ociStudents   String[] // List of OCI students
   ciwgStudents  String[] // List of CIWG students
+  pioStudents   String[] // List of PIO students
   year          Int // Year for which the data is applicable
   waitingList   Int      @default(0) // Count of students on the waiting list
 
@@ -154,9 +156,9 @@ model Admin {
 }
 
 model YearStatus {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  year      Int     @unique
-  isActive  Boolean @default(true) // Controls if registration is open for this year
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  year      Int      @unique
+  isActive  Boolean  @default(true) // Controls if registration is open for this year
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
