@@ -102,8 +102,9 @@ export async function conformSeat(userId: string, quota: string, branchName: str
 
         const quotaField = quota.toLowerCase();
         const studentsField = `${quotaField}Students`;
+        const isNriQuota = quota === 'NRI'; // Only NRI uses NRI seats
         
-        console.log('Using quotaField:', quotaField, 'studentsField:', studentsField);
+        console.log('Using quotaField:', quotaField, 'studentsField:', studentsField, 'isNriQuota:', isNriQuota);
 
         await prisma.branches.update({
             where: {
@@ -114,9 +115,11 @@ export async function conformSeat(userId: string, quota: string, branchName: str
             },
             data: {
                 occupiedSets: branch.occupiedSets + 1,
-                occupiedNri: quota == 'NRI' ? branch.occupiedNri + 1 : branch.occupiedNri,
-                occupiedSuper: quota != 'NRI' ? branch.occupiedSuper + 1 : branch.occupiedSuper,
-                //incremetn the quota field
+                // Increment NRI occupied count only for NRI quota
+                occupiedNri: isNriQuota ? branch.occupiedNri + 1 : branch.occupiedNri,
+                // Increment Super occupied count for all other quotas (OCI, CIWG, PIO)
+                occupiedSuper: !isNriQuota ? branch.occupiedSuper + 1 : branch.occupiedSuper,
+                // Increment the quota field
                 [quotaField]: { increment: 1 },
                 // Add student ID to the appropriate array
                 [studentsField]: { push: userId }
@@ -313,15 +316,9 @@ export async function deleteStudentById(userId: string) {
 
             if (branch) {
                 // Determine which fields to update based on quota
-                const occupiedField = quota === 'nri' ? 'occupiedNri' : 
-                                   quota === 'oci' ? 'occupiedNri' : // OCI uses NRI seats
-                                   'occupiedSuper'; // CIWG and PIO use super seats
-
+                const isNriQuota = quota === 'nri'; // Only NRI uses NRI seats, all others use Super seats
                 const studentsField = `${quota}Students` as 'nriStudents' | 'ociStudents' | 'ciwgStudents' | 'pioStudents';
 
-                // Get current occupied count
-                const currentOccupied = occupiedField === 'occupiedNri' ? branch.occupiedNri : branch.occupiedSuper;
-                
                 // Get current students array
                 const currentStudents = studentsField === 'nriStudents' ? branch.nriStudents :
                                       studentsField === 'ociStudents' ? branch.ociStudents :
@@ -337,8 +334,14 @@ export async function deleteStudentById(userId: string) {
                         }
                     },
                     data: {
-                        occupiedSets: branch.occupiedSets - 1,
-                        [occupiedField]: Math.max(0, currentOccupied - 1),
+                        // Always decrement total occupied seats
+                        occupiedSets: Math.max(0, branch.occupiedSets - 1),
+                        // Decrement NRI occupied count only for NRI quota
+                        occupiedNri: isNriQuota ? Math.max(0, branch.occupiedNri - 1) : branch.occupiedNri,
+                        // Decrement Super occupied count for all other quotas (OCI, CIWG, PIO)
+                        occupiedSuper: !isNriQuota ? Math.max(0, branch.occupiedSuper - 1) : branch.occupiedSuper,
+                        // Decrease the quota-specific field count
+                        [quota]: { decrement: 1 },
                         // Remove student ID from the appropriate array
                         [studentsField]: {
                             set: currentStudents.filter(id => id !== userId)
