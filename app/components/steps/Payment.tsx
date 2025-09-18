@@ -17,7 +17,7 @@ export default function Payment() {
   const [error, setError] = useState("");
   const router = useRouter();
   const session = useSession();
-  const { userData, fetchUserData } = useUserStore();
+  const { fetchUserData } = useUserStore();
 
   // Initialize userData on component mount
   useEffect(() => {
