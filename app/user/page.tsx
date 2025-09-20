@@ -228,7 +228,7 @@ export default function Register() {
                 
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Branch Opted</p>
-                  <p className="text-sm font-medium">{userData["Branch Details"]["Branch"]}</p>
+                  <p className="text-sm font-medium">{userData["Branch Details"]["Branch"] === "AIDS" ? "AI & DS" : userData["Branch Details"]["Branch"]}</p>
                 </div>
                 
                 <div>

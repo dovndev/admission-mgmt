@@ -185,7 +185,7 @@ export default function Declaration() {
     if (!canProceed) {
       CustomToast({ 
         title: "Branch Not Available", 
-        description: `No seats available in ${data.branch} for your quota category. Please select a different branch.`
+        description: `No seats available in ${data.branch === "AIDS" ? "AI & DS" : data.branch} for your quota category. Please select a different branch.`
       });
       return;
     }
@@ -245,11 +245,11 @@ export default function Declaration() {
                     id="branch"
                     label="Branch"
                     required={true}
-                    options={BRANCH_OPTIONS}
+                    options={BRANCH_OPTIONS.map(branch => branch === "AIDS" ? "AI & DS" : branch)}
                     onChange={(e) =>
-                      handleBranchChange(e.target.value as Branch)
+                      handleBranchChange(e.target.value === "AI & DS" ? "AIDS" as Branch : e.target.value as Branch)
                     }
-                    value={field.value}
+                    value={field.value === "AIDS" ? "AI & DS" : field.value}
                   />
                   {errors.branch && (
                     <p className="text-red-500 text-sm mt-1">
