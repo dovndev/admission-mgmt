@@ -6,7 +6,7 @@ export const CONTACTS = [
 ];
 export default function Contact({ className = "" }: { className?: string }) {
     return (
-        <div className={`w-full lg:fixed bottom-1 left-1 p-4 text-[13px] slide_up ${className}`}>
+        <div className={`lg:fixed bottom-1 left-1 p-4 text-[13px] slide_up ${className}`}>
             <div className="flex flex-col gap-1 items-start">
                 <span className="text-muthootRed font-bold">Technical Support</span>
                 <div className="grid  gap-2">
