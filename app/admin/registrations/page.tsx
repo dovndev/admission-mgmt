@@ -29,7 +29,7 @@ import {
 
 import { Save,Download, Search, Trash2, Printer, Eye } from "lucide-react";
 import NavbarAdmin from "../../components/NavbarAdmin";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect} from "react";
 import StudentDetails from "../../components/StudentDetails";
 import { usePrintPDF } from "../../hooks/usePrintPDF";
 import { getStructuredUsersByYear,updateOnboardingStatus, deleteStudentById } from "../../actions/user-Actions";
@@ -274,7 +274,7 @@ export default function RegistrationDashboard()
   function getRegistrationStatus(user: StructuredUserData) {
     // Since we don't have the exact date in the structured data,
     // determine status based on seat confirmation
-    return user["Student Details"]["Seat Confirmed"] === "Yes" ? "Completed" : "Registered";
+    return user["Student Details"]["Seat Confirmed"] === "Yes" ? user['Student Details']['payment'] ? "Payment confirmed" : "Payment pending" : "Registered";
   }
 
   return (
