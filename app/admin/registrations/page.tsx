@@ -274,7 +274,7 @@ export default function RegistrationDashboard()
   function getRegistrationStatus(user: StructuredUserData) {
     // Since we don't have the exact date in the structured data,
     // determine status based on seat confirmation
-    return user["Student Details"]["Seat Confirmed"] === "Yes" ? user['Payment'] ? "Payment confirmed" : "Payment pending" : "Registered";
+    return user["Student Details"]["Seat Confirmed"] === "Yes" ? user['Payment']['Transaction Slip'] && user['Payment']['Transaction Number'] ? "Payment confirmed" : "Payment pending" : "Registered";
   }
 
   return (
