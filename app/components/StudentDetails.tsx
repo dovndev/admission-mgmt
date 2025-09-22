@@ -50,9 +50,9 @@ export default function StudentDetails({
           </div>
           <div className="flex flex-col items-center justify-end">
             <Image
-              src={studentData.Uploads?.transactionSlip || "/no_img.png"}
+              src={studentData['Payment']['Transaction Slip'] || "/no_img.png"}
               alt="Transaction Slip"
-              className="w-full h-full p-2 max-h-[20rem] min-h-[20rem] object-contain rounded-xl"
+              className="w-full h-full max-w-md p-2 max-h-[20rem] min-h-[20rem] object-contain rounded-xl"
             />
             <h1 className="text-center">Transaction Slip</h1>
           </div>

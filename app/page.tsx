@@ -7,11 +7,15 @@ export default function Home() {
       <div className="min-h-screen flex flex-col items-center relative bg-black">
         <video
           autoPlay
+          playsInline
+          preload="auto"
           loop
           muted
+          poster="/background_image.png"
           className="absolute inset-0 w-full h-full opacity-40 object-cover"
         >
-          <source src="/landing.mov" type="video/mp4" />
+          {/* Primary WebM source (preferred) */}
+          <source src="/landing.webm" type="video/webm" />
         </video>
         <NavbarMain mode="dark" />
         <div className="relative z-10 flex flex-1 w-full lg:max-w-[90%] mt-0 mx-4 items-center justify-center flex-col md:flex-row ">
