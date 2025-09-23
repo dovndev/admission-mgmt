@@ -47,7 +47,9 @@ function BranchAllocation({
       className={`shadow-md hover:shadow-sm ${isRecentlySaved ? "border-green-500 border-2" : ""} bg-textBoxBackground`}
     >
       <CardHeader className="p-4">
-        <h1 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">{title}</h1>
+        <h1 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+          {title === "AIDS" ? "AI & DS" : title}
+        </h1>
         <Button
           size="sm"
           variant="solid"

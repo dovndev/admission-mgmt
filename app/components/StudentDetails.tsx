@@ -55,6 +55,12 @@ export default function StudentDetails({
               className="w-full h-full max-w-md p-2 max-h-[20rem] min-h-[20rem] object-contain rounded-xl"
             />
             <h1 className="text-center">Transaction Slip</h1>
+            <div className="flex flex-col w-full p-2 rounded-lg shadow-md border border-background" id="transactionDetails">
+              <div className="flex flex-row justify-between p-1">
+          <div className="font-light">Transaction Id:</div>
+          <div className="font-bold">{studentData['Payment']['Transaction Number'] || "Not provided"}</div>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -42,7 +42,7 @@ export default function AdminHome() {
       { program: "ECE", applications: 0, approved: 0 },
       { program: "ME", applications: 0, approved: 0 },
       { program: "CE", applications: 0, approved: 0 },
-      { program: "AIDS", applications: 0, approved: 0 },
+      { program: "AI & DS", applications: 0, approved: 0 },
       { program: "EEE", applications: 0, approved: 0 },
       { program: "CSAI", applications: 0, approved: 0 },
       { program: "CY", applications: 0, approved: 0 },
