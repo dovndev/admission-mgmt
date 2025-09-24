@@ -398,7 +398,7 @@ export default function RegistrationDashboard()
                         <div>
                           <div className="font-medium">{student["Student Details"].Course || "B.Tech"}</div>
                           <div className="text-xs text-default-500">
-                            {student["Branch Details"]?.Branch || "Not selected"}
+                            {student["Branch Details"]?.Branch === "AIDS" ? "AI & DS" : student["Branch Details"]?.Branch || "Not selected"}
                           </div>
                         </div>
                       </TableCell>

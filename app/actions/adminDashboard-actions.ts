@@ -46,7 +46,7 @@ export async function getDashboardStats(year: number) {
         // Format branch data for chart
         const programData = Object.entries(allBranches).map(
             ([program, stats]) => ({
-                program,
+                program: program === "AIDS" ? "AI & DS" : program,
                 applications: stats.applications,
                 approved: stats.approved,
             })

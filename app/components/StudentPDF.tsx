@@ -193,7 +193,7 @@ const StudentPDF = ({ student }: StudentPDFProps) => {
         sponsor: student["Student Details"]?.["NRI Sponsor"] || "Not provided",
         relation: student["Student Details"]?.["Relationship with Applicant"] || "Not provided",
         branch: student["Branch Details"]?.Branch === "AIDS" ? "AI & DS" : student["Branch Details"]?.Branch || "CSE",
-        transactionId: (student["Student Details"] as any)?.["Transaction Number"] || "Not provided",
+        transactionId: student["Payment"]?.["Transaction Number"] || "Not provided",
         applyingYear: student["Student Details"]?.["Academic Year"] || "Not provided",
       }
     : {
